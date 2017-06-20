@@ -592,21 +592,19 @@ public class Pool {
      *
      * @return the number of guppies that died
      */
-    public int adjustForCrowding() {
+    public ArrayList<Guppy> adjustForCrowding() {
 
         sortGuppiesByHealthCoefficient();
-        int countDied = 0;
 
+        ArrayList<Guppy> weakestGuppies = new ArrayList<>();
         int index = 0;
 
-        while (volumeLitres <= getGuppyVolumeRequirementInLitres() && index < guppiesInPool
-                .size()) {
-
-            guppiesInPool.get(index).setIsAlive(false);
-            countDied++;
+        while (volumeLitres <= getGuppyVolumeRequirementInLitres()
+                && index < guppiesInPool.size()) {
+            weakestGuppies.add(guppiesInPool.remove(index));
         }
 
-        return countDied;
+        return weakestGuppies;
     }
 
     /**
@@ -663,11 +661,8 @@ public class Pool {
         ArrayList<Integer> sorted = new ArrayList<>();
 
         for (Guppy guppy : guppiesInPool) {
-
             if (guppy.getIsAlive()) {
-
                 sorted.add(guppy.getAgeInWeeks());
-
             }
         }
 
@@ -680,18 +675,13 @@ public class Pool {
             min = sorted.get(i);
 
             for (int j = i + 1; j < sorted.size(); j++) {
-
                 if (min >= sorted.get(j)) {
-
                     index = j;
                     min = sorted.get(j);
-
                 }
             }
-
             sorted.add(i, sorted.remove(index));
         }
-
         return sorted;
     }
 
@@ -707,13 +697,10 @@ public class Pool {
             min = i;
 
             for (int j = i + 1; j < guppiesInPool.size(); j++) {
-
                 if (guppiesInPool.get(i).getHealthCoefficient() > guppiesInPool.get(j)
                         .getHealthCoefficient()) {
-
                     min = j;
                 }
-
                 guppiesInPool.add(i, guppiesInPool.remove(min));
             }
         }

@@ -1,5 +1,8 @@
 package io.github.paulszefer;
 
+import java.util.ArrayList;
+import java.util.Random;
+
 /**
  * A stream provides a connection between pools.
  * <p>
@@ -11,6 +14,9 @@ package io.github.paulszefer;
  * @version 1.0
  */
 public class Stream {
+
+    /** Random number generator. */
+    private static Random generator = new Random();
 
     /** The source pool. */
     private Pool source;
@@ -129,4 +135,20 @@ public class Stream {
         this.temperature = temperature;
     }
 
+    /**
+     * Transports the guppies through this stream to the destination pool.
+     * <p>
+     * Guppies die in transport if a randomly generated double is greater than their health
+     * coefficient.
+     *
+     * @param guppies
+     *         the guppies to transport
+     */
+    public void transportGuppies(ArrayList<Guppy> guppies) {
+
+        for (Guppy guppy : guppies) {
+            guppy.setIsAlive(generator.nextDouble() < guppy.getHealthCoefficient());
+        }
+        destination.addGuppies(guppies);
+    }
 }

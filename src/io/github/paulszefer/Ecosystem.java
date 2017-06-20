@@ -12,7 +12,7 @@ import java.util.Random;
 public class Ecosystem {
 
     /** Random number generator. */
-    private Random generator = new Random();
+    private static Random generator = new Random();
 
     /** The collection of pools in the ecosystem. */
     private ArrayList<Pool> pools;
@@ -57,6 +57,11 @@ public class Ecosystem {
 
         if (pools != null) {
             this.pools = pools;
+
+            for (int i = 0; i < pools.size() - 1; i++) {
+                Stream stream = new Stream(pools.get(i), pools.get(i + 1));
+                addStream(stream);
+            }
         }
     }
 
@@ -83,6 +88,8 @@ public class Ecosystem {
 
         if (pool != null) {
             pools.add(pool);
+            Stream stream = new Stream(pools.get(pools.size() - 1), pool);
+            addStream(stream);
         }
     }
 
@@ -167,6 +174,7 @@ public class Ecosystem {
 
             if (possibleStreams.size() > 0) {
                 Stream stream = possibleStreams.get(generator.nextInt(possibleStreams.size() - 1));
+                stream.transportGuppies(weakestGuppies);
             } else {
                 for (Guppy guppy : weakestGuppies) {
                     guppy.setIsAlive(false);
