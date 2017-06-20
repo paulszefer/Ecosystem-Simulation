@@ -174,7 +174,7 @@ public class Ecosystem {
 
             if (possibleStreams.size() > 0) {
                 Stream stream = possibleStreams.get(generator.nextInt(possibleStreams.size() - 1));
-                stream.transportGuppies(weakestGuppies);
+                diedToOverCrowding += stream.transportGuppies(weakestGuppies);
             } else {
                 for (Guppy guppy : weakestGuppies) {
                     guppy.setIsAlive(false);

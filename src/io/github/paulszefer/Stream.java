@@ -143,12 +143,19 @@ public class Stream {
      *
      * @param guppies
      *         the guppies to transport
+     *
+     * @return the number of guppies that died in transport
      */
-    public void transportGuppies(ArrayList<Guppy> guppies) {
+    public int transportGuppies(ArrayList<Guppy> guppies) {
+
+        int countDied = 0;
 
         for (Guppy guppy : guppies) {
             guppy.setIsAlive(generator.nextDouble() < guppy.getHealthCoefficient());
+            countDied += guppy.getIsAlive() ? 0 : 1;
         }
         destination.addGuppies(guppies);
+
+        return countDied;
     }
 }
