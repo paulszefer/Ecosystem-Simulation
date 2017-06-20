@@ -2,10 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="6dd2ee4d-f021-474e-9a67-e6e24092d690" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/codeStyleSettings.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/io/github/paulszefer/Stream.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/io/github/paulszefer/Ecosystem.java" afterPath="$PROJECT_DIR$/src/io/github/paulszefer/Ecosystem.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/io/github/paulszefer/Pool.java" afterPath="$PROJECT_DIR$/src/io/github/paulszefer/Pool.java" />
     </list>
     <ignored path="$PROJECT_DIR$/bin/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -30,11 +29,11 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="Pool.java" pinned="false" current-in-tab="false">
+      <file leaf-file-name="Pool.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/io/github/paulszefer/Pool.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="192">
-              <caret line="630" column="17" lean-forward="false" selection-start-line="630" selection-start-column="17" selection-end-line="630" selection-end-column="17" />
+            <state relative-caret-position="-2452">
+              <caret line="431" column="80" lean-forward="false" selection-start-line="431" selection-start-column="80" selection-end-line="431" selection-end-column="80" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -45,9 +44,11 @@
       <file leaf-file-name="Ecosystem.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/io/github/paulszefer/Ecosystem.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="204">
-              <caret line="18" column="36" lean-forward="false" selection-start-line="18" selection-start-column="31" selection-end-line="18" selection-end-column="36" />
-              <folding />
+            <state relative-caret-position="659">
+              <caret line="173" column="24" lean-forward="false" selection-start-line="173" selection-start-column="24" selection-end-line="173" selection-end-column="24" />
+              <folding>
+                <element signature="imports" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -55,11 +56,9 @@
       <file leaf-file-name="PoolTest.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/io/github/paulszefer/PoolTest.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="192">
-              <caret line="827" column="44" lean-forward="false" selection-start-line="827" selection-start-column="44" selection-end-line="827" selection-end-column="44" />
-              <folding>
-                <element signature="imports" expanded="false" />
-              </folding>
+            <state relative-caret-position="287">
+              <caret line="813" column="34" lean-forward="false" selection-start-line="813" selection-start-column="34" selection-end-line="813" selection-end-column="34" />
+              <folding />
             </state>
           </provider>
         </entry>
@@ -94,11 +93,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="Stream.java" pinned="false" current-in-tab="true">
+      <file leaf-file-name="Stream.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/io/github/paulszefer/Stream.java">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="-30">
-              <caret line="40" column="26" lean-forward="true" selection-start-line="40" selection-start-column="26" selection-end-line="40" selection-end-column="26" />
+              <caret line="40" column="26" lean-forward="false" selection-start-line="40" selection-start-column="26" selection-end-line="40" selection-end-column="26" />
               <folding />
             </state>
           </provider>
@@ -125,12 +124,12 @@
     <option name="CHANGED_PATHS">
       <list>
         <option value="$PROJECT_DIR$/src/io/github/paulszefer/EcosystemTest.java" />
-        <option value="$PROJECT_DIR$/src/io/github/paulszefer/Pool.java" />
-        <option value="$PROJECT_DIR$/src/io/github/paulszefer/Ecosystem.java" />
         <option value="$PROJECT_DIR$/src/io/github/paulszefer/PoolTest.java" />
         <option value="$PROJECT_DIR$/src/io/github/paulszefer/Simulation.java" />
         <option value="$PROJECT_DIR$/src/io/github/paulszefer/Guppy.java" />
         <option value="$PROJECT_DIR$/src/io/github/paulszefer/Stream.java" />
+        <option value="$PROJECT_DIR$/src/io/github/paulszefer/Ecosystem.java" />
+        <option value="$PROJECT_DIR$/src/io/github/paulszefer/Pool.java" />
       </list>
     </option>
   </component>
@@ -787,7 +786,7 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1497936788598</updated>
-      <workItem from="1497936866826" duration="10451000" />
+      <workItem from="1497936866826" duration="13963000" />
     </task>
     <task id="LOCAL-00001" summary="Initial commit">
       <created>1497939569417</created>
@@ -818,7 +817,7 @@
     </history-entry>
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="10451000" />
+    <option name="totallyTimeSpent" value="13963000" />
   </component>
   <component name="TodoView" selected-index="4">
     <todo-panel id="selected-file">
@@ -949,26 +948,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/io/github/paulszefer/Pool.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="192">
-          <caret line="630" column="17" lean-forward="false" selection-start-line="630" selection-start-column="17" selection-end-line="630" selection-end-column="17" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/io/github/paulszefer/PoolTest.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="192">
-          <caret line="827" column="44" lean-forward="false" selection-start-line="827" selection-start-column="44" selection-end-line="827" selection-end-column="44" />
-          <folding>
-            <element signature="imports" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/io/github/paulszefer/Simulation.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="255">
@@ -985,19 +964,47 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/io/github/paulszefer/Ecosystem.java">
+    <entry file="file://$PROJECT_DIR$/src/io/github/paulszefer/Stream.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="204">
-          <caret line="18" column="36" lean-forward="false" selection-start-line="18" selection-start-column="31" selection-end-line="18" selection-end-column="36" />
+        <state relative-caret-position="-30">
+          <caret line="40" column="26" lean-forward="false" selection-start-line="40" selection-start-column="26" selection-end-line="40" selection-end-column="26" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/io/github/paulszefer/Stream.java">
+    <entry file="jar://C:/Program Files/Java/jdk1.8.0_121/src.zip!/java/lang/Object.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-30">
-          <caret line="40" column="26" lean-forward="true" selection-start-line="40" selection-start-column="26" selection-end-line="40" selection-end-column="26" />
+        <state relative-caret-position="704">
+          <caret line="99" column="22" lean-forward="false" selection-start-line="99" selection-start-column="22" selection-end-line="99" selection-end-column="22" />
           <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/io/github/paulszefer/Ecosystem.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="659">
+          <caret line="173" column="24" lean-forward="false" selection-start-line="173" selection-start-column="24" selection-end-line="173" selection-end-column="24" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/io/github/paulszefer/PoolTest.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="287">
+          <caret line="813" column="34" lean-forward="false" selection-start-line="813" selection-start-column="34" selection-end-line="813" selection-end-column="34" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/io/github/paulszefer/Pool.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-2452">
+          <caret line="431" column="80" lean-forward="false" selection-start-line="431" selection-start-column="80" selection-end-line="431" selection-end-column="80" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>

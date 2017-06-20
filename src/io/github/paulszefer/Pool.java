@@ -111,6 +111,7 @@ public class Pool {
      * Sets up a generic aquatic pool with default values.
      */
     public Pool() {
+
         name = DEFAULT_POOL_NAME;
         volumeLitres = 0.0;
         temperatureCelsius = DEFAULT_POOL_TEMP_CELSIUS;
@@ -123,11 +124,16 @@ public class Pool {
     /**
      * Sets up an aquatic pool with the given values.
      *
-     * @param name                the name of the pool
-     * @param volumeLitres        the volume of water in the pool in Litres
-     * @param temperatureCelsius  the temperature of the pool in degrees Celsius
-     * @param pH                  the pH of the pool
-     * @param nutrientCoefficient the nutrient coefficient of the pool
+     * @param name
+     *         the name of the pool
+     * @param volumeLitres
+     *         the volume of water in the pool in Litres
+     * @param temperatureCelsius
+     *         the temperature of the pool in degrees Celsius
+     * @param pH
+     *         the pH of the pool
+     * @param nutrientCoefficient
+     *         the nutrient coefficient of the pool
      */
     public Pool(String name, double volumeLitres, double temperatureCelsius, double pH,
                 double nutrientCoefficient) {
@@ -164,15 +170,16 @@ public class Pool {
     /**
      * Sets the name.
      *
-     * @param name the name to set
+     * @param name
+     *         the name to set
      */
     public void setName(String name) {
 
         String newName = DEFAULT_POOL_NAME;
 
         if (name != null && !name.replaceAll(" ", "").equals("")) {
-            newName = name.replaceAll(" ", "").substring(0, 1).toUpperCase()
-                    + name.replaceAll(" ", "").substring(1).toLowerCase();
+            newName = name.replaceAll(" ", "").substring(0, 1).toUpperCase() + name
+                    .replaceAll(" ", "").substring(1).toLowerCase();
         }
 
         this.name = newName;
@@ -191,7 +198,8 @@ public class Pool {
     /**
      * Sets the volume of water in the pool in Litres.
      *
-     * @param volumeLitres the volume to set
+     * @param volumeLitres
+     *         the volume to set
      */
     public void setVolumeLitres(double volumeLitres) {
 
@@ -211,7 +219,8 @@ public class Pool {
     /**
      * Sets the temperature of the pool in degrees Celsius.
      *
-     * @param temperatureCelsius the temperature to set
+     * @param temperatureCelsius
+     *         the temperature to set
      */
     public void setTemperatureCelsius(double temperatureCelsius) {
 
@@ -238,7 +247,8 @@ public class Pool {
     /**
      * Sets the pH of the pool.
      *
-     * @param pH the pH to set
+     * @param pH
+     *         the pH to set
      */
     public void setpH(double pH) {
 
@@ -264,7 +274,8 @@ public class Pool {
     /**
      * Sets the nutrient coefficient of the pool.
      *
-     * @param nutrientCoefficient the nutrient coefficient to set
+     * @param nutrientCoefficient
+     *         the nutrient coefficient to set
      */
     public void setNutrientCoefficient(double nutrientCoefficient) {
 
@@ -301,7 +312,8 @@ public class Pool {
     /**
      * Sets the set of guppies in the pool.
      *
-     * @param guppiesInPool the set of guppies to set
+     * @param guppiesInPool
+     *         the set of guppies to set
      */
     public void setGuppiesInPool(ArrayList<Guppy> guppiesInPool) {
 
@@ -313,14 +325,22 @@ public class Pool {
     /**
      * Populates the pool with guppies according to the given parameters.
      *
-     * @param numberOfGuppies      the number of guppies to create
-     * @param genus                the genus of the guppy
-     * @param species              the species of the guppy
-     * @param minAge               the minimum possible age of the guppy
-     * @param maxAge               the maximum possible age of the guppy
-     * @param femaleChance         the chance that the guppy is female
-     * @param minHealthCoefficient the minimum possible health coefficient of the guppy
-     * @param maxHealthCoefficient the maximum possible health coefficient of the guppy
+     * @param numberOfGuppies
+     *         the number of guppies to create
+     * @param genus
+     *         the genus of the guppy
+     * @param species
+     *         the species of the guppy
+     * @param minAge
+     *         the minimum possible age of the guppy
+     * @param maxAge
+     *         the maximum possible age of the guppy
+     * @param femaleChance
+     *         the chance that the guppy is female
+     * @param minHealthCoefficient
+     *         the minimum possible health coefficient of the guppy
+     * @param maxHealthCoefficient
+     *         the maximum possible health coefficient of the guppy
      */
     public void populatePool(int numberOfGuppies, String genus, String species, int minAge,
                              int maxAge, double femaleChance, double minHealthCoefficient,
@@ -329,8 +349,9 @@ public class Pool {
         for (int i = 0; i < numberOfGuppies; i++) {
             int age = generator.nextInt(maxAge - minAge + 1) + minAge;
             boolean isFemale = generator.nextDouble() < femaleChance;
-            double healthCoefficient = generator.nextDouble()
-                    * (maxHealthCoefficient - minHealthCoefficient) + minHealthCoefficient;
+            double healthCoefficient =
+                    generator.nextDouble() * (maxHealthCoefficient - minHealthCoefficient)
+                            + minHealthCoefficient;
             addGuppy(new Guppy(genus, species, age, isFemale, 0, healthCoefficient));
         }
     }
@@ -342,7 +363,8 @@ public class Pool {
      * If the resulting coefficient is less than the minimum or greater than the maximum, then the
      * new nutrient coefficient of the pool is set to be the closest bound.
      *
-     * @param delta the change in nutrient coefficient
+     * @param delta
+     *         the change in nutrient coefficient
      */
     public void changeNutrientCoefficient(double delta) {
 
@@ -364,7 +386,8 @@ public class Pool {
      * If the resulting temperature is less than the minimum or greater than the maximum, then the
      * new temperature of the pool is set to be the closest bound.
      *
-     * @param delta the change in temperature
+     * @param delta
+     *         the change in temperature
      */
     public void changeTemperature(double delta) {
 
@@ -382,13 +405,33 @@ public class Pool {
     /**
      * Adds the given guppy to the pool.
      *
-     * @param guppy the guppy to add
+     * @param guppy
+     *         the guppy to add
+     *
      * @return true if successful; false otherwise
      */
     public boolean addGuppy(Guppy guppy) {
 
-        return guppy != null && guppiesInPool.add(guppy);
+        if (guppy == null) {
+            throw new IllegalArgumentException("The given parameter was null.");
+        }
+        return guppiesInPool.add(guppy);
+    }
 
+    /**
+     * Adds the given guppies to the pool.
+     *
+     * @param guppies
+     *         the guppies to add
+     *
+     * @return true if successful; false otherwise
+     */
+    public boolean addGuppies(ArrayList<Guppy> guppies) {
+
+        if (guppies == null) {
+            throw new IllegalArgumentException("The given parameter was null.");
+        }
+        return guppiesInPool.addAll(guppies);
     }
 
     /**
@@ -556,8 +599,8 @@ public class Pool {
 
         int index = 0;
 
-        while (volumeLitres <= getGuppyVolumeRequirementInLitres()
-                && index < guppiesInPool.size()) {
+        while (volumeLitres <= getGuppyVolumeRequirementInLitres() && index < guppiesInPool
+                .size()) {
 
             guppiesInPool.get(index).setIsAlive(false);
             countDied++;
@@ -674,6 +717,73 @@ public class Pool {
                 guppiesInPool.add(i, guppiesInPool.remove(min));
             }
         }
+    }
+
+    /**
+     * Compares this pool to the given object for equality.
+     *
+     * @param o
+     *         the object to compare to
+     *
+     * @return true if the objects are equal; false otherwise
+     */
+    @Override
+    public boolean equals(Object o) {
+
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+
+        Pool pool = (Pool) o;
+
+        if (Double.compare(pool.volumeLitres, volumeLitres) != 0) {
+            return false;
+        }
+        if (Double.compare(pool.temperatureCelsius, temperatureCelsius) != 0) {
+            return false;
+        }
+        if (Double.compare(pool.pH, pH) != 0) {
+            return false;
+        }
+        if (Double.compare(pool.nutrientCoefficient, nutrientCoefficient) != 0) {
+            return false;
+        }
+        if (identificationNumber != pool.identificationNumber) {
+            return false;
+        }
+        if (!name.equals(pool.name)) {
+            return false;
+        }
+        return guppiesInPool.equals(pool.guppiesInPool);
+    }
+
+    /**
+     * Generates a hashcode to identify this pool object.
+     * <p>
+     * Two identical pool objects should return the same hashcode.
+     *
+     * @return an integer representing the hashcode of this object
+     */
+    @Override
+    public int hashCode() {
+
+        int result;
+        long temp;
+        result = name.hashCode();
+        temp = Double.doubleToLongBits(volumeLitres);
+        result = 31 * result + (int) (temp ^ (temp >>> 32));
+        temp = Double.doubleToLongBits(temperatureCelsius);
+        result = 31 * result + (int) (temp ^ (temp >>> 32));
+        temp = Double.doubleToLongBits(pH);
+        result = 31 * result + (int) (temp ^ (temp >>> 32));
+        temp = Double.doubleToLongBits(nutrientCoefficient);
+        result = 31 * result + (int) (temp ^ (temp >>> 32));
+        result = 31 * result + identificationNumber;
+        result = 31 * result + guppiesInPool.hashCode();
+        return result;
     }
 
     /**
