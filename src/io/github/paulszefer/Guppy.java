@@ -57,14 +57,14 @@ public class Guppy {
     public static final double MAXIMUM_HEALTH_COEFFICIENT = 1.0;
 
     /**
-     * The number of guppies that have been born.
-     */
-    private static int numberOfGuppiesBorn;
-
-    /**
      * Random number generator.
      */
     private static Random generator = new Random();
+
+    /**
+     * The number of guppies that have been born.
+     */
+    private static int numberOfGuppiesBorn;
 
     /**
      * Genus of the guppy.
@@ -118,9 +118,7 @@ public class Guppy {
         generationNumber = 0;
         isAlive = true;
         healthCoefficient = DEFAULT_HEALTH_COEFFICIENT;
-
-        numberOfGuppiesBorn++;
-        identificationNumber = numberOfGuppiesBorn;
+        identificationNumber = ++numberOfGuppiesBorn;
 
     }
 
@@ -192,8 +190,7 @@ public class Guppy {
 
         }
 
-        numberOfGuppiesBorn++;
-        identificationNumber = numberOfGuppiesBorn;
+        identificationNumber = ++numberOfGuppiesBorn;
 
     }
 
