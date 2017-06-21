@@ -125,12 +125,18 @@ public class Guppy {
     /**
      * Creates a Guppy with the given parameters.
      *
-     * @param newGenus             The genus of the guppy.
-     * @param newSpecies           The species of the guppy.
-     * @param newAgeInWeeks        The age of the guppy in weeks.
-     * @param newIsFemale          True if the guppy is female; false otherwise.
-     * @param newGenerationNumber  The generation of the guppy.
-     * @param newHealthCoefficient The coefficient representing the health of the guppy.
+     * @param newGenus
+     *         The genus of the guppy.
+     * @param newSpecies
+     *         The species of the guppy.
+     * @param newAgeInWeeks
+     *         The age of the guppy in weeks.
+     * @param newIsFemale
+     *         True if the guppy is female; false otherwise.
+     * @param newGenerationNumber
+     *         The generation of the guppy.
+     * @param newHealthCoefficient
+     *         The coefficient representing the health of the guppy.
      */
     public Guppy(String newGenus, String newSpecies, int newAgeInWeeks, boolean newIsFemale,
                  int newGenerationNumber, double newHealthCoefficient) {
@@ -217,21 +223,6 @@ public class Guppy {
     }
 
     /**
-     * Sets the genus of the guppy.
-     *
-     * @param newGenus The genus of the guppy.
-     */
-    public void setGenus(String newGenus) {
-
-        if (newGenus != null && !newGenus.equals("")) {
-
-            genus = newGenus.substring(0, 1).toUpperCase() + newGenus.substring(1).toLowerCase();
-
-        }
-
-    }
-
-    /**
      * Returns the species of the guppy.
      *
      * @return The species of the guppy.
@@ -239,21 +230,6 @@ public class Guppy {
     public String getSpecies() {
 
         return species;
-
-    }
-
-    /**
-     * Sets the species of the guppy.
-     *
-     * @param newSpecies The species of the guppy.
-     */
-    public void setSpecies(String newSpecies) {
-
-        if (newSpecies != null && !newSpecies.equals("")) {
-
-            species = newSpecies.toLowerCase();
-
-        }
 
     }
 
@@ -269,9 +245,97 @@ public class Guppy {
     }
 
     /**
+     * Returns whether the guppy is female.
+     *
+     * @return True if the guppy is female; false otherwise.
+     */
+    public boolean getIsFemale() {
+
+        return isFemale;
+
+    }
+
+    /**
+     * Returns the generation number of the guppy.
+     *
+     * @return The generation number of the guppy.
+     */
+    public int getGenerationNumber() {
+
+        return generationNumber;
+
+    }
+
+    /**
+     * Returns whether the guppy is alive.
+     *
+     * @return True if the guppy is alive; false otherwise.
+     */
+    public boolean getIsAlive() {
+
+        return isAlive;
+
+    }
+
+    /**
+     * Returns the coefficient representing the health of the guppy.
+     *
+     * @return The coefficient representing the health of the guppy.
+     */
+    public double getHealthCoefficient() {
+
+        return healthCoefficient;
+
+    }
+
+    /**
+     * Returns the identification number of the guppy.
+     *
+     * @return The identification number of the guppy.
+     */
+    public int getIdentificationNumber() {
+
+        return identificationNumber;
+
+    }
+
+    /**
+     * Sets the genus of the guppy.
+     *
+     * @param newGenus
+     *         The genus of the guppy.
+     */
+    public void setGenus(String newGenus) {
+
+        if (newGenus != null && !newGenus.equals("")) {
+
+            genus = newGenus.substring(0, 1).toUpperCase() + newGenus.substring(1).toLowerCase();
+
+        }
+
+    }
+
+    /**
+     * Sets the species of the guppy.
+     *
+     * @param newSpecies
+     *         The species of the guppy.
+     */
+    public void setSpecies(String newSpecies) {
+
+        if (newSpecies != null && !newSpecies.equals("")) {
+
+            species = newSpecies.toLowerCase();
+
+        }
+
+    }
+
+    /**
      * Sets the age of the guppy in weeks.
      *
-     * @param newAgeInWeeks The age of the guppy in weeks.
+     * @param newAgeInWeeks
+     *         The age of the guppy in weeks.
      */
     public void setAgeInWeeks(int newAgeInWeeks) {
 
@@ -288,20 +352,10 @@ public class Guppy {
     }
 
     /**
-     * Returns whether the guppy is female.
-     *
-     * @return True if the guppy is female; false otherwise.
-     */
-    public boolean getIsFemale() {
-
-        return isFemale;
-
-    }
-
-    /**
      * Sets whether the guppy is female.
      *
-     * @param newIsFemale True if the guppy is female; false otherwise.
+     * @param newIsFemale
+     *         True if the guppy is female; false otherwise.
      */
     public void setIsFemale(boolean newIsFemale) {
 
@@ -310,20 +364,10 @@ public class Guppy {
     }
 
     /**
-     * Returns the generation number of the guppy.
-     *
-     * @return The generation number of the guppy.
-     */
-    public int getGenerationNumber() {
-
-        return generationNumber;
-
-    }
-
-    /**
      * Sets the generation number of the guppy.
      *
-     * @param newGenerationNumber The generation number of the guppy.
+     * @param newGenerationNumber
+     *         The generation number of the guppy.
      */
     public void setGenerationNumber(int newGenerationNumber) {
 
@@ -336,20 +380,10 @@ public class Guppy {
     }
 
     /**
-     * Returns whether the guppy is alive.
-     *
-     * @return True if the guppy is alive; false otherwise.
-     */
-    public boolean getIsAlive() {
-
-        return isAlive;
-
-    }
-
-    /**
      * Sets whether the guppy is alive.
      *
-     * @param newIsAlive True if the guppy is alive; false otherwise.
+     * @param newIsAlive
+     *         True if the guppy is alive; false otherwise.
      */
     public void setIsAlive(boolean newIsAlive) {
 
@@ -358,20 +392,10 @@ public class Guppy {
     }
 
     /**
-     * Returns the coefficient representing the health of the guppy.
-     *
-     * @return The coefficient representing the health of the guppy.
-     */
-    public double getHealthCoefficient() {
-
-        return healthCoefficient;
-
-    }
-
-    /**
      * Sets the coefficient representing the health of the guppy.
      *
-     * @param newHealthCoefficient The coefficient representing the health of the guppy.
+     * @param newHealthCoefficient
+     *         The coefficient representing the health of the guppy.
      */
     public void setHealthCoefficient(double newHealthCoefficient) {
 
@@ -385,17 +409,6 @@ public class Guppy {
             healthCoefficient = DEFAULT_HEALTH_COEFFICIENT;
 
         }
-
-    }
-
-    /**
-     * Returns the identification number of the guppy.
-     *
-     * @return The identification number of the guppy.
-     */
-    public int getIdentificationNumber() {
-
-        return identificationNumber;
 
     }
 
@@ -453,7 +466,8 @@ public class Guppy {
      * the resulting coefficient is equal to the maximum coefficient or more, then the guppy is in
      * perfect health.
      *
-     * @param delta The change in the coefficient representing the health of the guppy.
+     * @param delta
+     *         The change in the coefficient representing the health of the guppy.
      */
     public void changeHealthCoefficient(double delta) {
 
@@ -506,8 +520,12 @@ public class Guppy {
 
                 for (int i = 0; i < numberOfOffspring; i++) {
 
-                    babyGuppies.add(new Guppy(genus, species, 0, generator.nextBoolean(),
-                            generationNumber + 1, (1.0 + healthCoefficient) / 2.0));
+                    babyGuppies.add(new Guppy(genus,
+                                              species,
+                                              0,
+                                              generator.nextBoolean(),
+                                              generationNumber + 1,
+                                              (1.0 + healthCoefficient) / 2.0));
 
                 }
 

@@ -168,6 +168,66 @@ public class Pool {
     }
 
     /**
+     * Returns the volume of water in the pool in Litres.
+     *
+     * @return the volume of water in the pool in Litres
+     */
+    public double getVolumeLitres() {
+
+        return volumeLitres;
+    }
+
+    /**
+     * Returns the temperature of the pool in degrees Celsius.
+     *
+     * @return the temperature of the pool in degrees Celsius
+     */
+    public double getTemperatureCelsius() {
+
+        return temperatureCelsius;
+    }
+
+    /**
+     * Returns the pH of the pool.
+     *
+     * @return the pH of the pool
+     */
+    public double getpH() {
+
+        return pH;
+    }
+
+    /**
+     * Returns the nutrient coefficient of the pool.
+     *
+     * @return the nutrient coefficient of the pool
+     */
+    public double getNutrientCoefficient() {
+
+        return nutrientCoefficient;
+    }
+
+    /**
+     * Returns the identification number of the pool.
+     *
+     * @return the identification number of the pool
+     */
+    public int getIdentificationNumber() {
+
+        return identificationNumber;
+    }
+
+    /**
+     * Returns the set of guppies in the pool.
+     *
+     * @return the set of guppies in the pool
+     */
+    public ArrayList<Guppy> getGuppiesInPool() {
+
+        return guppiesInPool;
+    }
+
+    /**
      * Sets the name.
      *
      * @param name
@@ -186,16 +246,6 @@ public class Pool {
     }
 
     /**
-     * Returns the volume of water in the pool in Litres.
-     *
-     * @return the volume of water in the pool in Litres
-     */
-    public double getVolumeLitres() {
-
-        return volumeLitres;
-    }
-
-    /**
      * Sets the volume of water in the pool in Litres.
      *
      * @param volumeLitres
@@ -204,16 +254,6 @@ public class Pool {
     public void setVolumeLitres(double volumeLitres) {
 
         this.volumeLitres = volumeLitres > 0.0 ? volumeLitres : 0.0;
-    }
-
-    /**
-     * Returns the temperature of the pool in degrees Celsius.
-     *
-     * @return the temperature of the pool in degrees Celsius
-     */
-    public double getTemperatureCelsius() {
-
-        return temperatureCelsius;
     }
 
     /**
@@ -235,16 +275,6 @@ public class Pool {
     }
 
     /**
-     * Returns the pH of the pool.
-     *
-     * @return the pH of the pool
-     */
-    public double getpH() {
-
-        return pH;
-    }
-
-    /**
      * Sets the pH of the pool.
      *
      * @param pH
@@ -259,16 +289,6 @@ public class Pool {
         }
 
         this.pH = newPH;
-    }
-
-    /**
-     * Returns the nutrient coefficient of the pool.
-     *
-     * @return the nutrient coefficient of the pool
-     */
-    public double getNutrientCoefficient() {
-
-        return nutrientCoefficient;
     }
 
     /**
@@ -287,26 +307,6 @@ public class Pool {
         }
 
         this.nutrientCoefficient = newNutrientCoefficient;
-    }
-
-    /**
-     * Returns the identification number of the pool.
-     *
-     * @return the identification number of the pool
-     */
-    public int getIdentificationNumber() {
-
-        return identificationNumber;
-    }
-
-    /**
-     * Returns the set of guppies in the pool.
-     *
-     * @return the set of guppies in the pool
-     */
-    public ArrayList<Guppy> getGuppiesInPool() {
-
-        return guppiesInPool;
     }
 
     /**
