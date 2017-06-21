@@ -599,8 +599,7 @@ public class Pool {
         ArrayList<Guppy> weakestGuppies = new ArrayList<>();
         int index = 0;
 
-        while (volumeLitres <= getGuppyVolumeRequirementInLitres()
-                && index < guppiesInPool.size()) {
+        while (volumeLitres < getGuppyVolumeRequirementInLitres()) {
             weakestGuppies.add(guppiesInPool.remove(index));
         }
 

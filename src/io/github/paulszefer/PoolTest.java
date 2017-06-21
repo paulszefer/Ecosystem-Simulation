@@ -9,7 +9,8 @@ import java.util.Random;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 /**
  * Tests the constructors and methods of the Pool class.
@@ -43,16 +44,18 @@ public class PoolTest {
     public static final double PH_UPPER_BOUND = Pool.MAXIMUM_PH;
     public static final double PH_ABOVE_UPPER_BOUND = Pool.MAXIMUM_PH + 1.0;
 
-    public static final double NUTRIENT_COEFFICIENT_BELOW_LOWER_BOUND = Pool.MINIMUM_NUTRIENT_COEFFICIENT
-            - 0.1;
+    public static final double NUTRIENT_COEFFICIENT_BELOW_LOWER_BOUND =
+            Pool.MINIMUM_NUTRIENT_COEFFICIENT
+                    - 0.1;
     public static final double NUTRIENT_COEFFICIENT_LOWER_BOUND = Pool.MINIMUM_NUTRIENT_COEFFICIENT;
     public static final double NUTRIENT_COEFFICIENT_VALID_1 = Pool.MINIMUM_NUTRIENT_COEFFICIENT
             + 0.1;
     public static final double NUTRIENT_COEFFICIENT_VALID_2 = Pool.MAXIMUM_NUTRIENT_COEFFICIENT
             - 0.1;
     public static final double NUTRIENT_COEFFICIENT_UPPER_BOUND = Pool.MAXIMUM_NUTRIENT_COEFFICIENT;
-    public static final double NUTRIENT_COEFFICIENT_ABOVE_UPPER_BOUND = Pool.MAXIMUM_NUTRIENT_COEFFICIENT
-            + 0.1;
+    public static final double NUTRIENT_COEFFICIENT_ABOVE_UPPER_BOUND =
+            Pool.MAXIMUM_NUTRIENT_COEFFICIENT
+                    + 0.1;
 
     public static final double TOLERANCE = 0.000001;
 
@@ -70,22 +73,27 @@ public class PoolTest {
     public void setUp() throws Exception {
 
         pool = new Pool(NAME_VALID, VOLUME_LITRES_VALID, TEMP_CELSIUS_VALID_2, PH_VALID_2,
-                NUTRIENT_COEFFICIENT_VALID_2);
+                        NUTRIENT_COEFFICIENT_VALID_2);
         pool0ParameterConstructor = new Pool();
-        pool5ParameterConstructorValidParameterValues = new Pool(NAME_VALID, VOLUME_LITRES_VALID,
-                TEMP_CELSIUS_VALID_1, PH_VALID_1, NUTRIENT_COEFFICIENT_VALID_1);
+        pool5ParameterConstructorValidParameterValues = new Pool(NAME_VALID,
+                                                                 VOLUME_LITRES_VALID,
+                                                                 TEMP_CELSIUS_VALID_1,
+                                                                 PH_VALID_1,
+                                                                 NUTRIENT_COEFFICIENT_VALID_1);
         pool5ParameterConstructorInvalidParameterValuesBelowBound = new Pool(
                 NAME_WHITESPACE_UNFORMATTED, VOLUME_LITRES_BELOW_LOWER_BOUND,
                 TEMP_CELSIUS_BELOW_LOWER_BOUND, PH_BELOW_LOWER_BOUND,
                 NUTRIENT_COEFFICIENT_BELOW_LOWER_BOUND);
         pool5ParameterConstructorInvalidParameterValuesAboveBound = new Pool(NAME_NULL,
-                VOLUME_LITRES_LOWER_BOUND, TEMP_CELSIUS_ABOVE_UPPER_BOUND, PH_ABOVE_UPPER_BOUND,
-                NUTRIENT_COEFFICIENT_ABOVE_UPPER_BOUND);
+                                                                             VOLUME_LITRES_LOWER_BOUND,
+                                                                             TEMP_CELSIUS_ABOVE_UPPER_BOUND,
+                                                                             PH_ABOVE_UPPER_BOUND,
+                                                                             NUTRIENT_COEFFICIENT_ABOVE_UPPER_BOUND);
 
         testGuppies = new ArrayList<>();
 
         // must be even
-        final int numberOfTestGuppies = 10;
+        final int numberOfTestGuppies = 100;
 
         for (int i = 0; i < numberOfTestGuppies; i++) {
             testGuppies.add(new Guppy());
@@ -117,7 +125,7 @@ public class PoolTest {
     public void testPoolTemperature() {
 
         assertThat(pool0ParameterConstructor.getTemperatureCelsius(),
-                is(Pool.DEFAULT_POOL_TEMP_CELSIUS));
+                   is(Pool.DEFAULT_POOL_TEMP_CELSIUS));
 
     }
 
@@ -132,7 +140,7 @@ public class PoolTest {
     public void testPoolNutrientCoefficient() {
 
         assertThat(pool0ParameterConstructor.getNutrientCoefficient(),
-                is(Pool.DEFAULT_NUTRIENT_COEFFICIENT));
+                   is(Pool.DEFAULT_NUTRIENT_COEFFICIENT));
 
     }
 
@@ -142,7 +150,7 @@ public class PoolTest {
         pool0ParameterConstructor = new Pool();
 
         assertThat(pool0ParameterConstructor.getIdentificationNumber(),
-                is(Pool.getNumberCreated()));
+                   is(Pool.getNumberCreated()));
 
     }
 
@@ -203,7 +211,7 @@ public class PoolTest {
     public void testPoolStringDoubleDoubleDoubleDoubleVolumeLitres() {
 
         assertThat(pool5ParameterConstructorValidParameterValues.getVolumeLitres(),
-                is(VOLUME_LITRES_VALID));
+                   is(VOLUME_LITRES_VALID));
 
     }
 
@@ -211,7 +219,7 @@ public class PoolTest {
     public void testPoolStringDoubleDoubleDoubleDoubleTemperature() {
 
         assertThat(pool5ParameterConstructorValidParameterValues.getTemperatureCelsius(),
-                is(TEMP_CELSIUS_VALID_1));
+                   is(TEMP_CELSIUS_VALID_1));
 
     }
 
@@ -226,20 +234,23 @@ public class PoolTest {
     public void testPoolStringDoubleDoubleDoubleDoubleNutrientCoefficient() {
 
         assertThat(pool5ParameterConstructorValidParameterValues.getNutrientCoefficient(),
-                is(NUTRIENT_COEFFICIENT_VALID_1));
+                   is(NUTRIENT_COEFFICIENT_VALID_1));
 
     }
 
     @Test
     public void testPoolStringDoubleDoubleDoubleDoubleIdentificationNumber() {
 
-        pool5ParameterConstructorValidParameterValues = new Pool(NAME_VALID, VOLUME_LITRES_VALID,
-                TEMP_CELSIUS_VALID_1, PH_VALID_1, NUTRIENT_COEFFICIENT_VALID_1);
+        pool5ParameterConstructorValidParameterValues = new Pool(NAME_VALID,
+                                                                 VOLUME_LITRES_VALID,
+                                                                 TEMP_CELSIUS_VALID_1,
+                                                                 PH_VALID_1,
+                                                                 NUTRIENT_COEFFICIENT_VALID_1);
 
         int numberOfPools = Pool.getNumberCreated();
 
         assertThat(pool5ParameterConstructorValidParameterValues.getIdentificationNumber(),
-                is(numberOfPools));
+                   is(numberOfPools));
 
     }
 
@@ -247,7 +258,7 @@ public class PoolTest {
     public void testPoolStringDoubleDoubleDoubleDoubleGuppiesInPoolCreatesArrayList() {
 
         assertThat(pool5ParameterConstructorValidParameterValues.getGuppiesInPool(),
-                is(instanceOf(ArrayList.class)));
+                   is(instanceOf(ArrayList.class)));
 
     }
 
@@ -262,7 +273,7 @@ public class PoolTest {
     public void testPoolStringDoubleDoubleDoubleDoubleRandomNumberGeneratorGeneratesInteger() {
 
         assertThat(pool5ParameterConstructorValidParameterValues.getIdentificationNumber(),
-                is(instanceOf(Integer.class)));
+                   is(instanceOf(Integer.class)));
 
     }
 
@@ -270,7 +281,7 @@ public class PoolTest {
     public void testPoolStringDoubleDoubleDoubleDoubleRandomNumberGeneratorGeneratesPositiveNumber() {
 
         assertThat(pool5ParameterConstructorValidParameterValues.getIdentificationNumber(),
-                is(greaterThanOrEqualTo(0)));
+                   is(greaterThanOrEqualTo(0)));
 
     }
 
@@ -280,7 +291,7 @@ public class PoolTest {
         int initial = Pool.getNumberCreated();
 
         new Pool(NAME_VALID, VOLUME_LITRES_VALID, TEMP_CELSIUS_VALID_1, PH_VALID_1,
-                NUTRIENT_COEFFICIENT_VALID_1);
+                 NUTRIENT_COEFFICIENT_VALID_1);
 
         assertThat(initial + 1, is(equalTo(Pool.getNumberCreated())));
 
@@ -306,7 +317,7 @@ public class PoolTest {
     public void testGetVolumeLitres() {
 
         assertThat(pool5ParameterConstructorValidParameterValues.getVolumeLitres(),
-                is(VOLUME_LITRES_VALID));
+                   is(VOLUME_LITRES_VALID));
 
     }
 
@@ -314,7 +325,7 @@ public class PoolTest {
     public void testGetTemperatureCelsius() {
 
         assertThat(pool5ParameterConstructorValidParameterValues.getTemperatureCelsius(),
-                is(TEMP_CELSIUS_VALID_1));
+                   is(TEMP_CELSIUS_VALID_1));
 
     }
 
@@ -329,7 +340,7 @@ public class PoolTest {
     public void testGetNutrientCoefficient() {
 
         assertThat(pool5ParameterConstructorValidParameterValues.getNutrientCoefficient(),
-                is(NUTRIENT_COEFFICIENT_VALID_1));
+                   is(NUTRIENT_COEFFICIENT_VALID_1));
 
     }
 
@@ -809,10 +820,60 @@ public class PoolTest {
     }
 
     @Test
-    public void testAddGuppyNullFails() {
+    public void testAddGuppyNullThrowsException() {
 
-        assertFalse(pool.addGuppy(null));
+        try {
+            pool.addGuppy(null);
+        } catch (IllegalArgumentException e) {
+            return;
+        }
+        fail("No exception thrown.");
+    }
 
+    @Test
+    public void testAddGuppiesEmptyArrayList() {
+
+        ArrayList<Guppy> emptyList = new ArrayList<>();
+
+        pool.setGuppiesInPool(emptyList);
+        pool.addGuppies(testGuppies);
+
+        Guppy result = pool.getGuppiesInPool().get(pool.getGuppiesInPool().size() - 1);
+        Guppy expected = testGuppies.get(testGuppies.size() - 1);
+        assertThat(result, is(expected));
+    }
+
+    @Test
+    public void testAddGuppiesNotEmptyArrayList() {
+
+        ArrayList<Guppy> emptyList = new ArrayList<>();
+
+        pool.setGuppiesInPool(emptyList);
+        pool.addGuppy(new Guppy());
+
+        pool.addGuppies(testGuppies);
+
+        Guppy result = pool.getGuppiesInPool().get(pool.getGuppiesInPool().size() - 1);
+        Guppy expected = testGuppies.get(testGuppies.size() - 1);
+        assertThat(result, is(expected));
+    }
+
+    @Test
+    public void testAddGuppiesValidSetSucceeds() {
+
+        assertTrue(pool.addGuppies(testGuppies));
+
+    }
+
+    @Test
+    public void testAddGuppiesNullThrowsException() {
+
+        try {
+            pool.addGuppies(null);
+        } catch (IllegalArgumentException e) {
+            return;
+        }
+        fail("No exception thrown.");
     }
 
     @Test
@@ -1107,12 +1168,51 @@ public class PoolTest {
 
         if (ages.size() % 2 == 0) {
             medianAge = (ages.get(ages.size() / 2 - 1) + ages.get(ages.size() / 2)) / 2.0;
+        } else if (ages.size() == 1) {
+            medianAge = ages.get(0);
         } else {
             medianAge = ages.get(ages.size() / 2 - 1);
         }
 
         assertThat(pool.getMedianAge(), is(medianAge));
 
+    }
+
+    @Test
+    public void testAdjustForCrowdingRemovesEnough() {
+
+        pool.setVolumeLitres(1.4);
+        pool.adjustForCrowding();
+        assertThat(pool.getVolumeLitres(),
+                   is(greaterThanOrEqualTo(pool.getGuppyVolumeRequirementInLitres())));
+    }
+
+    @Test
+    public void testAdjustForCrowdingRemovesJustEnough() {
+
+        pool.setVolumeLitres(1.5);
+        for (Guppy guppy : pool.getGuppiesInPool()) {
+            guppy.setAgeInWeeks(0);
+        }
+        pool.adjustForCrowding();
+        assertThat(pool.getVolumeLitres(), is(equalTo(pool.getGuppyVolumeRequirementInLitres())));
+    }
+
+    @Test
+    public void testAdjustForCrowdingRemovesGuppies() {
+
+        pool.setVolumeLitres(1.5);
+        int initial = pool.getPopulation();
+        int removedGuppies = pool.adjustForCrowding().size();
+        assertThat(removedGuppies, is(equalTo(initial - pool.getPopulation())));
+    }
+
+    @Test
+    public void testAdjustForCrowdingReturnsRemovedGuppies() {
+
+        pool.setVolumeLitres(1.5);
+        ArrayList<Guppy> removedGuppies = pool.adjustForCrowding();
+        assertThat(removedGuppies, is(instanceOf(ArrayList.class)));
     }
 
     @Test

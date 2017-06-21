@@ -141,7 +141,7 @@ public class Simulation {
      * <ul>
      * <li>Deaths to old age</li>
      * <li>Deaths to starvation</li>
-     * <li>Deaths to overcrowding</li>
+     * <li>Crowded out</li>
      * <li>Number of births</li>
      * <li>Population of pool 1</li>
      * <li>Population of pool 2</li>
@@ -165,7 +165,7 @@ public class Simulation {
             starvedToDeath += pool.applyNutrientCoefficient();
             numberRemoved += pool.removeDeadGuppies();
             newFry += pool.spawn();
-            crowdedOut += pool.adjustForCrowding();
+            crowdedOut += pool.adjustForCrowding().size();
             numberRemoved += pool.removeDeadGuppies();
 
         }
@@ -175,7 +175,7 @@ public class Simulation {
             System.out.println("----------------------");
             System.out.println("Deaths to old age: " + diedOfOldAge);
             System.out.println("Deaths to starvation: " + starvedToDeath);
-            System.out.println("Deaths to overcrowding: " + crowdedOut);
+            System.out.println("Crowded out: " + crowdedOut);
             System.out.println("Number of births: " + newFry);
             System.out.println("Pool 1 population: " + pools.get(0).getPopulation());
             System.out.println("Pool 2 population: " + pools.get(1).getPopulation());

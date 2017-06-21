@@ -3,6 +3,8 @@ package io.github.paulszefer;
 import java.util.ArrayList;
 import java.util.Random;
 
+import static io.github.paulszefer.Pool.*;
+
 /**
  * A stream provides a connection between pools.
  * <p>
@@ -46,8 +48,6 @@ public class Stream {
 
         setSource(source);
         setDestination(destination);
-        setpH(source.getpH());
-        setTemperature(source.getTemperatureCelsius());
 
     }
 
@@ -100,6 +100,8 @@ public class Stream {
     public void setSource(Pool source) {
 
         this.source = source;
+        setpH(source.getpH());
+        setTemperature(source.getTemperatureCelsius());
     }
 
     /**
@@ -121,7 +123,13 @@ public class Stream {
      */
     public void setpH(double pH) {
 
-        this.pH = pH;
+        double newPH = NEUTRAL_PH;
+
+        if (pH >= MINIMUM_PH && pH <= MAXIMUM_PH) {
+            newPH = pH;
+        }
+
+        this.pH = newPH;
     }
 
     /**
@@ -132,7 +140,14 @@ public class Stream {
      */
     public void setTemperature(double temperature) {
 
-        this.temperature = temperature;
+        double newTemperature = DEFAULT_POOL_TEMP_CELSIUS;
+
+        if (temperature >= MINIMUM_POOL_TEMP_CELSIUS
+                && temperature <= MAXIMUM_POOL_TEMP_CELSIUS) {
+            newTemperature = temperature;
+        }
+
+        this.temperature = newTemperature;
     }
 
     /**
@@ -144,7 +159,7 @@ public class Stream {
      * @param guppies
      *         the guppies to transport
      *
-     * @return the number of guppies that died in transport
+     * @return the number of guppies that die in transport
      */
     public int transportGuppies(ArrayList<Guppy> guppies) {
 
@@ -152,10 +167,48 @@ public class Stream {
 
         for (Guppy guppy : guppies) {
             guppy.setIsAlive(generator.nextDouble() < guppy.getHealthCoefficient());
-            countDied += guppy.getIsAlive() ? 0 : 1;
+            countDied += !guppy.getIsAlive() ? 1 : 0;
         }
         destination.addGuppies(guppies);
 
         return countDied;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+
+        Stream stream = (Stream) o;
+
+        if (Double.compare(stream.pH, pH) != 0) {
+            return false;
+        }
+        if (Double.compare(stream.temperature, temperature) != 0) {
+            return false;
+        }
+        if (!source.equals(stream.source)) {
+            return false;
+        }
+        return destination.equals(stream.destination);
+    }
+
+    @Override
+    public int hashCode() {
+
+        int result;
+        long temp;
+        result = source.hashCode();
+        result = 31 * result + destination.hashCode();
+        temp = Double.doubleToLongBits(pH);
+        result = 31 * result + (int) (temp ^ (temp >>> 32));
+        temp = Double.doubleToLongBits(temperature);
+        result = 31 * result + (int) (temp ^ (temp >>> 32));
+        return result;
     }
 }

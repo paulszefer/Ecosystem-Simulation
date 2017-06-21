@@ -88,8 +88,10 @@ public class Ecosystem {
 
         if (pool != null) {
             pools.add(pool);
-            Stream stream = new Stream(pools.get(pools.size() - 1), pool);
-            addStream(stream);
+            if (pools.size() > 1) {
+                Stream stream = new Stream(pools.get(pools.size() - 2), pool);
+                addStream(stream);
+            }
         }
     }
 
@@ -164,16 +166,8 @@ public class Ecosystem {
 
             ArrayList<Guppy> weakestGuppies = pool.adjustForCrowding();
 
-            ArrayList<Stream> possibleStreams = new ArrayList<>();
-
-            for (Stream stream : streams) {
-                if (stream.getSource() == pool) {
-                    possibleStreams.add(stream);
-                }
-            }
-
-            if (possibleStreams.size() > 0) {
-                Stream stream = possibleStreams.get(generator.nextInt(possibleStreams.size() - 1));
+            Stream stream = getRandomStream(pool);
+            if (stream != null) {
                 diedToOverCrowding += stream.transportGuppies(weakestGuppies);
             } else {
                 for (Guppy guppy : weakestGuppies) {
@@ -185,5 +179,23 @@ public class Ecosystem {
         }
 
         return diedToOverCrowding;
+    }
+
+    public Stream getRandomStream(Pool pool) {
+
+        ArrayList<Stream> possibleStreams = new ArrayList<>();
+
+        for (Stream stream : streams) {
+            if (stream.getSource() == pool) {
+                possibleStreams.add(stream);
+            }
+        }
+
+        if (possibleStreams.size() > 1) {
+            return possibleStreams.get(generator.nextInt(possibleStreams.size() - 1));
+        } else if (possibleStreams.size() == 1) {
+            return possibleStreams.get(0);
+        }
+        return null;
     }
 }
