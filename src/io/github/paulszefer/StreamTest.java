@@ -62,7 +62,7 @@ public class StreamTest {
     @Test
     public void getTemperature() throws Exception {
 
-        assertThat(stream1.getTemperature(), is(equalTo(pool1.getTemperatureCelsius())));
+        assertThat(stream1.getTemperature(), is(equalTo(pool1.getTemperature())));
     }
 
     @Test

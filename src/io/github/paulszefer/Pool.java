@@ -10,42 +10,7 @@ import java.util.Random;
  * @author Paul Szefer
  * @version 1.0
  */
-public class Pool {
-
-    /**
-     * The default pool name.
-     */
-    public static final String DEFAULT_POOL_NAME = "Unnamed";
-
-    /**
-     * The default pool temperature in Celsius.
-     */
-    public static final double DEFAULT_POOL_TEMP_CELSIUS = 40.0;
-
-    /**
-     * The minimum pool temperature in degrees Celsius.
-     */
-    public static final double MINIMUM_POOL_TEMP_CELSIUS = 0.0;
-
-    /**
-     * The maximum pool temperature in degrees Celsius.
-     */
-    public static final double MAXIMUM_POOL_TEMP_CELSIUS = 100.0;
-
-    /**
-     * The default pool pH.
-     */
-    public static final double NEUTRAL_PH = 7.0;
-
-    /**
-     * The minimum pool pH.
-     */
-    public static final double MINIMUM_PH = 0.0;
-
-    /**
-     * The maximum pool pH.
-     */
-    public static final double MAXIMUM_PH = 14.0;
+public class Pool extends WaterBody {
 
     /**
      * The default pool nutrient coefficient.
@@ -73,24 +38,9 @@ public class Pool {
     private static Random generator = new Random();
 
     /**
-     * The name of the pool.
-     */
-    private String name;
-
-    /**
      * The volume of water in the pool in Litres.
      */
     private double volumeLitres;
-
-    /**
-     * The temperature of the pool in degrees Celsius.
-     */
-    private double temperatureCelsius;
-
-    /**
-     * The pH of the pool.
-     */
-    private double pH;
 
     /**
      * The nutrient coefficient of the pool.
@@ -112,10 +62,8 @@ public class Pool {
      */
     public Pool() {
 
-        name = DEFAULT_POOL_NAME;
+        super(DEFAULT_WATER_BODY_NAME, DEFAULT_WATER_TEMP_CELSIUS, NEUTRAL_PH);
         volumeLitres = 0.0;
-        temperatureCelsius = DEFAULT_POOL_TEMP_CELSIUS;
-        pH = NEUTRAL_PH;
         nutrientCoefficient = DEFAULT_NUTRIENT_COEFFICIENT;
         identificationNumber = ++numberOfPools;
         guppiesInPool = new ArrayList<>();
@@ -138,10 +86,8 @@ public class Pool {
     public Pool(String name, double volumeLitres, double temperatureCelsius, double pH,
                 double nutrientCoefficient) {
 
-        setName(name);
+        super(name, temperatureCelsius, pH);
         setVolumeLitres(volumeLitres);
-        setTemperatureCelsius(temperatureCelsius);
-        setpH(pH);
         setNutrientCoefficient(nutrientCoefficient);
         identificationNumber = ++numberOfPools;
         guppiesInPool = new ArrayList<>();
@@ -158,16 +104,6 @@ public class Pool {
     }
 
     /**
-     * Returns the name of the pool.
-     *
-     * @return the name of the pool
-     */
-    public String getName() {
-
-        return name;
-    }
-
-    /**
      * Returns the volume of water in the pool in Litres.
      *
      * @return the volume of water in the pool in Litres
@@ -175,26 +111,6 @@ public class Pool {
     public double getVolumeLitres() {
 
         return volumeLitres;
-    }
-
-    /**
-     * Returns the temperature of the pool in degrees Celsius.
-     *
-     * @return the temperature of the pool in degrees Celsius
-     */
-    public double getTemperatureCelsius() {
-
-        return temperatureCelsius;
-    }
-
-    /**
-     * Returns the pH of the pool.
-     *
-     * @return the pH of the pool
-     */
-    public double getpH() {
-
-        return pH;
     }
 
     /**
@@ -228,24 +144,6 @@ public class Pool {
     }
 
     /**
-     * Sets the name.
-     *
-     * @param name
-     *         the name to set
-     */
-    public void setName(String name) {
-
-        String newName = DEFAULT_POOL_NAME;
-
-        if (name != null && !name.replaceAll(" ", "").equals("")) {
-            newName = name.replaceAll(" ", "").substring(0, 1).toUpperCase() + name
-                    .replaceAll(" ", "").substring(1).toLowerCase();
-        }
-
-        this.name = newName;
-    }
-
-    /**
      * Sets the volume of water in the pool in Litres.
      *
      * @param volumeLitres
@@ -254,41 +152,6 @@ public class Pool {
     public void setVolumeLitres(double volumeLitres) {
 
         this.volumeLitres = volumeLitres > 0.0 ? volumeLitres : 0.0;
-    }
-
-    /**
-     * Sets the temperature of the pool in degrees Celsius.
-     *
-     * @param temperatureCelsius
-     *         the temperature to set
-     */
-    public void setTemperatureCelsius(double temperatureCelsius) {
-
-        double newTemperature = DEFAULT_POOL_TEMP_CELSIUS;
-
-        if (temperatureCelsius >= MINIMUM_POOL_TEMP_CELSIUS
-                && temperatureCelsius <= MAXIMUM_POOL_TEMP_CELSIUS) {
-            newTemperature = temperatureCelsius;
-        }
-
-        this.temperatureCelsius = newTemperature;
-    }
-
-    /**
-     * Sets the pH of the pool.
-     *
-     * @param pH
-     *         the pH to set
-     */
-    public void setpH(double pH) {
-
-        double newPH = NEUTRAL_PH;
-
-        if (pH >= MINIMUM_PH && pH <= MAXIMUM_PH) {
-            newPH = pH;
-        }
-
-        this.pH = newPH;
     }
 
     /**
@@ -382,7 +245,6 @@ public class Pool {
     /**
      * Changes the pool's temperature by delta.
      * <p>
-     * <p>
      * If the resulting temperature is less than the minimum or greater than the maximum, then the
      * new temperature of the pool is set to be the closest bound.
      *
@@ -391,15 +253,15 @@ public class Pool {
      */
     public void changeTemperature(double delta) {
 
-        double newTemp = temperatureCelsius + delta;
+        double newTemp = getTemperature() + delta;
 
-        if (newTemp < MINIMUM_POOL_TEMP_CELSIUS) {
-            newTemp = MINIMUM_POOL_TEMP_CELSIUS;
-        } else if (newTemp > MAXIMUM_POOL_TEMP_CELSIUS) {
-            newTemp = MAXIMUM_POOL_TEMP_CELSIUS;
+        if (newTemp < MINIMUM_WATER_TEMP_CELSIUS) {
+            newTemp = MINIMUM_WATER_TEMP_CELSIUS;
+        } else if (newTemp > MAXIMUM_WATER_TEMP_CELSIUS) {
+            newTemp = MAXIMUM_WATER_TEMP_CELSIUS;
         }
 
-        temperatureCelsius = newTemp;
+        setTemperature(newTemp);
     }
 
     /**
@@ -728,10 +590,10 @@ public class Pool {
         if (Double.compare(pool.volumeLitres, volumeLitres) != 0) {
             return false;
         }
-        if (Double.compare(pool.temperatureCelsius, temperatureCelsius) != 0) {
+        if (Double.compare(pool.getTemperature(), getTemperature()) != 0) {
             return false;
         }
-        if (Double.compare(pool.pH, pH) != 0) {
+        if (Double.compare(pool.getpH(), getpH()) != 0) {
             return false;
         }
         if (Double.compare(pool.nutrientCoefficient, nutrientCoefficient) != 0) {
@@ -740,7 +602,7 @@ public class Pool {
         if (identificationNumber != pool.identificationNumber) {
             return false;
         }
-        if (!name.equals(pool.name)) {
+        if (!getName().equals(pool.getName())) {
             return false;
         }
         return guppiesInPool.equals(pool.guppiesInPool);
@@ -758,12 +620,12 @@ public class Pool {
 
         int result;
         long temp;
-        result = name.hashCode();
+        result = getName().hashCode();
         temp = Double.doubleToLongBits(volumeLitres);
         result = 31 * result + (int) (temp ^ (temp >>> 32));
-        temp = Double.doubleToLongBits(temperatureCelsius);
+        temp = Double.doubleToLongBits(getTemperature());
         result = 31 * result + (int) (temp ^ (temp >>> 32));
-        temp = Double.doubleToLongBits(pH);
+        temp = Double.doubleToLongBits(getpH());
         result = 31 * result + (int) (temp ^ (temp >>> 32));
         temp = Double.doubleToLongBits(nutrientCoefficient);
         result = 31 * result + (int) (temp ^ (temp >>> 32));
@@ -787,9 +649,9 @@ public class Pool {
      */
     public String toString() {
 
-        return "[name=" + name + ",volumeLitres=" + volumeLitres + ",temperatureCelsius="
-                + temperatureCelsius + ",pH=" + pH + ",nutrientCoefficient=" + nutrientCoefficient
-                + ",identificationNumber=" + identificationNumber + ",guppiesInPool="
-                + guppiesInPool + "]";
+        return "[name=" + getName() + ",volumeLitres=" + volumeLitres + ",temperatureCelsius="
+                + getTemperature() + ",pH=" + getpH() + ",nutrientCoefficient="
+                + nutrientCoefficient + ",identificationNumber=" + identificationNumber
+                + ",guppiesInPool=" + guppiesInPool + "]";
     }
 }

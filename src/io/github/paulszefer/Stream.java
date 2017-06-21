@@ -3,8 +3,6 @@ package io.github.paulszefer;
 import java.util.ArrayList;
 import java.util.Random;
 
-import static io.github.paulszefer.Pool.*;
-
 /**
  * A stream provides a connection between pools.
  * <p>
@@ -15,7 +13,7 @@ import static io.github.paulszefer.Pool.*;
  * @author Paul Szefer
  * @version 1.0
  */
-public class Stream {
+public class Stream extends WaterBody {
 
     /** Random number generator. */
     private static Random generator = new Random();
@@ -25,12 +23,6 @@ public class Stream {
 
     /** The destination pool. */
     private Pool destination;
-
-    /** The pH. */
-    private double pH;
-
-    /** The temperature in degrees Celsius. */
-    private double temperature;
 
     /**
      * A stream that flows from its source pool to its destination pool.
@@ -46,9 +38,30 @@ public class Stream {
      */
     public Stream(Pool source, Pool destination) {
 
+        super(source + "to" + destination, source.getpH(), source.getTemperature());
         setSource(source);
         setDestination(destination);
+    }
 
+    /**
+     * A stream that flows from its source pool to its destination pool.
+     * <p>
+     * Streams facilitate the transfer of guppies between pools.
+     * <p>
+     * Streams begin with the same pH and temperature as their source pool.
+     *
+     * @param name
+     *         the name
+     * @param source
+     *         the source pool
+     * @param destination
+     *         the destination pool
+     */
+    public Stream(String name, Pool source, Pool destination) {
+
+        super(name, source.getpH(), source.getTemperature());
+        setSource(source);
+        setDestination(destination);
     }
 
     /**
@@ -72,26 +85,6 @@ public class Stream {
     }
 
     /**
-     * Returns the pH.
-     *
-     * @return the pH
-     */
-    public double getpH() {
-
-        return pH;
-    }
-
-    /**
-     * Returns the temperature in degrees Celsius.
-     *
-     * @return the temperature in degrees Celsius
-     */
-    public double getTemperature() {
-
-        return temperature;
-    }
-
-    /**
      * Sets the source pool.
      *
      * @param source
@@ -101,7 +94,7 @@ public class Stream {
 
         this.source = source;
         setpH(source.getpH());
-        setTemperature(source.getTemperatureCelsius());
+        setTemperature(source.getTemperature());
     }
 
     /**
@@ -113,41 +106,6 @@ public class Stream {
     public void setDestination(Pool destination) {
 
         this.destination = destination;
-    }
-
-    /**
-     * Sets the pH.
-     *
-     * @param pH
-     *         the pH
-     */
-    public void setpH(double pH) {
-
-        double newPH = NEUTRAL_PH;
-
-        if (pH >= MINIMUM_PH && pH <= MAXIMUM_PH) {
-            newPH = pH;
-        }
-
-        this.pH = newPH;
-    }
-
-    /**
-     * Sets the temperature in degrees Celsius.
-     *
-     * @param temperature
-     *         the temperature in degrees Celsius
-     */
-    public void setTemperature(double temperature) {
-
-        double newTemperature = DEFAULT_POOL_TEMP_CELSIUS;
-
-        if (temperature >= MINIMUM_POOL_TEMP_CELSIUS
-                && temperature <= MAXIMUM_POOL_TEMP_CELSIUS) {
-            newTemperature = temperature;
-        }
-
-        this.temperature = newTemperature;
     }
 
     /**
@@ -186,10 +144,10 @@ public class Stream {
 
         Stream stream = (Stream) o;
 
-        if (Double.compare(stream.pH, pH) != 0) {
+        if (Double.compare(stream.getpH(), getpH()) != 0) {
             return false;
         }
-        if (Double.compare(stream.temperature, temperature) != 0) {
+        if (Double.compare(stream.getTemperature(), getTemperature()) != 0) {
             return false;
         }
         if (!source.equals(stream.source)) {
@@ -205,9 +163,9 @@ public class Stream {
         long temp;
         result = source.hashCode();
         result = 31 * result + destination.hashCode();
-        temp = Double.doubleToLongBits(pH);
+        temp = Double.doubleToLongBits(getpH());
         result = 31 * result + (int) (temp ^ (temp >>> 32));
-        temp = Double.doubleToLongBits(temperature);
+        temp = Double.doubleToLongBits(getTemperature());
         result = 31 * result + (int) (temp ^ (temp >>> 32));
         return result;
     }

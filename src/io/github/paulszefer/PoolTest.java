@@ -28,13 +28,13 @@ public class PoolTest {
     public static final double VOLUME_LITRES_LOWER_BOUND = 0.0;
     public static final double VOLUME_LITRES_VALID = 203.2;
 
-    public static final double TEMP_CELSIUS_BELOW_LOWER_BOUND = Pool.MINIMUM_POOL_TEMP_CELSIUS
+    public static final double TEMP_CELSIUS_BELOW_LOWER_BOUND = Pool.MINIMUM_WATER_TEMP_CELSIUS
             - 1.0;
-    public static final double TEMP_CELSIUS_LOWER_BOUND = Pool.MINIMUM_POOL_TEMP_CELSIUS;
-    public static final double TEMP_CELSIUS_VALID_1 = Pool.MINIMUM_POOL_TEMP_CELSIUS + 1.0;
-    public static final double TEMP_CELSIUS_VALID_2 = Pool.MAXIMUM_POOL_TEMP_CELSIUS - 1.0;
-    public static final double TEMP_CELSIUS_UPPER_BOUND = Pool.MAXIMUM_POOL_TEMP_CELSIUS;
-    public static final double TEMP_CELSIUS_ABOVE_UPPER_BOUND = Pool.MAXIMUM_POOL_TEMP_CELSIUS
+    public static final double TEMP_CELSIUS_LOWER_BOUND = Pool.MINIMUM_WATER_TEMP_CELSIUS;
+    public static final double TEMP_CELSIUS_VALID_1 = Pool.MINIMUM_WATER_TEMP_CELSIUS + 1.0;
+    public static final double TEMP_CELSIUS_VALID_2 = Pool.MAXIMUM_WATER_TEMP_CELSIUS - 1.0;
+    public static final double TEMP_CELSIUS_UPPER_BOUND = Pool.MAXIMUM_WATER_TEMP_CELSIUS;
+    public static final double TEMP_CELSIUS_ABOVE_UPPER_BOUND = Pool.MAXIMUM_WATER_TEMP_CELSIUS
             + 1.0;
 
     public static final double PH_BELOW_LOWER_BOUND = Pool.MINIMUM_PH - 1.0;
@@ -110,7 +110,7 @@ public class PoolTest {
     @Test
     public void testPoolName() {
 
-        assertThat(pool0ParameterConstructor.getName(), is(Pool.DEFAULT_POOL_NAME));
+        assertThat(pool0ParameterConstructor.getName(), is(Pool.DEFAULT_WATER_BODY_NAME));
 
     }
 
@@ -124,8 +124,8 @@ public class PoolTest {
     @Test
     public void testPoolTemperature() {
 
-        assertThat(pool0ParameterConstructor.getTemperatureCelsius(),
-                   is(Pool.DEFAULT_POOL_TEMP_CELSIUS));
+        assertThat(pool0ParameterConstructor.getTemperature(),
+                   is(Pool.DEFAULT_WATER_TEMP_CELSIUS));
 
     }
 
@@ -218,7 +218,7 @@ public class PoolTest {
     @Test
     public void testPoolStringDoubleDoubleDoubleDoubleTemperature() {
 
-        assertThat(pool5ParameterConstructorValidParameterValues.getTemperatureCelsius(),
+        assertThat(pool5ParameterConstructorValidParameterValues.getTemperature(),
                    is(TEMP_CELSIUS_VALID_1));
 
     }
@@ -322,9 +322,9 @@ public class PoolTest {
     }
 
     @Test
-    public void testGetTemperatureCelsius() {
+    public void testGetTemperature() {
 
-        assertThat(pool5ParameterConstructorValidParameterValues.getTemperatureCelsius(),
+        assertThat(pool5ParameterConstructorValidParameterValues.getTemperature(),
                    is(TEMP_CELSIUS_VALID_1));
 
     }
@@ -385,7 +385,7 @@ public class PoolTest {
 
         pool.setName(null);
 
-        assertThat(pool.getName(), is(Pool.DEFAULT_POOL_NAME));
+        assertThat(pool.getName(), is(Pool.DEFAULT_WATER_BODY_NAME));
 
     }
 
@@ -417,56 +417,56 @@ public class PoolTest {
     }
 
     @Test
-    public void testSetTemperatureCelsiusBelowLowerBound() {
+    public void testSetTemperatureBelowLowerBound() {
 
-        pool.setTemperatureCelsius(TEMP_CELSIUS_BELOW_LOWER_BOUND);
+        pool.setTemperature(TEMP_CELSIUS_BELOW_LOWER_BOUND);
 
-        assertThat(pool.getTemperatureCelsius(), is(Pool.DEFAULT_POOL_TEMP_CELSIUS));
-
-    }
-
-    @Test
-    public void testSetTemperatureCelsiusLowerBound() {
-
-        pool.setTemperatureCelsius(TEMP_CELSIUS_LOWER_BOUND);
-
-        assertThat(pool.getTemperatureCelsius(), is(TEMP_CELSIUS_LOWER_BOUND));
+        assertThat(pool.getTemperature(), is(Pool.DEFAULT_WATER_TEMP_CELSIUS));
 
     }
 
     @Test
-    public void testSetTemperatureCelsiusValid1() {
+    public void testSetTemperatureLowerBound() {
 
-        pool.setTemperatureCelsius(TEMP_CELSIUS_VALID_1);
+        pool.setTemperature(TEMP_CELSIUS_LOWER_BOUND);
 
-        assertThat(pool.getTemperatureCelsius(), is(TEMP_CELSIUS_VALID_1));
-
-    }
-
-    @Test
-    public void testSetTemperatureCelsiusValid2() {
-
-        pool.setTemperatureCelsius(TEMP_CELSIUS_VALID_2);
-
-        assertThat(pool.getTemperatureCelsius(), is(TEMP_CELSIUS_VALID_2));
+        assertThat(pool.getTemperature(), is(TEMP_CELSIUS_LOWER_BOUND));
 
     }
 
     @Test
-    public void testSetTemperatureCelsiusUpperBound() {
+    public void testSetTemperatureValid1() {
 
-        pool.setTemperatureCelsius(TEMP_CELSIUS_UPPER_BOUND);
+        pool.setTemperature(TEMP_CELSIUS_VALID_1);
 
-        assertThat(pool.getTemperatureCelsius(), is(TEMP_CELSIUS_UPPER_BOUND));
+        assertThat(pool.getTemperature(), is(TEMP_CELSIUS_VALID_1));
 
     }
 
     @Test
-    public void testSetTemperatureCelsiusAboveUpperBound() {
+    public void testSetTemperatureValid2() {
 
-        pool.setTemperatureCelsius(TEMP_CELSIUS_ABOVE_UPPER_BOUND);
+        pool.setTemperature(TEMP_CELSIUS_VALID_2);
 
-        assertThat(pool.getTemperatureCelsius(), is(Pool.DEFAULT_POOL_TEMP_CELSIUS));
+        assertThat(pool.getTemperature(), is(TEMP_CELSIUS_VALID_2));
+
+    }
+
+    @Test
+    public void testSetTemperatureUpperBound() {
+
+        pool.setTemperature(TEMP_CELSIUS_UPPER_BOUND);
+
+        assertThat(pool.getTemperature(), is(TEMP_CELSIUS_UPPER_BOUND));
+
+    }
+
+    @Test
+    public void testSetTemperatureAboveUpperBound() {
+
+        pool.setTemperature(TEMP_CELSIUS_ABOVE_UPPER_BOUND);
+
+        assertThat(pool.getTemperature(), is(Pool.DEFAULT_WATER_TEMP_CELSIUS));
 
     }
 
@@ -704,10 +704,10 @@ public class PoolTest {
 
         double delta = -1;
 
-        pool.setTemperatureCelsius(Pool.MINIMUM_POOL_TEMP_CELSIUS);
+        pool.setTemperature(Pool.MINIMUM_WATER_TEMP_CELSIUS);
         pool.changeTemperature(delta);
 
-        assertThat(pool.getTemperatureCelsius(), is(Pool.MINIMUM_POOL_TEMP_CELSIUS));
+        assertThat(pool.getTemperature(), is(Pool.MINIMUM_WATER_TEMP_CELSIUS));
 
     }
 
@@ -716,10 +716,10 @@ public class PoolTest {
 
         double delta = -1;
 
-        pool.setTemperatureCelsius(Pool.MINIMUM_POOL_TEMP_CELSIUS + 1);
+        pool.setTemperature(Pool.MINIMUM_WATER_TEMP_CELSIUS + 1);
         pool.changeTemperature(delta);
 
-        assertThat(pool.getTemperatureCelsius(), is(Pool.MINIMUM_POOL_TEMP_CELSIUS));
+        assertThat(pool.getTemperature(), is(Pool.MINIMUM_WATER_TEMP_CELSIUS));
 
     }
 
@@ -728,10 +728,10 @@ public class PoolTest {
 
         double delta = -1;
 
-        pool.setTemperatureCelsius(Pool.MINIMUM_POOL_TEMP_CELSIUS + 2);
+        pool.setTemperature(Pool.MINIMUM_WATER_TEMP_CELSIUS + 2);
         pool.changeTemperature(delta);
 
-        assertThat(pool.getTemperatureCelsius(), is(Pool.MINIMUM_POOL_TEMP_CELSIUS + 1));
+        assertThat(pool.getTemperature(), is(Pool.MINIMUM_WATER_TEMP_CELSIUS + 1));
 
     }
 
@@ -740,10 +740,10 @@ public class PoolTest {
 
         double delta = 0;
 
-        pool.setTemperatureCelsius(Pool.MINIMUM_POOL_TEMP_CELSIUS + 1);
+        pool.setTemperature(Pool.MINIMUM_WATER_TEMP_CELSIUS + 1);
         pool.changeTemperature(delta);
 
-        assertThat(pool.getTemperatureCelsius(), is(Pool.MINIMUM_POOL_TEMP_CELSIUS + 1));
+        assertThat(pool.getTemperature(), is(Pool.MINIMUM_WATER_TEMP_CELSIUS + 1));
 
     }
 
@@ -752,10 +752,10 @@ public class PoolTest {
 
         double delta = 1;
 
-        pool.setTemperatureCelsius(Pool.MAXIMUM_POOL_TEMP_CELSIUS - 2);
+        pool.setTemperature(Pool.MAXIMUM_WATER_TEMP_CELSIUS - 2);
         pool.changeTemperature(delta);
 
-        assertThat(pool.getTemperatureCelsius(), is(Pool.MAXIMUM_POOL_TEMP_CELSIUS - 1));
+        assertThat(pool.getTemperature(), is(Pool.MAXIMUM_WATER_TEMP_CELSIUS - 1));
 
     }
 
@@ -764,10 +764,10 @@ public class PoolTest {
 
         double delta = 1;
 
-        pool.setTemperatureCelsius(Pool.MAXIMUM_POOL_TEMP_CELSIUS - 1);
+        pool.setTemperature(Pool.MAXIMUM_WATER_TEMP_CELSIUS - 1);
         pool.changeTemperature(delta);
 
-        assertThat(pool.getTemperatureCelsius(), is(Pool.MAXIMUM_POOL_TEMP_CELSIUS));
+        assertThat(pool.getTemperature(), is(Pool.MAXIMUM_WATER_TEMP_CELSIUS));
 
     }
 
@@ -776,10 +776,10 @@ public class PoolTest {
 
         double delta = 2;
 
-        pool.setTemperatureCelsius(Pool.MAXIMUM_POOL_TEMP_CELSIUS);
+        pool.setTemperature(Pool.MAXIMUM_WATER_TEMP_CELSIUS);
         pool.changeTemperature(delta);
 
-        assertThat(pool.getTemperatureCelsius(), is(Pool.MAXIMUM_POOL_TEMP_CELSIUS));
+        assertThat(pool.getTemperature(), is(Pool.MAXIMUM_WATER_TEMP_CELSIUS));
 
     }
 
@@ -1228,7 +1228,7 @@ public class PoolTest {
 
         /*
          * assertThat(pool, is("[name=" + pool.getName() + ",volumeLitres=" + pool.getVolumeLitres()
-         * + ",temperatureCelsius=" + pool.getTemperatureCelsius() + ",pH=" + pool.getpH() +
+         * + ",temperatureCelsius=" + pool.getTemperature() + ",pH=" + pool.getpH() +
          * ",nutrientCoefficient=" + pool.getNutrientCoefficient() + ",identificationNumber=" +
          * pool.getIdentificationNumber() + ",guppiesInPool=" + pool.getGuppiesInPool() +
          * ",randomNumberGenerator=" + pool.getran() + "]";))
