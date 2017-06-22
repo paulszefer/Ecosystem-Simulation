@@ -1,5 +1,7 @@
 package io.github.paulszefer;
 
+import java.util.Scanner;
+
 /**
  * Represents an object that can load its data from an external file.
  *
@@ -11,7 +13,7 @@ public interface ILoadable {
     /**
      * Loads the applicable data.
      *
-     * @return true if successful; false otherwise
+     * @return a scanner containing the data or null if unsuccessful
      */
-    boolean loadData();
+    Scanner loadData();
 }

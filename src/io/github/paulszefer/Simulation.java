@@ -20,6 +20,8 @@ public class Simulation {
      */
     public Simulation() {
 
+        new SimulationFrame();
+
         ecosystem = new Ecosystem();
 
         ecosystem.addPool(setupSkookumchuk());
@@ -31,7 +33,8 @@ public class Simulation {
     /**
      * Sets up the simulation.
      *
-     * @param args command-line arguments
+     * @param args
+     *         command-line arguments
      */
     public static void main(String[] args) {
 
@@ -60,7 +63,7 @@ public class Simulation {
         final double maxHealthCoefficient = 0.8;
 
         skookumchuk.populatePool(numberOfGuppies, genus, species, minAge, maxAge, femaleChance,
-                minHealthCoefficient, maxHealthCoefficient);
+                                 minHealthCoefficient, maxHealthCoefficient);
 
         return skookumchuk;
 
@@ -85,7 +88,7 @@ public class Simulation {
         final double maxHealthCoefficient = 1.0;
 
         rutherford.populatePool(numberOfGuppies, genus, species, minAge, maxAge, femaleChance,
-                minHealthCoefficient, maxHealthCoefficient);
+                                minHealthCoefficient, maxHealthCoefficient);
 
         return rutherford;
 
@@ -110,7 +113,7 @@ public class Simulation {
         final double maxHealthCoefficient = 1.0;
 
         gamelin.populatePool(numberOfGuppies, genus, species, minAge, maxAge, femaleChance,
-                minHealthCoefficient, maxHealthCoefficient);
+                             minHealthCoefficient, maxHealthCoefficient);
 
         return gamelin;
 
@@ -119,7 +122,8 @@ public class Simulation {
     /**
      * Simulates the given number of weeks passing in the ecosystem.
      *
-     * @param numberOfWeeks the number of weeks to simulate
+     * @param numberOfWeeks
+     *         the number of weeks to simulate
      */
     public void simulate(int numberOfWeeks) {
 
@@ -165,10 +169,12 @@ public class Simulation {
             starvedToDeath += pool.applyNutrientCoefficient();
             numberRemoved += pool.removeDeadGuppies();
             newFry += pool.spawn();
-            crowdedOut += pool.adjustForCrowding().size();
             numberRemoved += pool.removeDeadGuppies();
 
         }
+
+        // TODO - crowded out guppies are not tracked properly
+        crowdedOut = ecosystem.adjustForCrowding();
 
         if (diedOfOldAge + starvedToDeath + crowdedOut == numberRemoved) {
 
