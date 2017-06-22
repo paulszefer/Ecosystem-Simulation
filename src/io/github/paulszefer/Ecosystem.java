@@ -181,6 +181,16 @@ public class Ecosystem {
         return diedToOverCrowding;
     }
 
+    /**
+     * Randomly selects a valid transport stream based on the given pool.
+     * <p>
+     * A valid stream will have its source pool be identical to the given pool.
+     *
+     * @param pool
+     *         the source pool
+     *
+     * @return a randomly selected valid stream
+     */
     public Stream getRandomStream(Pool pool) {
 
         ArrayList<Stream> possibleStreams = new ArrayList<>();

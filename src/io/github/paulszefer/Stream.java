@@ -159,14 +159,17 @@ public class Stream extends WaterBody {
     @Override
     public int hashCode() {
 
+        final int hashValue1 = 31;
+        final int hashValue2 = 32;
+
         int result;
         long temp;
         result = source.hashCode();
-        result = 31 * result + destination.hashCode();
+        result = hashValue1 * result + destination.hashCode();
         temp = Double.doubleToLongBits(getpH());
-        result = 31 * result + (int) (temp ^ (temp >>> 32));
+        result = hashValue1 * result + (int) (temp ^ (temp >>> hashValue2));
         temp = Double.doubleToLongBits(getTemperature());
-        result = 31 * result + (int) (temp ^ (temp >>> 32));
+        result = hashValue1 * result + (int) (temp ^ (temp >>> hashValue2));
         return result;
     }
 }

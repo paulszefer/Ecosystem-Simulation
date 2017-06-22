@@ -1,6 +1,7 @@
 package io.github.paulszefer;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.Random;
 
@@ -348,7 +349,7 @@ public class Pool extends WaterBody {
     }
 
     /**
-     * Calculates the volume of water needed for the pool's living population
+     * Calculates the volume of water needed for the pool's living population.
      *
      * @return the volume of water needed in Litres
      */
@@ -456,7 +457,7 @@ public class Pool extends WaterBody {
      */
     public ArrayList<Guppy> adjustForCrowding() {
 
-        sortGuppiesByHealthCoefficient();
+        Collections.sort(guppiesInPool);
 
         ArrayList<Guppy> weakestGuppies = new ArrayList<>();
         int index = 0;
@@ -491,25 +492,23 @@ public class Pool extends WaterBody {
     /**
      * Attempts to spawn baby guppies for each guppy in the pool.
      * <p>
-     * <p>
      * The new baby guppies are then added to the pool and the number that spawned is returned.
      *
      * @return the total number of spawned guppies
      */
     public int spawn() {
 
-        ArrayList<Guppy> newGuppies;
-        int guppiesSpawned = 0;
+        ArrayList<Guppy> newGuppies = new ArrayList<>();
 
         for (Guppy guppy : guppiesInPool) {
-            newGuppies = guppy.spawn();
-            if (newGuppies != null) {
-                guppiesInPool.addAll(newGuppies);
-                guppiesSpawned += newGuppies.size();
+            ArrayList<Guppy> spawned = guppy.spawn();
+            if (spawned != null) {
+                newGuppies.addAll(spawned);
             }
         }
+        guppiesInPool.addAll(newGuppies);
 
-        return guppiesSpawned;
+        return newGuppies.size();
     }
 
     /**
@@ -544,27 +543,6 @@ public class Pool extends WaterBody {
             sorted.add(i, sorted.remove(index));
         }
         return sorted;
-    }
-
-    /**
-     * Sorts the pool's population by ascending health coefficient.
-     */
-    public void sortGuppiesByHealthCoefficient() {
-
-        int min;
-
-        for (int i = 0; i < guppiesInPool.size(); i++) {
-
-            min = i;
-
-            for (int j = i + 1; j < guppiesInPool.size(); j++) {
-                if (guppiesInPool.get(i).getHealthCoefficient() > guppiesInPool.get(j)
-                        .getHealthCoefficient()) {
-                    min = j;
-                }
-                guppiesInPool.add(i, guppiesInPool.remove(min));
-            }
-        }
     }
 
     /**
@@ -618,19 +596,21 @@ public class Pool extends WaterBody {
     @Override
     public int hashCode() {
 
+        final int hashValue1 = 31;
+        final int hashValue2 = 32;
         int result;
         long temp;
         result = getName().hashCode();
         temp = Double.doubleToLongBits(volumeLitres);
-        result = 31 * result + (int) (temp ^ (temp >>> 32));
+        result = hashValue1 * result + (int) (temp ^ (temp >>> hashValue2));
         temp = Double.doubleToLongBits(getTemperature());
-        result = 31 * result + (int) (temp ^ (temp >>> 32));
+        result = hashValue1 * result + (int) (temp ^ (temp >>> hashValue2));
         temp = Double.doubleToLongBits(getpH());
-        result = 31 * result + (int) (temp ^ (temp >>> 32));
+        result = hashValue1 * result + (int) (temp ^ (temp >>> hashValue2));
         temp = Double.doubleToLongBits(nutrientCoefficient);
-        result = 31 * result + (int) (temp ^ (temp >>> 32));
-        result = 31 * result + identificationNumber;
-        result = 31 * result + guppiesInPool.hashCode();
+        result = hashValue1 * result + (int) (temp ^ (temp >>> hashValue2));
+        result = hashValue1 * result + identificationNumber;
+        result = hashValue1 * result + guppiesInPool.hashCode();
         return result;
     }
 

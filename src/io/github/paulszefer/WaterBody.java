@@ -2,6 +2,9 @@ package io.github.paulszefer;
 
 /**
  * A body of water in which animals might live.
+ *
+ * @author Paul Szefer
+ * @version 1.0
  */
 public class WaterBody {
 
@@ -35,6 +38,12 @@ public class WaterBody {
     /** The pH. */
     private double pH;
 
+    /**
+     * A body of water with a name, temperature and pH.
+     * @param name a name
+     * @param temperature a temperature in degrees Celsius
+     * @param pH a pH value
+     */
     public WaterBody(String name, double temperature, double pH) {
 
         setName(name);

@@ -1,6 +1,7 @@
 package io.github.paulszefer;
 
 import java.util.ArrayList;
+import java.util.InputMismatchException;
 import java.util.Random;
 
 /**
@@ -9,7 +10,7 @@ import java.util.Random;
  * @author Paul Szefer
  * @version 1.0
  */
-public class Guppy {
+public class Guppy implements Comparable {
 
     /**
      * The number of weeks for a fish to be considered young.
@@ -539,6 +540,48 @@ public class Guppy {
 
         return babyGuppies;
 
+    }
+
+    /**
+     * Compares this Guppy to the given object according to health coefficient.
+     * <p>
+     * Returns:
+     * <ul>
+     * <li>1 if this Guppy is healthier</li>
+     * <li>-1 if the other guppy is healthier</li>
+     * <li>0 if the guppies are equally healthy</li>
+     * </ul>
+     *
+     * @param other
+     *         an object to compare this guppy to
+     *
+     * @return an integer depending on which guppy is healthier
+     *
+     * @throws NullPointerException
+     *         if the other object is null
+     * @throws InputMismatchException
+     *         if the other object is not of type Guppy
+     */
+    public int compareTo(Object other) {
+
+        if (this == other) {
+            return 0;
+        }
+        if (other == null) {
+            throw new NullPointerException();
+        }
+        if (other.getClass() != Guppy.class) {
+            throw new InputMismatchException();
+        }
+
+        Guppy otherGuppy = (Guppy) other;
+
+        if (this.getHealthCoefficient() > otherGuppy.getHealthCoefficient()) {
+            return 1;
+        } else if (this.getHealthCoefficient() < otherGuppy.getHealthCoefficient()) {
+            return -1;
+        }
+        return 0;
     }
 
     /**
