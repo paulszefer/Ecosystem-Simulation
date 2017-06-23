@@ -1,9 +1,8 @@
 package io.github.paulszefer;
 
+import javax.swing.GroupLayout;
 import javax.swing.JPanel;
 
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
 import java.util.Scanner;
 
 /**
@@ -22,20 +21,34 @@ public class SimulationPanel extends JPanel {
      */
     public SimulationPanel(Scanner data) {
 
-        JPanel panel = new JPanel(new GridBagLayout());
-        GridBagConstraints constraints;
+        GroupLayout layout = new GroupLayout(this);
+        setLayout(layout);
 
-        JPanel animationPanel = new AnimationPanel();
-        constraints = new GridBagConstraints();
-        constraints.gridx = 0;
-        constraints.gridy = 0;
-        constraints.gridwidth = 1;
-        constraints.gridheight = 4;
-        constraints.fill = GridBagConstraints.HORIZONTAL;
-        constraints.ipadx = 0;
-        constraints.ipady = 0;
-        constraints.weightx = 1;
-        constraints.weighty = 0.8;
-        panel.add(animationPanel, constraints);
+        JPanel animation = new AnimationPanel();
+        JPanel options = new OptionPanel();
+
+        layout.setHorizontalGroup(
+                layout.createParallelGroup()
+                        .addComponent(animation,
+                                      GroupLayout.DEFAULT_SIZE,
+                                      GroupLayout.DEFAULT_SIZE,
+                                      Short.MAX_VALUE)
+                        .addComponent(options,
+                                      GroupLayout.DEFAULT_SIZE,
+                                      GroupLayout.DEFAULT_SIZE,
+                                      Short.MAX_VALUE)
+        );
+
+        layout.setVerticalGroup(
+                layout.createSequentialGroup()
+                        .addComponent(animation,
+                                      GroupLayout.DEFAULT_SIZE,
+                                      GroupLayout.DEFAULT_SIZE,
+                                      Short.MAX_VALUE)
+                        .addComponent(options,
+                                      GroupLayout.DEFAULT_SIZE,
+                                      GroupLayout.DEFAULT_SIZE,
+                                      Short.MAX_VALUE)
+        );
     }
 }

@@ -39,7 +39,7 @@ public class Simulation {
     public static void main(String[] args) {
 
         Simulation simulation = new Simulation();
-        final int weeksToSimulate = 20;
+        final int weeksToSimulate = 40;
         simulation.simulate(weeksToSimulate);
 
     }
@@ -139,7 +139,6 @@ public class Simulation {
     /**
      * Simulates a week passing in the ecosystem and prints out the results of the week.
      * <p>
-     * <p>
      * The statistics that will be printed are:
      * </p>
      * <ul>
@@ -173,8 +172,8 @@ public class Simulation {
 
         }
 
-        // TODO - crowded out guppies are not tracked properly
         crowdedOut = ecosystem.adjustForCrowding();
+        numberRemoved += crowdedOut;
 
         if (diedOfOldAge + starvedToDeath + crowdedOut == numberRemoved) {
 

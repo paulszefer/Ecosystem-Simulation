@@ -18,22 +18,19 @@ import java.util.Scanner;
 public class SimulationFrame extends JFrame implements ILoadable {
 
     /** Width of the frame. */
-    public static final int WIDTH = 400;
+    public static final int WIDTH = 800;
 
     /** Height of the frame. */
-    public static final int HEIGHT = 400;
+    public static final int HEIGHT = 800;
 
     /** A frame to hold and display the simulation. */
     public SimulationFrame() {
 
+        // TODO - remove load data prompt on start
+        // update frame title from within SimulationPanel - figure out how
         Scanner data = loadData();
 
-        String simulationTitle;
-        if (data != null) {
-            simulationTitle = data.nextLine();
-        } else {
-            simulationTitle = "";
-        }
+        String simulationTitle = (data != null) ? data.nextLine() : "";
 
         JFrame frame = new JFrame(simulationTitle);
         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
@@ -43,12 +40,25 @@ public class SimulationFrame extends JFrame implements ILoadable {
         frame.setVisible(true);
     }
 
+    /**
+     * Used for testing GUI.
+     *
+     * @param args
+     *         command-line arguments
+     */
+    public static void main(String[] args) {
+
+        new SimulationFrame();
+    }
+
     /** {@inheritDoc} */
     @Override
     public Scanner loadData() {
 
         // TODO - parse file differently based on file type
         // Scanner should work for text file, but maybe not for xml and json
+        // Option: DataFile extends File, has a method called nextField()
+        // that returns the next field based on the file type/structure
 
         JFileChooser fileChooser = new JFileChooser();
         FileNameExtensionFilter filter = new FileNameExtensionFilter("File type",
