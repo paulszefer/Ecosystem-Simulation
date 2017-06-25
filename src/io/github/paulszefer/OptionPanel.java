@@ -22,17 +22,17 @@ public class OptionPanel extends JPanel {
         GroupLayout layout = new GroupLayout(this);
         setLayout(layout);
 
+        // Data load controls
+        JButton loadButton = new JButton("Load");
+        JButton saveButton = new JButton("Save");
+
         // Animation controls
         JButton playButton = new JButton("Play");
         JButton pauseButton = new JButton("Pause");
         JButton stepButton = new JButton("Step");
 
         final int speedBound = 3;
-        JSlider speedSlider = new SpeedSlider(-speedBound, speedBound, 0);
-
-        // Data load controls
-        JButton loadButton = new JButton("Load");
-        JButton saveButton = new JButton("Save");
+        JSlider speedSlider = new JSpeedSlider(-speedBound, speedBound, 0);
 
         // Data analysis controls
         JButton graphButton = new JButton("Graph");

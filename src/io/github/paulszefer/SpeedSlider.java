@@ -1,9 +1,7 @@
 package io.github.paulszefer;
 
-import javax.swing.JLabel;
-import javax.swing.JSlider;
-
-import java.util.Hashtable;
+import javafx.scene.control.Slider;
+import javafx.util.StringConverter;
 
 /**
  * Defines a slider with labels representing play speeds.
@@ -13,7 +11,7 @@ import java.util.Hashtable;
  * @author Paul Szefer
  * @version 1.0
  */
-public class SpeedSlider extends JSlider {
+public class SpeedSlider extends Slider {
 
     /**
      * Creates a horizontal slider with the given minimum, maximum and start values.
@@ -30,36 +28,72 @@ public class SpeedSlider extends JSlider {
     public SpeedSlider(int min, int max, int start) {
 
         super(min, max, start);
-        configureLabels(min, max);
+        configureLabels();
     }
 
     /**
      * Configures the labels of the slider to display speeds based on the range of the slider.
      * <p>
      * Speeds increment by a factor of two.
-     *
-     * @param min
-     *         the minimum slider state
-     * @param max
-     *         the maximum slider state
      */
-    private void configureLabels(int min, int max) {
+    private void configureLabels() {
 
-        //Create the label table
-        Hashtable<Integer, JLabel> labelTable = new Hashtable<>();
-        for (int i = min; i <= max; i++) {
-            if (i < 0) {
-                labelTable.put(i, new JLabel("1/" + (int) Math.pow(2, -i) + "x"));
-            } else if (i == 0) {
-                labelTable.put(i, new JLabel("1x"));
-            } else {
-                labelTable.put(i, new JLabel((int) Math.pow(2, i) + "x"));
+        @SuppressWarnings("unchecked")
+        StringConverter<Double> converter = new StringConverter() {
+
+            /**
+             * Converts the object provided into its string form.
+             * <p>
+             * Format of the returned string is defined by the specific converter.
+             *
+             * @param object
+             *         the unformatted bound of the slider
+             *
+             * @return a string representation of the object passed in.
+             */
+            @Override
+            public String toString(Object object) {
+
+                double bound = (double) object;
+                if (bound < 0) {
+                    return "1/" + (int) Math.pow(2, -bound) + "x";
+                } else if (bound == 0) {
+                    return "1x";
+                } else {
+                    return (int) Math.pow(2, bound) + "x";
+                }
             }
-        }
-        setLabelTable(labelTable);
 
-        setMajorTickSpacing(1);
-        setPaintTicks(true);
-        setPaintLabels(true);
+            /**
+             * Converts the string provided into an object defined by the specific converter.
+             * <p>
+             * Format of the string and type of the resulting object is defined by the specific
+             * converter.
+             *
+             * @param string
+             *         the formatted bound of the slider
+             *
+             * @return an object representation of the string passed in.
+             */
+            @Override
+            public Object fromString(String string) {
+
+                String value = string.substring(0, string.length() - 1);
+                if (value.startsWith("1/")) {
+                    return Double.valueOf(value);
+                } else if (value.startsWith("1")) {
+                    return Double.valueOf("0");
+                } else {
+                    return Double.valueOf(value);
+                }
+            }
+        };
+
+        setLabelFormatter(converter);
+        setMinorTickCount(0);
+        setMajorTickUnit(1);
+        setShowTickMarks(true);
+        setShowTickLabels(true);
+        setSnapToTicks(true);
     }
 }
