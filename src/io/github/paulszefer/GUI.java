@@ -1,6 +1,5 @@
 package io.github.paulszefer;
 
-import javafx.scene.Node;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 
@@ -15,18 +14,25 @@ public class GUI {
     /** The root pane of the GUI. */
     private Pane root;
 
+    /** The animation pane of the GUI. */
+    private AnimationPane animationPane;
+
+    /** The option pane of the GUI. */
+    private OptionPane optionPane;
+
     /** Creates the GUI. */
     public GUI() {
 
-        setRoot(new VBox());
-        addChild(new AnimationPane());
-        addChild(new OptionPane());
+        root = new VBox();
+        animationPane = new AnimationPane();
+        optionPane = new OptionPane();
+        root.getChildren().addAll(animationPane, optionPane);
     }
 
     /**
-     * Returns the root.
+     * Returns the root pane.
      *
-     * @return the root
+     * @return the root pane
      */
     public Pane getRoot() {
 
@@ -34,24 +40,22 @@ public class GUI {
     }
 
     /**
-     * Sets the root.
+     * Returns the animation pane.
      *
-     * @param root
-     *         the root
+     * @return the animation pane
      */
-    public void setRoot(Pane root) {
+    public AnimationPane getAnimationPane() {
 
-        this.root = root;
+        return animationPane;
     }
 
     /**
-     * Adds the given node to the root pane.
+     * Returns the option pane.
      *
-     * @param node
-     *         the node to be added
+     * @return the option pane
      */
-    public void addChild(Node node) {
+    public OptionPane getOptionPane() {
 
-        root.getChildren().add(node);
+        return optionPane;
     }
 }

@@ -1,6 +1,13 @@
 package io.github.paulszefer;
 
+import javax.swing.JFileChooser;
+import javax.swing.JFrame;
+import javax.swing.filechooser.FileNameExtensionFilter;
+
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
+import java.util.Scanner;
 
 /**
  * Drives a simulation of an ecosystem of pools containing guppies.
@@ -10,38 +17,33 @@ import java.util.ArrayList;
  */
 public class Simulation {
 
-    /**
-     * The ecosystem to be simulated.
-     */
-    private Ecosystem ecosystem;
+    // /** The simulation GUI. */
+    // private SimulationApplication gui;
 
-    /**
-     * Sets up a simulation with three pools.
-     */
+    // /** The ecosystem to be simulated. */
+    // private Ecosystem ecosystem;
+
+    /** The current simulation state identifier. */
+    private int week;
+
+    /** The storage of ecosystem states. */
+    private ArrayList<Ecosystem> history;
+
+    /** Sets up a simulation with three pools. */
     public Simulation() {
 
-        new SimulationFrame();
+        // initialize GUI
 
-        ecosystem = new Ecosystem();
+        // Swing GUI
+        // new SimulationFrame();
 
-        ecosystem.addPool(setupSkookumchuk());
-        ecosystem.addPool(setupRutherford());
-        ecosystem.addPool(setupGamelin());
+        // JavaFX GUI
 
-    }
+        // initialize current identifier
+        week = 0;
 
-    /**
-     * Sets up the simulation.
-     *
-     * @param args
-     *         command-line arguments
-     */
-    public static void main(String[] args) {
-
-        Simulation simulation = new Simulation();
-        final int weeksToSimulate = 40;
-        simulation.simulate(weeksToSimulate);
-
+        // initialize history storage
+        history = new ArrayList<>();
     }
 
     /**
@@ -49,7 +51,7 @@ public class Simulation {
      *
      * @return the generated Skookumchuk pool
      */
-    public Pool setupSkookumchuk() {
+    public static Pool setupSkookumchuk() {
 
         final Pool skookumchuk = new Pool("Skookumchuk", 1000.0, 42.0, 7.9, 0.9);
 
@@ -64,17 +66,33 @@ public class Simulation {
 
         skookumchuk.populatePool(numberOfGuppies, genus, species, minAge, maxAge, femaleChance,
                                  minHealthCoefficient, maxHealthCoefficient);
-
         return skookumchuk;
-
     }
+
+    // /**
+    //  * Sets up the simulation.
+    //  *
+    //  * @param args
+    //  *         command-line arguments
+    //  */
+    // public static void main(String[] args) {
+    //
+    //     // create the simulation
+    //     Simulation simulation = new Simulation();
+    //
+    //     // wait for user-input in GUI
+    //
+    //     // // TODO - remove, move to GUI implementation
+    //     // final int weeksToSimulate = 40;
+    //     // simulation.simulate(weeksToSimulate);
+    // }
 
     /**
      * Generates and populates the Rutherford pool.
      *
      * @return the generated Rutherford pool
      */
-    public Pool setupRutherford() {
+    public static Pool setupRutherford() {
 
         final Pool rutherford = new Pool("Rutherford", 5000.0, 39.0, 7.7, 0.85);
 
@@ -89,9 +107,7 @@ public class Simulation {
 
         rutherford.populatePool(numberOfGuppies, genus, species, minAge, maxAge, femaleChance,
                                 minHealthCoefficient, maxHealthCoefficient);
-
         return rutherford;
-
     }
 
     /**
@@ -99,7 +115,7 @@ public class Simulation {
      *
      * @return the generated Gamelin pool
      */
-    public Pool setupGamelin() {
+    public static Pool setupGamelin() {
 
         final Pool gamelin = new Pool("Gamelin", 4300.0, 37.0, 7.5, 1.0);
 
@@ -114,9 +130,63 @@ public class Simulation {
 
         gamelin.populatePool(numberOfGuppies, genus, species, minAge, maxAge, femaleChance,
                              minHealthCoefficient, maxHealthCoefficient);
-
         return gamelin;
+    }
 
+    /** Loads the simulation data from a file. */
+    public void loadFile() {
+
+        // TODO - parse file differently based on file type
+        // Scanner should work for text file, but maybe not for xml and json
+        // Option: DataFile extends File, has a method called nextField()
+        // that returns the next field based on the file type/structure
+
+        JFileChooser fileChooser = new JFileChooser();
+        FileNameExtensionFilter filter = new FileNameExtensionFilter("File type",
+                                                                     "xml",
+                                                                     "json",
+                                                                     "txt");
+        Scanner data = null;
+        fileChooser.addChoosableFileFilter(filter);
+        if (fileChooser.showOpenDialog(new JFrame()) == JFileChooser.APPROVE_OPTION) {
+            File file = fileChooser.getSelectedFile();
+            try {
+                data = new Scanner(file);
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            }
+        }
+
+        try {
+            SimulationApplication.getStage().setTitle(data.nextLine());
+        } catch (NullPointerException e) {
+            System.out.println("Invalid data file");
+            return;
+        }
+        Ecosystem ecosystem = new Ecosystem();
+        Pool pool;
+        while (data.hasNext()) {
+            pool = new Pool(data.nextLine(),
+                            Double.valueOf(data.nextLine()),
+                            Double.valueOf(data.nextLine()),
+                            Double.valueOf(data.nextLine()),
+                            Double.valueOf(data.nextLine()));
+            pool.populatePool(Integer.valueOf(data.nextLine()),
+                              data.nextLine(),
+                              data.nextLine(),
+                              Integer.valueOf(data.nextLine()),
+                              Integer.valueOf(data.nextLine()),
+                              Double.valueOf(data.nextLine()),
+                              Double.valueOf(data.nextLine()),
+                              Double.valueOf(data.nextLine()));
+            ecosystem.addPool(pool);
+        }
+
+        SimulationApplication.getGui().getAnimationPane().updateState(ecosystem);
+
+        week = 0;
+        history = new ArrayList<>();
+        history.add(ecosystem);
     }
 
     /**
@@ -128,12 +198,9 @@ public class Simulation {
     public void simulate(int numberOfWeeks) {
 
         for (int i = 0; i < numberOfWeeks; i++) {
-
             System.out.println("Simulating Week " + (i + 1));
             simulateOneWeek();
-
         }
-
     }
 
     /**
@@ -154,6 +221,8 @@ public class Simulation {
      */
     public void simulateOneWeek() {
 
+        Ecosystem ecosystem = history.get(week);
+
         int diedOfOldAge = 0;
         int starvedToDeath = 0;
         int newFry = 0;
@@ -162,21 +231,18 @@ public class Simulation {
         ArrayList<Pool> pools = ecosystem.getPools();
 
         for (Pool pool : pools) {
-
             diedOfOldAge += pool.incrementAges();
             numberRemoved += pool.removeDeadGuppies();
             starvedToDeath += pool.applyNutrientCoefficient();
             numberRemoved += pool.removeDeadGuppies();
             newFry += pool.spawn();
             numberRemoved += pool.removeDeadGuppies();
-
         }
 
-        crowdedOut = ecosystem.adjustForCrowding();
+        crowdedOut += ecosystem.adjustForCrowding();
         numberRemoved += crowdedOut;
 
         if (diedOfOldAge + starvedToDeath + crowdedOut == numberRemoved) {
-
             System.out.println("----------------------");
             System.out.println("Deaths to old age: " + diedOfOldAge);
             System.out.println("Deaths to starvation: " + starvedToDeath);
@@ -188,9 +254,9 @@ public class Simulation {
             System.out.println("Ecosystem population: " + (pools.get(0).getPopulation()
                     + pools.get(1).getPopulation() + pools.get(2).getPopulation()));
             System.out.println();
-
         }
 
+        week++;
+        history.add(ecosystem);
     }
-
 }

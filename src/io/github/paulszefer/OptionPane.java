@@ -19,6 +19,9 @@ public class OptionPane extends StackPane {
     /** The proportion of the GUI's height taken by this Pane. */
     private static final double PROPORTION = 0.25;
 
+    /** The simulation gui. */
+    private GUI gui;
+
     /** Creates the GUI pane that will display the options for the simulation. */
     public OptionPane() {
 
@@ -68,6 +71,11 @@ public class OptionPane extends StackPane {
         Button loadButton = new Button("Load");
         Button saveButton = new Button("Save");
 
+        loadButton.setOnAction((actionEvent) -> {
+            SimulationApplication.getSimulation().loadFile();
+        });
+        saveButton.setDisable(true);
+
         // Animation controls
         Button backButton = new Button("Back");
         Button playPauseButton = new Button("Play");
@@ -97,5 +105,4 @@ public class OptionPane extends StackPane {
 
         pane.getChildren().add(grid);
     }
-
 }

@@ -18,6 +18,15 @@ public class SimulationApplication extends Application {
     /** The height of the application. */
     public static final int HEIGHT = 800;
 
+    /** Stores the simulation stage. */
+    private static Stage stage;
+
+    /** Stores the simulation. */
+    private static Simulation simulation = new Simulation();
+
+    /** Stores the simulation GUI. */
+    private static GUI gui = new GUI();
+
     /**
      * Drives the program.
      *
@@ -29,18 +38,51 @@ public class SimulationApplication extends Application {
         launch(args);
     }
 
+    /**
+     * Creates, configures and then displays the GUI.
+     *
+     * @param primaryStage
+     *         the primary stage of the JavaFX GUI
+     */
     @Override
     public void start(Stage primaryStage) {
-
-        primaryStage.setTitle("Simulation title"); // TODO - read from file
-
-        GUI gui = new GUI();
-
-        Scene scene = new Scene(gui.getRoot(), WIDTH, HEIGHT);
-
+        stage = primaryStage;
+        Scene scene = new Scene(gui.getRoot());
+        // TODO - configure GUI.css to add custom styling
+        // scene.getStylesheets().add(SimulationApplication.class.getResource("GUI.css")
+        //                                                       .toExternalForm());
         primaryStage.setScene(scene);
-        scene.getStylesheets().add(SimulationApplication.class.getResource("GUI.css")
-                                                              .toExternalForm());
+        primaryStage.setTitle("Simulation");
         primaryStage.show();
+    }
+
+    /**
+     * Returns the stage.
+     *
+     * @return the stage
+     */
+    public static Stage getStage() {
+
+        return stage;
+    }
+
+    /**
+     * Returns the simulation.
+     *
+     * @return the simulation
+     */
+    public static Simulation getSimulation() {
+
+        return simulation;
+    }
+
+    /**
+     * Returns the gui.
+     *
+     * @return the gui
+     */
+    public static GUI getGui() {
+
+        return gui;
     }
 }
