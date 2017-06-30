@@ -221,7 +221,7 @@ public class Simulation {
         }
 
         week++;
-        history.add(ecosystem.copy());
+        history.add(ecosystem);
         SimulationApplication.getGui().getAnimationPane().updateState(history.get(week));
     }
 }
