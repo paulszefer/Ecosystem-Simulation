@@ -124,8 +124,8 @@ public class Stream extends WaterBody {
         int countDied = 0;
 
         for (Guppy guppy : guppies) {
-            guppy.setIsAlive(generator.nextDouble() < guppy.getHealthCoefficient());
-            countDied += !guppy.getIsAlive() ? 1 : 0;
+            guppy.getHealth().setIsAlive(generator.nextDouble() < guppy.getHealth().getCoefficient());
+            countDied += !guppy.getHealth().getIsAlive() ? 1 : 0;
         }
         destination.addGuppies(guppies);
 

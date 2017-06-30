@@ -8,7 +8,11 @@ import java.util.ArrayList;
 import java.util.Random;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.*;
+import static org.hamcrest.Matchers.closeTo;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.greaterThanOrEqualTo;
+import static org.hamcrest.Matchers.instanceOf;
+import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
@@ -919,7 +923,7 @@ public class PoolTest {
 
             if (generator.nextBoolean()) {
 
-                guppy.setIsAlive(false);
+                guppy.getHealth().setIsAlive(false);
                 countDead++;
             }
         }
@@ -937,7 +941,7 @@ public class PoolTest {
 
         for (Guppy guppy : testGuppies) {
 
-            guppy.setIsAlive(false);
+            guppy.getHealth().setIsAlive(false);
             countDead++;
         }
 
@@ -973,7 +977,7 @@ public class PoolTest {
             if (generator.nextBoolean()) {
                 volume += guppy.getVolumeNeeded() / mLPerL;
             } else {
-                guppy.setIsAlive(false);
+                guppy.getHealth().setIsAlive(false);
             }
         }
 
@@ -989,8 +993,8 @@ public class PoolTest {
 
         for (Guppy guppy : testGuppies) {
 
-            guppy.setAgeInWeeks(generator.nextInt(Guppy.MAXIMUM_AGE_IN_WEEKS));
-            totalAge += guppy.getAgeInWeeks();
+            guppy.getHealth().setAge(generator.nextInt(Guppy.MAXIMUM_AGE));
+            totalAge += guppy.getHealth().getAge();
             count++;
 
         }
@@ -1010,11 +1014,11 @@ public class PoolTest {
         for (Guppy guppy : testGuppies) {
 
             if (generator.nextBoolean()) {
-                guppy.setAgeInWeeks(generator.nextInt(Guppy.MAXIMUM_AGE_IN_WEEKS));
-                totalAge += guppy.getAgeInWeeks();
+                guppy.getHealth().setAge(generator.nextInt(Guppy.MAXIMUM_AGE));
+                totalAge += guppy.getHealth().getAge();
                 count++;
             } else {
-                guppy.setIsAlive(false);
+                guppy.getHealth().setIsAlive(false);
             }
 
         }
@@ -1033,8 +1037,8 @@ public class PoolTest {
 
         for (Guppy guppy : testGuppies) {
 
-            guppy.setHealthCoefficient(generator.nextDouble());
-            totalHealthCoefficient += guppy.getHealthCoefficient();
+            guppy.getHealth().setCoefficient(generator.nextDouble());
+            totalHealthCoefficient += guppy.getHealth().getCoefficient();
             count++;
 
         }
@@ -1054,11 +1058,11 @@ public class PoolTest {
         for (Guppy guppy : testGuppies) {
 
             if (generator.nextBoolean()) {
-                guppy.setHealthCoefficient(generator.nextDouble());
-                totalHealthCoefficient += guppy.getHealthCoefficient();
+                guppy.getHealth().setCoefficient(generator.nextDouble());
+                totalHealthCoefficient += guppy.getHealth().getCoefficient();
                 count++;
             } else {
-                guppy.setIsAlive(false);
+                guppy.getHealth().setIsAlive(false);
             }
 
         }
@@ -1101,7 +1105,7 @@ public class PoolTest {
                 countFemale += guppy.getIsFemale() ? 1 : 0;
                 countAll++;
             } else {
-                guppy.setIsAlive(false);
+                guppy.getHealth().setIsAlive(false);
             }
         }
 
@@ -1115,14 +1119,14 @@ public class PoolTest {
     public void testGetMedianAgeEvenAmount() {
 
         for (Guppy guppy : testGuppies) {
-            guppy.setAgeInWeeks(generator.nextInt(Guppy.MAXIMUM_AGE_IN_WEEKS - 1));
+            guppy.getHealth().setAge(generator.nextInt(Guppy.MAXIMUM_AGE - 1));
         }
 
         ArrayList<Integer> ages = pool.sortLivingGuppyAges();
 
         if (ages.size() % 2 != 0) {
             ages.add(50);
-            pool.addGuppy(new Guppy(null, null, 50, true, 0, 0));
+            pool.addGuppy(new Guppy(50, 0, true, 0));
         }
 
         double medianAge = (ages.get(ages.size() / 2 - 1) + ages.get(ages.size() / 2)) / 2.0;
@@ -1135,14 +1139,14 @@ public class PoolTest {
     public void testGetMedianAgeOddAmount() {
 
         for (Guppy guppy : testGuppies) {
-            guppy.setAgeInWeeks(generator.nextInt(Guppy.MAXIMUM_AGE_IN_WEEKS - 1));
+            guppy.getHealth().setAge(generator.nextInt(Guppy.MAXIMUM_AGE - 1));
         }
 
         ArrayList<Integer> ages = pool.sortLivingGuppyAges();
 
         if (ages.size() % 2 == 0) {
             ages.add(50);
-            pool.addGuppy(new Guppy(null, null, 49, true, 0, 0));
+            pool.addGuppy(new Guppy(49, 0, true, 0));
         }
 
         double medianAge = ages.get(ages.size() / 2 - 1);
@@ -1156,9 +1160,9 @@ public class PoolTest {
 
         for (Guppy guppy : testGuppies) {
             if (generator.nextBoolean()) {
-                guppy.setAgeInWeeks(generator.nextInt(Guppy.MAXIMUM_AGE_IN_WEEKS - 1));
+                guppy.getHealth().setAge(generator.nextInt(Guppy.MAXIMUM_AGE - 1));
             } else {
-                guppy.setIsAlive(false);
+                guppy.getHealth().setIsAlive(false);
             }
         }
 
@@ -1192,7 +1196,7 @@ public class PoolTest {
 
         pool.setVolumeLitres(1.5);
         for (Guppy guppy : pool.getGuppiesInPool()) {
-            guppy.setAgeInWeeks(0);
+            guppy.getHealth().setAge(0);
         }
         pool.adjustForCrowding();
         assertThat(pool.getVolumeLitres(), is(equalTo(pool.getGuppyVolumeRequirementInLitres())));

@@ -171,7 +171,7 @@ public class Ecosystem {
                 diedToOverCrowding += stream.transportGuppies(weakestGuppies);
             } else {
                 for (Guppy guppy : weakestGuppies) {
-                    guppy.setIsAlive(false);
+                    guppy.getHealth().setIsAlive(false);
                 }
                 pool.addGuppies(weakestGuppies);
                 diedToOverCrowding += weakestGuppies.size();

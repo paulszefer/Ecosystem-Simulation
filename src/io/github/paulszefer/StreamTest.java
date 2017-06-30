@@ -7,7 +7,9 @@ import java.util.ArrayList;
 import java.util.Random;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.*;
+import static org.hamcrest.Matchers.closeTo;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertTrue;
 
 public class StreamTest {
@@ -109,7 +111,7 @@ public class StreamTest {
         final double deathProportion = 0.25;
 
         for (Guppy guppy : testGuppies2) {
-            guppy.setHealthCoefficient(1 - deathProportion);
+            guppy.getHealth().setCoefficient(1 - deathProportion);
         }
         double countDied = stream1.transportGuppies(testGuppies2);
         assertThat(countDied,
