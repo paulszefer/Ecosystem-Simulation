@@ -71,11 +71,6 @@ public class OptionPane extends StackPane {
         Button loadButton = new Button("Load");
         Button saveButton = new Button("Save");
 
-        loadButton.setOnAction((actionEvent) -> {
-            SimulationApplication.getSimulation().loadFile();
-        });
-        saveButton.setDisable(true);
-
         // Animation controls
         Button backButton = new Button("Back");
         Button playPauseButton = new Button("Play");
@@ -87,6 +82,49 @@ public class OptionPane extends StackPane {
         // Data analysis controls
         Button graphButton = new Button("Graph");
         Button reportButton = new Button("Report");
+
+        // Button actions
+        loadButton.setOnAction((actionEvent) -> {
+
+            // cases:
+
+            // new window
+            // try to load file, fail
+            // should not change any disabled state
+
+            // file already loaded
+            // try to load file, fail
+            // should not change any disabled state
+
+            // new window
+            // try to load file, successful
+            // enable/disable buttons
+
+            // file already loaded
+            // try to load file, successful
+            // enable/disable buttons
+            boolean fileLoaded = SimulationApplication.getSimulation().loadFile();
+            if (fileLoaded) {
+                backButton.setDisable(true);
+                playPauseButton.setDisable(false);
+                stepButton.setDisable(false);
+            }
+        });
+        saveButton.setDisable(true);
+
+        backButton.setOnAction((actionEvent) -> {
+            SimulationApplication.getSimulation().previousWeek();
+            if (SimulationApplication.getSimulation().getWeek() == 0) {
+                backButton.setDisable(true);
+            }
+        });
+        backButton.setDisable(true);
+        playPauseButton.setDisable(true);
+        stepButton.setOnAction((actionEvent) -> {
+            SimulationApplication.getSimulation().nextWeek();
+            backButton.setDisable(false);
+        });
+        stepButton.setDisable(true);
 
         final int thirdColumn = 3;
         final int fourthColumn = 4;

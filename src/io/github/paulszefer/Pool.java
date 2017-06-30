@@ -174,6 +174,20 @@ public class Pool extends WaterBody {
     }
 
     /**
+     * Sets the identification number of the pool.
+     *
+     * @param identificationNumber
+     *         the identification number to set
+     */
+    public void setIdentificationNumber(int identificationNumber) {
+
+        this.identificationNumber = 0;
+        if (identificationNumber > 0) {
+            this.identificationNumber = identificationNumber;
+        }
+    }
+
+    /**
      * Sets the set of guppies in the pool.
      *
      * @param guppiesInPool
@@ -543,6 +557,27 @@ public class Pool extends WaterBody {
             sorted.add(i, sorted.remove(index));
         }
         return sorted;
+    }
+
+    /**
+     * Creates and returns a copy of this Pool.
+     *
+     * @return a cloned copy of this pool
+     */
+    public Pool copy() {
+
+        Pool poolCopy = new Pool(getName(),
+                                 getVolumeLitres(),
+                                 getTemperature(),
+                                 getpH(),
+                                 getNutrientCoefficient());
+        poolCopy.setIdentificationNumber(getIdentificationNumber());
+        for (Guppy guppy : guppiesInPool) {
+            poolCopy.addGuppy(guppy.copy());
+        }
+
+        assert poolCopy == this;
+        return poolCopy;
     }
 
     /**

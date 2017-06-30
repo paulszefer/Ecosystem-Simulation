@@ -462,6 +462,20 @@ public class Guppy implements Comparable {
     }
 
     /**
+     * Sets the identification number of the guppy.
+     *
+     * @param identificationNumber
+     *         the identification number to set
+     */
+    public void setIdentificationNumber(int identificationNumber) {
+
+        this.identificationNumber = 0;
+        if (identificationNumber > 0) {
+            this.identificationNumber = identificationNumber;
+        }
+    }
+
+    /**
      * Changes the coefficient representing the health of the guppy by delta. If the resulting
      * coefficient is equal to the minimum health coefficient or less, then the guppy is dead. If
      * the resulting coefficient is equal to the maximum coefficient or more, then the guppy is in
@@ -540,6 +554,24 @@ public class Guppy implements Comparable {
 
         return babyGuppies;
 
+    }
+
+    /**
+     * Creates and returns a copy of this Guppy.
+     *
+     * @return a cloned copy of this guppy
+     */
+    public Guppy copy() {
+
+        Guppy guppyCopy = new Guppy(getGenus(),
+                                    getSpecies(),
+                                    getAgeInWeeks(),
+                                    getIsFemale(),
+                                    getGenerationNumber(),
+                                    getHealthCoefficient());
+        guppyCopy.setIdentificationNumber(getIdentificationNumber());
+        guppyCopy.setIsAlive(getIsAlive());
+        return guppyCopy;
     }
 
     /**

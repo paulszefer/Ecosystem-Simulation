@@ -9,7 +9,6 @@ import javafx.scene.paint.RadialGradient;
 import javafx.scene.paint.Stop;
 import javafx.scene.text.Font;
 
-import java.util.ArrayList;
 import java.util.Random;
 
 /**
@@ -109,8 +108,12 @@ public class AnimationPane extends StackPane {
 
             // draw guppies
             graphicsContext.setFill(guppyFill);
-            ArrayList<Guppy> guppies = ecosystem.getPools().get(i).getGuppiesInPool();
-            for (Guppy guppy : guppies) {
+            int guppies = ecosystem.getPools().get(i).getPopulation();
+            final int maxToDraw = 1000;
+            if (guppies > maxToDraw) {
+                guppies = maxToDraw;
+            }
+            for (int j = 0; j < guppies; j++) {
                 graphicsContext.fillOval(
                         generator.nextDouble() * poolSize * guppyAreaFactor
                                 + poolSize * guppyBorderFactor + poolStartX,

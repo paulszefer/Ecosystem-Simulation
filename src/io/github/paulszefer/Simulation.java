@@ -7,6 +7,7 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
+import java.util.NoSuchElementException;
 import java.util.Scanner;
 
 /**
@@ -17,12 +18,6 @@ import java.util.Scanner;
  */
 public class Simulation {
 
-    // /** The simulation GUI. */
-    // private SimulationApplication gui;
-
-    // /** The ecosystem to be simulated. */
-    // private Ecosystem ecosystem;
-
     /** The current simulation state identifier. */
     private int week;
 
@@ -32,109 +27,29 @@ public class Simulation {
     /** Sets up a simulation with three pools. */
     public Simulation() {
 
-        // initialize GUI
-
-        // Swing GUI
-        // new SimulationFrame();
-
-        // JavaFX GUI
-
         // initialize current identifier
-        week = 0;
+        week = -1;
 
         // initialize history storage
         history = new ArrayList<>();
     }
 
     /**
-     * Generates and populates the Skookumchuk pool.
+     * Returns the week.
      *
-     * @return the generated Skookumchuk pool
+     * @return the week
      */
-    public static Pool setupSkookumchuk() {
+    public int getWeek() {
 
-        final Pool skookumchuk = new Pool("Skookumchuk", 1000.0, 42.0, 7.9, 0.9);
-
-        final int numberOfGuppies = 100;
-        final String genus = "Poecilia";
-        final String species = "reticulata";
-        final int minAge = 10;
-        final int maxAge = 25;
-        final double femaleChance = 0.5;
-        final double minHealthCoefficient = 0.5;
-        final double maxHealthCoefficient = 0.8;
-
-        skookumchuk.populatePool(numberOfGuppies, genus, species, minAge, maxAge, femaleChance,
-                                 minHealthCoefficient, maxHealthCoefficient);
-        return skookumchuk;
-    }
-
-    // /**
-    //  * Sets up the simulation.
-    //  *
-    //  * @param args
-    //  *         command-line arguments
-    //  */
-    // public static void main(String[] args) {
-    //
-    //     // create the simulation
-    //     Simulation simulation = new Simulation();
-    //
-    //     // wait for user-input in GUI
-    //
-    //     // // TODO - remove, move to GUI implementation
-    //     // final int weeksToSimulate = 40;
-    //     // simulation.simulate(weeksToSimulate);
-    // }
-
-    /**
-     * Generates and populates the Rutherford pool.
-     *
-     * @return the generated Rutherford pool
-     */
-    public static Pool setupRutherford() {
-
-        final Pool rutherford = new Pool("Rutherford", 5000.0, 39.0, 7.7, 0.85);
-
-        final int numberOfGuppies = 100;
-        final String genus = "Poecilia";
-        final String species = "reticulata";
-        final int minAge = 10;
-        final int maxAge = 15;
-        final double femaleChance = 0.5;
-        final double minHealthCoefficient = 0.8;
-        final double maxHealthCoefficient = 1.0;
-
-        rutherford.populatePool(numberOfGuppies, genus, species, minAge, maxAge, femaleChance,
-                                minHealthCoefficient, maxHealthCoefficient);
-        return rutherford;
+        return week;
     }
 
     /**
-     * Generates and populates the Gamelin pool.
+     * Loads the simulation data from a file.
      *
-     * @return the generated Gamelin pool
+     * @return true if the file was loaded successfully; false otherwise
      */
-    public static Pool setupGamelin() {
-
-        final Pool gamelin = new Pool("Gamelin", 4300.0, 37.0, 7.5, 1.0);
-
-        final int numberOfGuppies = 30;
-        final String genus = "Poecilia";
-        final String species = "reticulata";
-        final int minAge = 15;
-        final int maxAge = 49;
-        final double femaleChance = 0.5;
-        final double minHealthCoefficient = 0.0;
-        final double maxHealthCoefficient = 1.0;
-
-        gamelin.populatePool(numberOfGuppies, genus, species, minAge, maxAge, femaleChance,
-                             minHealthCoefficient, maxHealthCoefficient);
-        return gamelin;
-    }
-
-    /** Loads the simulation data from a file. */
-    public void loadFile() {
+    public boolean loadFile() {
 
         // TODO - parse file differently based on file type
         // Scanner should work for text file, but maybe not for xml and json
@@ -153,15 +68,22 @@ public class Simulation {
             try {
                 data = new Scanner(file);
             } catch (FileNotFoundException e) {
-                e.printStackTrace();
+                System.out.println("File not found");
+                return false;
             }
+        } else {
+            System.out.println("No file selected");
+            return false;
         }
 
         try {
             SimulationApplication.getStage().setTitle(data.nextLine());
         } catch (NullPointerException e) {
             System.out.println("Invalid data file");
-            return;
+            return false;
+        } catch (NoSuchElementException e) {
+            System.out.println("Invalid file type");
+            return false;
         }
         Ecosystem ecosystem = new Ecosystem();
         Pool pool;
@@ -182,11 +104,43 @@ public class Simulation {
             ecosystem.addPool(pool);
         }
 
-        SimulationApplication.getGui().getAnimationPane().updateState(ecosystem);
-
+        // update the simulation history
         week = 0;
         history = new ArrayList<>();
-        history.add(ecosystem);
+        history.add(ecosystem.copy());
+
+        // update the animation
+        SimulationApplication.getGui().getAnimationPane().updateState(ecosystem);
+
+        return true;
+    }
+
+    /** Returns the simulation to its state one week prior. */
+    public void previousWeek() {
+
+        if (week > 0) {
+            week--;
+            SimulationApplication.getGui().getAnimationPane().updateState(history.get(week));
+        } else {
+            System.out.println("There are no previous weeks.");
+            // TODO - grey out back button if there are no previous weeks
+        }
+    }
+
+    /**
+     * Returns the simulation to its state one week subsequent or simulates the week if it does not
+     * exist.
+     */
+    public void nextWeek() {
+
+        if (week == -1) {
+            System.out.println("Please load a simulation first.");
+        } else if (week + 1 < history.size()) {
+            week++;
+            SimulationApplication.getGui().getAnimationPane().updateState(history.get(week));
+        } else {
+            simulateOneWeek();
+        }
     }
 
     /**
@@ -196,6 +150,10 @@ public class Simulation {
      *         the number of weeks to simulate
      */
     public void simulate(int numberOfWeeks) {
+
+        if (week == -1) {
+            System.out.println("Please load a simulation first.");
+        }
 
         for (int i = 0; i < numberOfWeeks; i++) {
             System.out.println("Simulating Week " + (i + 1));
@@ -221,7 +179,12 @@ public class Simulation {
      */
     public void simulateOneWeek() {
 
-        Ecosystem ecosystem = history.get(week);
+        if (week == -1) {
+            System.out.println("Please load a simulation first.");
+            return;
+        }
+
+        Ecosystem ecosystem = history.get(week).copy();
 
         int diedOfOldAge = 0;
         int starvedToDeath = 0;
@@ -243,6 +206,7 @@ public class Simulation {
         numberRemoved += crowdedOut;
 
         if (diedOfOldAge + starvedToDeath + crowdedOut == numberRemoved) {
+            System.out.println("Simulating Week " + (week + 1));
             System.out.println("----------------------");
             System.out.println("Deaths to old age: " + diedOfOldAge);
             System.out.println("Deaths to starvation: " + starvedToDeath);
@@ -257,6 +221,7 @@ public class Simulation {
         }
 
         week++;
-        history.add(ecosystem);
+        history.add(ecosystem.copy());
+        SimulationApplication.getGui().getAnimationPane().updateState(history.get(week));
     }
 }

@@ -208,4 +208,24 @@ public class Ecosystem {
         }
         return null;
     }
+
+    /**
+     * Creates and returns a copy of this ecosystem.
+     *
+     * @return a cloned copy of this ecosystem
+     */
+    public Ecosystem copy() {
+
+        Ecosystem ecosystemCopy = new Ecosystem();
+
+        for (Pool pool : pools) {
+            ecosystemCopy.addPool(pool.copy());
+        }
+
+        for (Stream stream : streams) {
+            ecosystemCopy.addStream(stream.copy());
+        }
+
+        return ecosystemCopy;
+    }
 }

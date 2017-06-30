@@ -132,6 +132,19 @@ public class Stream extends WaterBody {
         return countDied;
     }
 
+    /**
+     * Creates and returns a copy of this stream.
+     *
+     * @return a cloned copy of this stream
+     */
+    public Stream copy() {
+
+        Stream streamCopy = new Stream(getName(), source, destination);
+        streamCopy.setTemperature(getTemperature());
+        streamCopy.setpH(getpH());
+        return streamCopy;
+    }
+
     @Override
     public boolean equals(Object o) {
 
