@@ -30,8 +30,8 @@ public class Guppy implements Comparable {
     /** The number of guppies that have been born. */
     private static int numberOfGuppiesBorn;
 
-    /** The classification profile of the guppy. */
-    private final Classification classification = new Classification(GENUS, SPECIES);
+    /** The identification profile of the guppy. */
+    private Identification identification;
 
     /** The health profile of the guppy. */
     private Health health;
@@ -39,19 +39,12 @@ public class Guppy implements Comparable {
     /** Whether the guppy is female. */
     private boolean isFemale;
 
-    /** The generation identifier of the guppy. */
-    private int generationNumber;
-
-    /** The identification number of the guppy. */
-    private int identificationNumber;
-
     /** Creates a Guppy with the default values. */
     public Guppy() {
 
+        identification = new Identification(GENUS, SPECIES, ++numberOfGuppiesBorn, 0);
         health = new Health(MAXIMUM_AGE);
         isFemale = true;
-        generationNumber = 0;
-        identificationNumber = ++numberOfGuppiesBorn;
     }
 
     /**
@@ -63,22 +56,14 @@ public class Guppy implements Comparable {
      *         The coefficient representing the health of the guppy.
      * @param isFemale
      *         True if the guppy is female; false otherwise.
-     * @param generationNumber
-     *         The generation of the guppy.
+     * @param generation
+     *         The generation number of the guppy.
      */
-    public Guppy(int age, double healthCoefficient, boolean isFemale, int generationNumber) {
+    public Guppy(int age, double healthCoefficient, boolean isFemale, int generation) {
 
+        identification = new Identification(GENUS, SPECIES, ++numberOfGuppiesBorn, generation);
         health = new Health(MAXIMUM_AGE, true, age, healthCoefficient);
-
         this.isFemale = isFemale;
-
-        if (generationNumber < 0) {
-            this.generationNumber = 0;
-        } else {
-            this.generationNumber = generationNumber;
-        }
-
-        identificationNumber = ++numberOfGuppiesBorn;
     }
 
     /**
@@ -92,13 +77,13 @@ public class Guppy implements Comparable {
     }
 
     /**
-     * Returns the classification profile.
+     * Returns the identification profile.
      *
-     * @return the classification profile
+     * @return the identification profile
      */
-    public Classification getClassification() {
+    public Identification getIdentification() {
 
-        return classification;
+        return identification;
     }
 
     /**
@@ -122,23 +107,14 @@ public class Guppy implements Comparable {
     }
 
     /**
-     * Returns the generation number of the guppy.
+     * Sets the identification profile.
      *
-     * @return The generation number of the guppy.
+     * @param identification
+     *         the identification
      */
-    public int getGenerationNumber() {
+    public void setIdentification(Identification identification) {
 
-        return generationNumber;
-    }
-
-    /**
-     * Returns the identification number of the guppy.
-     *
-     * @return The identification number of the guppy.
-     */
-    public int getIdentificationNumber() {
-
-        return identificationNumber;
+        this.identification = identification;
     }
 
     /**
@@ -150,19 +126,6 @@ public class Guppy implements Comparable {
     public void setIsFemale(boolean isFemale) {
 
         this.isFemale = isFemale;
-    }
-
-    /**
-     * Sets the generation number of the guppy.
-     *
-     * @param generationNumber
-     *         The generation number of the guppy.
-     */
-    public void setGenerationNumber(int generationNumber) {
-
-        if (generationNumber >= 0) {
-            this.generationNumber = generationNumber;
-        }
     }
 
     /**
@@ -186,20 +149,6 @@ public class Guppy implements Comparable {
             }
         }
         return volumeOfWaterML;
-    }
-
-    /**
-     * Sets the identification number of the guppy.
-     *
-     * @param identificationNumber
-     *         the identification number to set
-     */
-    public void setIdentificationNumber(int identificationNumber) {
-
-        this.identificationNumber = 0;
-        if (identificationNumber > 0) {
-            this.identificationNumber = identificationNumber;
-        }
     }
 
     /**
@@ -230,7 +179,7 @@ public class Guppy implements Comparable {
                     babyGuppies.add(new Guppy(0,
                                               (1.0 + health.getCoefficient()) / 2.0,
                                               generator.nextBoolean(),
-                                              generationNumber + 1));
+                                              identification.getGeneration() + 1));
                 }
             }
         } else {
@@ -249,9 +198,9 @@ public class Guppy implements Comparable {
         Guppy guppyCopy = new Guppy(health.getAge(),
                                     health.getCoefficient(),
                                     getIsFemale(),
-                                    getGenerationNumber());
+                                    identification.getGeneration());
         guppyCopy.getHealth().setIsAlive(health.getIsAlive());
-        guppyCopy.setIdentificationNumber(getIdentificationNumber());
+        guppyCopy.setIdentification(identification.copy());
         return guppyCopy;
     }
 
@@ -303,7 +252,9 @@ public class Guppy implements Comparable {
      */
     public String toString() {
 
-        return "[" + classification + health + ",isFemale=" + isFemale + ",generationNumber="
-                + generationNumber + ",identificationNumber=" + identificationNumber + "]";
+        return "[" + identification.getClassification() + health + ",isFemale=" + isFemale
+                + ",generationNumber="
+                + identification.getGeneration() + ",identificationNumber=" + identification
+                .getIdentifier() + "]";
     }
 }

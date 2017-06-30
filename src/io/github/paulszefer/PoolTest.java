@@ -1234,7 +1234,7 @@ public class PoolTest {
          * assertThat(pool, is("[name=" + pool.getName() + ",volumeLitres=" + pool.getVolumeLitres()
          * + ",temperatureCelsius=" + pool.getTemperature() + ",pH=" + pool.getpH() +
          * ",nutrientCoefficient=" + pool.getNutrientCoefficient() + ",identificationNumber=" +
-         * pool.getIdentificationNumber() + ",guppiesInPool=" + pool.getGuppiesInPool() +
+         * pool.getIdentifier() + ",guppiesInPool=" + pool.getGuppiesInPool() +
          * ",randomNumberGenerator=" + pool.getran() + "]";))
          */
         // no getter for random number generator, cannot test from outside pool
