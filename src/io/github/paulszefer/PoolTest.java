@@ -5,6 +5,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -13,6 +14,7 @@ import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.greaterThanOrEqualTo;
 import static org.hamcrest.Matchers.instanceOf;
 import static org.hamcrest.Matchers.is;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
@@ -71,7 +73,7 @@ public class PoolTest {
     private Pool pool5ParameterConstructorInvalidParameterValuesBelowBound;
     private Pool pool5ParameterConstructorInvalidParameterValuesAboveBound;
     private Pool pool5ParameterConstructor5;
-    private ArrayList<Guppy> testGuppies;
+    private List<Guppy> testGuppies;
 
     @Before
     public void setUp() throws Exception {
@@ -159,14 +161,14 @@ public class PoolTest {
     }
 
     @Test
-    public void testPoolGuppiesInPoolCreatesArrayList() {
+    public void testPoolGuppiesInPoolCreatesList() {
 
-        assertThat(testGuppies, is(instanceOf(ArrayList.class)));
+        assertThat(testGuppies, is(instanceOf(List.class)));
 
     }
 
     @Test
-    public void testPoolGuppiesInPoolIsEmptyArrayList() {
+    public void testPoolGuppiesInPoolIsEmptyList() {
 
         assertThat(pool0ParameterConstructor.getGuppiesInPool().size(), is(0));
 
@@ -259,15 +261,15 @@ public class PoolTest {
     }
 
     @Test
-    public void testPoolStringDoubleDoubleDoubleDoubleGuppiesInPoolCreatesArrayList() {
+    public void testPoolStringDoubleDoubleDoubleDoubleGuppiesInPoolCreatesList() {
 
         assertThat(pool5ParameterConstructorValidParameterValues.getGuppiesInPool(),
-                   is(instanceOf(ArrayList.class)));
+                   is(instanceOf(List.class)));
 
     }
 
     @Test
-    public void testPoolStringDoubleDoubleDoubleDoubleGuppiesInPoolCreatesEmptyArrayList() {
+    public void testPoolStringDoubleDoubleDoubleDoubleGuppiesInPoolCreatesEmptyList() {
 
         assertThat(pool5ParameterConstructorValidParameterValues.getGuppiesInPool().size(), is(0));
 
@@ -590,9 +592,9 @@ public class PoolTest {
     }
 
     @Test
-    public void testSetGuppiesInPoolSetsArrayListOfGuppies() {
+    public void testSetGuppiesInPoolSetsListOfGuppies() {
 
-        assertThat(pool.getGuppiesInPool(), is(instanceOf(ArrayList.class)));
+        assertThat(pool.getGuppiesInPool(), is(instanceOf(List.class)));
 
     }
 
@@ -788,9 +790,9 @@ public class PoolTest {
     }
 
     @Test
-    public void testAddGuppyEmptyArrayList() {
+    public void testAddGuppyEmptyList() {
 
-        ArrayList<Guppy> emptyList = new ArrayList<>();
+        List<Guppy> emptyList = new ArrayList<>();
 
         pool.setGuppiesInPool(emptyList);
 
@@ -802,9 +804,9 @@ public class PoolTest {
     }
 
     @Test
-    public void testAddGuppyNotEmptyArrayList() {
+    public void testAddGuppyNotEmptyList() {
 
-        ArrayList<Guppy> emptyList = new ArrayList<>();
+        List<Guppy> emptyList = new ArrayList<>();
 
         pool.setGuppiesInPool(emptyList);
         pool.addGuppy(new Guppy());
@@ -824,20 +826,15 @@ public class PoolTest {
     }
 
     @Test
-    public void testAddGuppyNullThrowsException() {
+    public void testAddGuppyNullReturnsFalse() {
 
-        try {
-            pool.addGuppy(null);
-        } catch (IllegalArgumentException e) {
-            return;
-        }
-        fail("No exception thrown.");
+        assertFalse(pool.addGuppy(null));
     }
 
     @Test
-    public void testAddGuppiesEmptyArrayList() {
+    public void testAddGuppiesEmptyList() {
 
-        ArrayList<Guppy> emptyList = new ArrayList<>();
+        List<Guppy> emptyList = new ArrayList<>();
 
         pool.setGuppiesInPool(emptyList);
         pool.addGuppies(testGuppies);
@@ -848,9 +845,9 @@ public class PoolTest {
     }
 
     @Test
-    public void testAddGuppiesNotEmptyArrayList() {
+    public void testAddGuppiesNotEmptyList() {
 
-        ArrayList<Guppy> emptyList = new ArrayList<>();
+        List<Guppy> emptyList = new ArrayList<>();
 
         pool.setGuppiesInPool(emptyList);
         pool.addGuppy(new Guppy());
@@ -862,22 +859,16 @@ public class PoolTest {
         assertThat(result, is(expected));
     }
 
+    public void testAddGuppiesNullReturnsFalse() {
+
+        assertFalse(pool.addGuppies(null));
+    }
+
     @Test
     public void testAddGuppiesValidSetSucceeds() {
 
         assertTrue(pool.addGuppies(testGuppies));
 
-    }
-
-    @Test
-    public void testAddGuppiesNullThrowsException() {
-
-        try {
-            pool.addGuppies(null);
-        } catch (IllegalArgumentException e) {
-            return;
-        }
-        fail("No exception thrown.");
     }
 
     @Test
@@ -1122,7 +1113,7 @@ public class PoolTest {
             guppy.getHealth().setAge(generator.nextInt(Guppy.MAXIMUM_AGE - 1));
         }
 
-        ArrayList<Integer> ages = pool.sortLivingGuppyAges();
+        List<Integer> ages = pool.sortLivingGuppyAges();
 
         if (ages.size() % 2 != 0) {
             ages.add(50);
@@ -1142,7 +1133,7 @@ public class PoolTest {
             guppy.getHealth().setAge(generator.nextInt(Guppy.MAXIMUM_AGE - 1));
         }
 
-        ArrayList<Integer> ages = pool.sortLivingGuppyAges();
+        List<Integer> ages = pool.sortLivingGuppyAges();
 
         if (ages.size() % 2 == 0) {
             ages.add(50);
@@ -1166,7 +1157,7 @@ public class PoolTest {
             }
         }
 
-        ArrayList<Integer> ages = pool.sortLivingGuppyAges();
+        List<Integer> ages = pool.sortLivingGuppyAges();
 
         double medianAge;
 
@@ -1215,8 +1206,8 @@ public class PoolTest {
     public void testAdjustForCrowdingReturnsRemovedGuppies() {
 
         pool.setVolumeLitres(1.5);
-        ArrayList<Guppy> removedGuppies = pool.adjustForCrowding();
-        assertThat(removedGuppies, is(instanceOf(ArrayList.class)));
+        List<Guppy> removedGuppies = pool.adjustForCrowding();
+        assertThat(removedGuppies, is(instanceOf(List.class)));
     }
 
     @Test

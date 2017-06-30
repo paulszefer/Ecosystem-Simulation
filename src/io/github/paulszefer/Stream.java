@@ -1,6 +1,6 @@
 package io.github.paulszefer;
 
-import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 /**
@@ -119,12 +119,13 @@ public class Stream extends WaterBody {
      *
      * @return the number of guppies that die in transport
      */
-    public int transportGuppies(ArrayList<Guppy> guppies) {
+    public int transportGuppies(List<Guppy> guppies) {
 
         int countDied = 0;
 
         for (Guppy guppy : guppies) {
-            guppy.getHealth().setIsAlive(generator.nextDouble() < guppy.getHealth().getCoefficient());
+            guppy.getHealth().setIsAlive(
+                    generator.nextDouble() < guppy.getHealth().getCoefficient());
             countDied += !guppy.getHealth().getIsAlive() ? 1 : 0;
         }
         destination.addGuppies(guppies);

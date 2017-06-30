@@ -7,6 +7,7 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Scanner;
 
@@ -191,7 +192,7 @@ public class Simulation {
         int newFry = 0;
         int crowdedOut = 0;
         int numberRemoved = 0;
-        ArrayList<Pool> pools = ecosystem.getPools();
+        List<Pool> pools = ecosystem.getPools();
 
         for (Pool pool : pools) {
             diedOfOldAge += pool.incrementAges();

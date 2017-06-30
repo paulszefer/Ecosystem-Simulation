@@ -3,6 +3,7 @@ package io.github.paulszefer;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Random;
 
 /**
@@ -56,7 +57,7 @@ public class Pool extends WaterBody {
     /**
      * The set of guppies in the pool.
      */
-    private ArrayList<Guppy> guppiesInPool;
+    private List<Guppy> guppiesInPool;
 
     /**
      * Sets up a generic aquatic pool with default values.
@@ -139,7 +140,7 @@ public class Pool extends WaterBody {
      *
      * @return the set of guppies in the pool
      */
-    public ArrayList<Guppy> getGuppiesInPool() {
+    public List<Guppy> getGuppiesInPool() {
 
         return guppiesInPool;
     }
@@ -193,7 +194,7 @@ public class Pool extends WaterBody {
      * @param guppiesInPool
      *         the set of guppies to set
      */
-    public void setGuppiesInPool(ArrayList<Guppy> guppiesInPool) {
+    public void setGuppiesInPool(List<Guppy> guppiesInPool) {
 
         if (guppiesInPool != null) {
             this.guppiesInPool = guppiesInPool;
@@ -300,7 +301,7 @@ public class Pool extends WaterBody {
      *
      * @return true if successful; false otherwise
      */
-    public boolean addGuppies(ArrayList<Guppy> guppies) {
+    public boolean addGuppies(List<Guppy> guppies) {
 
         return guppies != null && guppiesInPool.addAll(guppies);
     }
@@ -442,7 +443,7 @@ public class Pool extends WaterBody {
 
         double medianAge;
 
-        ArrayList<Integer> livingGuppiesSorted = sortLivingGuppyAges();
+        List<Integer> livingGuppiesSorted = sortLivingGuppyAges();
 
         if (livingGuppiesSorted.size() == 0) {
             medianAge = 0;
@@ -463,11 +464,11 @@ public class Pool extends WaterBody {
      *
      * @return the number of guppies that died
      */
-    public ArrayList<Guppy> adjustForCrowding() {
+    public List<Guppy> adjustForCrowding() {
 
         Collections.sort(guppiesInPool);
 
-        ArrayList<Guppy> weakestGuppies = new ArrayList<>();
+        List<Guppy> weakestGuppies = new ArrayList<>();
         int index = 0;
 
         while (volumeLitres < getGuppyVolumeRequirementInLitres()) {
@@ -505,10 +506,10 @@ public class Pool extends WaterBody {
      */
     public int spawn() {
 
-        ArrayList<Guppy> newGuppies = new ArrayList<>();
+        List<Guppy> newGuppies = new ArrayList<>();
 
         for (Guppy guppy : guppiesInPool) {
-            ArrayList<Guppy> spawned = guppy.spawn();
+            List<Guppy> spawned = guppy.spawn();
             if (spawned != null) {
                 newGuppies.addAll(spawned);
             }
@@ -523,9 +524,9 @@ public class Pool extends WaterBody {
      *
      * @return a list of the pool's living population's ages in ascending order
      */
-    public ArrayList<Integer> sortLivingGuppyAges() {
+    public List<Integer> sortLivingGuppyAges() {
 
-        ArrayList<Integer> sorted = new ArrayList<>();
+        List<Integer> sorted = new ArrayList<>();
 
         for (Guppy guppy : guppiesInPool) {
             if (guppy.getHealth().getIsAlive()) {

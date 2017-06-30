@@ -1,6 +1,7 @@
 package io.github.paulszefer;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 /**
@@ -15,10 +16,10 @@ public class Ecosystem {
     private static Random generator = new Random();
 
     /** The collection of pools in the ecosystem. */
-    private ArrayList<Pool> pools;
+    private List<Pool> pools;
 
     /** The collection of streams in the ecosystem. */
-    private ArrayList<Stream> streams;
+    private List<Stream> streams;
 
     /** Creates an ecosystem of pools connected by streams. */
     public Ecosystem() {
@@ -32,7 +33,7 @@ public class Ecosystem {
      *
      * @return the pools in the ecosystem
      */
-    public ArrayList<Pool> getPools() {
+    public List<Pool> getPools() {
 
         return pools;
     }
@@ -42,7 +43,7 @@ public class Ecosystem {
      *
      * @return the streams in the ecosystem
      */
-    public ArrayList<Stream> getStreams() {
+    public List<Stream> getStreams() {
 
         return streams;
     }
@@ -53,7 +54,7 @@ public class Ecosystem {
      * @param pools
      *         the pools to set
      */
-    public void setPools(ArrayList<Pool> pools) {
+    public void setPools(List<Pool> pools) {
 
         if (pools != null) {
             this.pools = pools;
@@ -71,7 +72,7 @@ public class Ecosystem {
      * @param streams
      *         the streams to set
      */
-    public void setStreams(ArrayList<Stream> streams) {
+    public void setStreams(List<Stream> streams) {
 
         if (streams != null) {
             this.streams = streams;
@@ -164,7 +165,7 @@ public class Ecosystem {
 
         for (Pool pool : pools) {
 
-            ArrayList<Guppy> weakestGuppies = pool.adjustForCrowding();
+            List<Guppy> weakestGuppies = pool.adjustForCrowding();
 
             Stream stream = getRandomStream(pool);
             if (stream != null) {
@@ -193,7 +194,7 @@ public class Ecosystem {
      */
     public Stream getRandomStream(Pool pool) {
 
-        ArrayList<Stream> possibleStreams = new ArrayList<>();
+        List<Stream> possibleStreams = new ArrayList<>();
 
         for (Stream stream : streams) {
             if (stream.getSource() == pool) {
