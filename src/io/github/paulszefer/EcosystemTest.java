@@ -168,7 +168,7 @@ public class EcosystemTest {
     @Test
     public void testGetGuppyPopulationNoPools() {
 
-        assertThat(ecosystem.getGuppyPopulation(), is(equalTo(0)));
+        assertThat(ecosystem.getCreaturePopulation(), is(equalTo(0)));
 
     }
 
@@ -179,13 +179,13 @@ public class EcosystemTest {
 
         for (int i = 0; i < numberOfGuppies; i++) {
 
-            pool1.addGuppy(new Guppy());
+            pool1.addCreature(new Guppy());
 
         }
 
         ecosystem.addPool(pool1);
 
-        assertThat(ecosystem.getGuppyPopulation(), is(equalTo(numberOfGuppies)));
+        assertThat(ecosystem.getCreaturePopulation(), is(equalTo(numberOfGuppies)));
 
     }
 
@@ -196,7 +196,7 @@ public class EcosystemTest {
 
         for (int i = 0; i < numberOfGuppies1; i++) {
 
-            pool1.addGuppy(new Guppy());
+            pool1.addCreature(new Guppy());
 
         }
 
@@ -204,14 +204,14 @@ public class EcosystemTest {
 
         for (int i = 0; i < numberOfGuppies2; i++) {
 
-            pool2.addGuppy(new Guppy());
+            pool2.addCreature(new Guppy());
 
         }
 
         ecosystem.addPool(pool1);
         ecosystem.addPool(pool2);
 
-        assertThat(ecosystem.getGuppyPopulation(),
+        assertThat(ecosystem.getCreaturePopulation(),
                    is(equalTo(numberOfGuppies1 + numberOfGuppies2)));
 
     }

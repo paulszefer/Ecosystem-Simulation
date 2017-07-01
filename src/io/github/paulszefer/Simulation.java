@@ -25,7 +25,7 @@ public class Simulation {
     /** The storage of ecosystem states. */
     private ArrayList<Ecosystem> history;
 
-    /** Sets up a simulation with three pools. */
+    /** Sets up the simulation. */
     public Simulation() {
 
         // initialize current identifier
@@ -58,11 +58,9 @@ public class Simulation {
         // that returns the next field based on the file type/structure
 
         JFileChooser fileChooser = new JFileChooser();
-        FileNameExtensionFilter filter = new FileNameExtensionFilter("File type",
-                                                                     "xml",
-                                                                     "json",
+        FileNameExtensionFilter filter = new FileNameExtensionFilter("File type", "xml", "json",
                                                                      "txt");
-        Scanner data = null;
+        Scanner data;
         fileChooser.addChoosableFileFilter(filter);
         if (fileChooser.showOpenDialog(new JFrame()) == JFileChooser.APPROVE_OPTION) {
             File file = fileChooser.getSelectedFile();
@@ -89,19 +87,13 @@ public class Simulation {
         Ecosystem ecosystem = new Ecosystem();
         Pool pool;
         while (data.hasNext()) {
-            pool = new Pool(data.nextLine(),
-                            Double.valueOf(data.nextLine()),
-                            Double.valueOf(data.nextLine()),
-                            Double.valueOf(data.nextLine()),
+            pool = new Pool(data.nextLine(), Double.valueOf(data.nextLine()),
+                            Double.valueOf(data.nextLine()), Double.valueOf(data.nextLine()),
                             Double.valueOf(data.nextLine()));
-            pool.populatePool(Integer.valueOf(data.nextLine()),
-                              data.nextLine(),
-                              data.nextLine(),
-                              Integer.valueOf(data.nextLine()),
-                              Integer.valueOf(data.nextLine()),
-                              Double.valueOf(data.nextLine()),
-                              Double.valueOf(data.nextLine()),
-                              Double.valueOf(data.nextLine()));
+            pool.populate(Integer.valueOf(data.nextLine()), data.nextLine(), data.nextLine(),
+                          Integer.valueOf(data.nextLine()), Integer.valueOf(data.nextLine()),
+                          Double.valueOf(data.nextLine()), Double.valueOf(data.nextLine()),
+                          Double.valueOf(data.nextLine()));
             ecosystem.addPool(pool);
         }
 
@@ -196,11 +188,11 @@ public class Simulation {
 
         for (Pool pool : pools) {
             diedOfOldAge += pool.incrementAges();
-            numberRemoved += pool.removeDeadGuppies();
+            numberRemoved += pool.removeDeadCreatures();
             starvedToDeath += pool.applyNutrientCoefficient();
-            numberRemoved += pool.removeDeadGuppies();
+            numberRemoved += pool.removeDeadCreatures();
             newFry += pool.spawn();
-            numberRemoved += pool.removeDeadGuppies();
+            numberRemoved += pool.removeDeadCreatures();
         }
 
         crowdedOut += ecosystem.adjustForCrowding();
@@ -213,11 +205,11 @@ public class Simulation {
             System.out.println("Deaths to starvation: " + starvedToDeath);
             System.out.println("Crowded out: " + crowdedOut);
             System.out.println("Number of births: " + newFry);
-            System.out.println("Pool 1 population: " + pools.get(0).getPopulation());
-            System.out.println("Pool 2 population: " + pools.get(1).getPopulation());
-            System.out.println("Pool 3 population: " + pools.get(2).getPopulation());
-            System.out.println("Ecosystem population: " + (pools.get(0).getPopulation()
-                    + pools.get(1).getPopulation() + pools.get(2).getPopulation()));
+            for (int i = 0; i < pools.size(); i++) {
+                System.out.println(
+                        "Pool " + (i + 1) + " population: " + pools.get(i).getPopulation());
+            }
+            System.out.println("Ecosystem population: " + ecosystem.getCreaturePopulation());
             System.out.println();
         }
 

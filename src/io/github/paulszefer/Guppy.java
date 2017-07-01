@@ -2,6 +2,7 @@ package io.github.paulszefer;
 
 import java.util.ArrayList;
 import java.util.InputMismatchException;
+import java.util.List;
 import java.util.Random;
 
 /**
@@ -10,7 +11,7 @@ import java.util.Random;
  * @author Paul Szefer
  * @version 1.0
  */
-public class Guppy implements Comparable {
+public class Guppy implements Creature {
 
     /** The maximum number of weeks for a guppy to live. */
     public static final int MAXIMUM_AGE = 50;
@@ -25,7 +26,7 @@ public class Guppy implements Comparable {
     public static final String SPECIES = "reticulata";
 
     /** Random number generator. */
-    private static Random generator = new Random();
+    private static final Random generator = new Random();
 
     /** The number of guppies that have been born. */
     private static int numberOfGuppiesBorn;
@@ -34,17 +35,17 @@ public class Guppy implements Comparable {
     private Identification identification;
 
     /** The health profile of the guppy. */
-    private Health health;
+    private final Health health;
 
     /** Whether the guppy is female. */
-    private boolean isFemale;
+    private boolean female;
 
     /** Creates a Guppy with the default values. */
     public Guppy() {
 
         identification = new Identification(GENUS, SPECIES, ++numberOfGuppiesBorn, 0);
         health = new Health(MAXIMUM_AGE);
-        isFemale = true;
+        female = true;
     }
 
     /**
@@ -54,91 +55,55 @@ public class Guppy implements Comparable {
      *         The age of the guppy in weeks.
      * @param healthCoefficient
      *         The coefficient representing the health of the guppy.
-     * @param isFemale
+     * @param female
      *         True if the guppy is female; false otherwise.
      * @param generation
      *         The generation number of the guppy.
      */
-    public Guppy(int age, double healthCoefficient, boolean isFemale, int generation) {
+    public Guppy(int age, double healthCoefficient, boolean female, int generation) {
 
         identification = new Identification(GENUS, SPECIES, ++numberOfGuppiesBorn, generation);
         health = new Health(MAXIMUM_AGE, true, age, healthCoefficient);
-        this.isFemale = isFemale;
+        this.female = female;
     }
 
-    /**
-     * Returns the number of guppies born.
-     *
-     * @return The number of guppies born.
-     */
-    public static int getNumberOfGuppiesBorn() {
-
-        return numberOfGuppiesBorn;
-    }
-
-    /**
-     * Returns the identification profile.
-     *
-     * @return the identification profile
-     */
+    @Override
     public Identification getIdentification() {
 
         return identification;
     }
 
-    /**
-     * Returns the health profile.
-     *
-     * @return the health profile
-     */
+    @Override
     public Health getHealth() {
 
         return health;
     }
 
-    /**
-     * Returns whether the guppy is female.
-     *
-     * @return True if the guppy is female; false otherwise.
-     */
-    public boolean getIsFemale() {
+    @Override
+    public boolean isFemale() {
 
-        return isFemale;
+        return female;
     }
 
-    /**
-     * Sets the identification profile.
-     *
-     * @param identification
-     *         the identification
-     */
+    @Override
     public void setIdentification(Identification identification) {
 
         this.identification = identification;
     }
 
-    /**
-     * Sets whether the guppy is female.
-     *
-     * @param isFemale
-     *         True if the guppy is female; false otherwise.
-     */
-    public void setIsFemale(boolean isFemale) {
+    @Override
+    public void setFemale(boolean isFemale) {
 
-        this.isFemale = isFemale;
+        this.female = isFemale;
     }
 
-    /**
-     * Gets the volume of water in mL that the guppy needs according to its age.
-     *
-     * @return Volume of water in mL needed for the guppy or 0.0 if dead.
-     */
+    @Override
     public double getVolumeNeeded() {
 
         final int youngFishAge = 10;
         final int matureFishAge = 30;
         double volumeOfWaterML = 0.0;
-        if (health.getIsAlive()) {
+        if (health.isAlive()) {
             if (health.getAge() < youngFishAge) {
                 volumeOfWaterML = MINIMUM_WATER_VOLUME_ML;
             } else if (health.getAge() < matureFishAge) {
@@ -152,22 +117,21 @@ public class Guppy implements Comparable {
     }
 
     /**
-     * Spawns offspring if the required conditions are met.
+     * {@inheritDoc}
      * <p>
      * If the parent is female and at least 10 weeks old, then there is a 25% chance that they will
      * have offspring. If they do, they will have 0-100 offspring.
-     *
-     * @return an ArrayList of spawned offspring or null if this guppy is unable to reproduce
      */
-    public ArrayList<Guppy> spawn() {
+    @Override
+    public List<Creature> spawn() {
 
         final int minAgeInWeeksToSpawn = 10;
         final double spawnChance = 0.25;
         final int maxOffspring = 100;
 
-        ArrayList<Guppy> babyGuppies = new ArrayList<>();
+        List<Creature> babyGuppies = new ArrayList<>();
 
-        if (isFemale && health.getAge() >= minAgeInWeeksToSpawn) {
+        if (female && health.getAge() >= minAgeInWeeksToSpawn) {
 
             int numberOfOffspring = 0;
             if (generator.nextDouble() <= spawnChance) {
@@ -176,8 +140,7 @@ public class Guppy implements Comparable {
 
             if (numberOfOffspring > 0) {
                 for (int i = 0; i < numberOfOffspring; i++) {
-                    babyGuppies.add(new Guppy(0,
-                                              (1.0 + health.getCoefficient()) / 2.0,
+                    babyGuppies.add(new Guppy(0, (1.0 + health.getCoefficient()) / 2.0,
                                               generator.nextBoolean(),
                                               identification.getGeneration() + 1));
                 }
@@ -188,42 +151,31 @@ public class Guppy implements Comparable {
         return babyGuppies;
     }
 
-    /**
-     * Creates and returns a copy of this Guppy.
-     *
-     * @return a cloned copy of this guppy
-     */
+    @Override
     public Guppy copy() {
 
-        Guppy guppyCopy = new Guppy(health.getAge(),
-                                    health.getCoefficient(),
-                                    getIsFemale(),
+        Guppy guppyCopy = new Guppy(health.getAge(), health.getCoefficient(), isFemale(),
                                     identification.getGeneration());
-        guppyCopy.getHealth().setIsAlive(health.getIsAlive());
+        guppyCopy.getHealth().setAlive(health.isAlive());
         guppyCopy.setIdentification(identification.copy());
         return guppyCopy;
     }
 
     /**
-     * Compares this Guppy to the given object according to health coefficient.
+     * {@inheritDoc}
      * <p>
-     * Returns:
+     * Comparison is done according to health coefficient.
+     * <p>
+     * Evaluates to:
      * <ul>
      * <li>1 if this Guppy is healthier</li>
      * <li>-1 if the other guppy is healthier</li>
      * <li>0 if the guppies are equally healthy</li>
      * </ul>
      *
-     * @param other
-     *         an object to compare this guppy to
-     *
-     * @return an integer depending on which guppy is healthier
-     *
-     * @throws NullPointerException
-     *         if the other object is null
-     * @throws InputMismatchException
-     *         if the other object is not of type Guppy
+     * @return an integer depending on which creature is healthier
      */
+    @Override
     public int compareTo(Object other) {
 
         if (this == other) {
@@ -245,16 +197,11 @@ public class Guppy implements Comparable {
         return 0;
     }
 
-    /**
-     * Returns a string representation of the guppy containing all of its attributes.
-     *
-     * @return A string containing all of the attributes of the guppy.
-     */
+    @Override
     public String toString() {
 
-        return "[" + identification.getClassification() + health + ",isFemale=" + isFemale
-                + ",generationNumber="
-                + identification.getGeneration() + ",identificationNumber=" + identification
-                .getIdentifier() + "]";
+        return "[" + identification.getClassification() + health + ",female=" + female
+                + ",generationNumber=" + identification.getGeneration() + ",identificationNumber="
+                + identification.getIdentifier() + "]";
     }
 }

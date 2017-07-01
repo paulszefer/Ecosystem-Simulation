@@ -14,10 +14,10 @@ public class Identification {
     private final Classification classification;
 
     /** The identification number of the organism. */
-    private int identifier;
+    private final int identifier;
 
     /** The generation identifier of the organism. */
-    private int generation;
+    private final int generation;
 
     /**
      * Creates the identification profile for an organism.
@@ -75,9 +75,7 @@ public class Identification {
      */
     public Identification copy() {
 
-        return new Identification(classification.getGenus(),
-                                  classification.getSpecies(),
-                                  identifier,
-                                  generation);
+        return new Identification(classification.getGenus(), classification.getSpecies(),
+                                  identifier, generation);
     }
 }

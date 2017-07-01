@@ -24,7 +24,7 @@ public class Health {
     private final int maxAge;
 
     /** Whether the organism is alive. */
-    private boolean isAlive;
+    private boolean alive;
 
     /** The age of the organism in weeks. */
     private int age;
@@ -41,7 +41,7 @@ public class Health {
     public Health(int maxAge) {
 
         this.maxAge = maxAge;
-        setIsAlive(true);
+        setAlive(true);
         setAge(0);
         setCoefficient(DEFAULT_COEFFICIENT);
     }
@@ -51,17 +51,17 @@ public class Health {
      *
      * @param maxAge
      *         the maximum age of this organism in weeks
-     * @param isAlive
+     * @param alive
      *         whether the organism is alive
      * @param age
      *         the age of the organism in weeks
      * @param coefficient
      *         the coefficient representing the organism's health
      */
-    public Health(int maxAge, boolean isAlive, int age, double coefficient) {
+    public Health(int maxAge, boolean alive, int age, double coefficient) {
 
         this.maxAge = maxAge;
-        setIsAlive(isAlive);
+        setAlive(alive);
         setAge(age);
         setCoefficient(coefficient);
     }
@@ -91,9 +91,9 @@ public class Health {
      *
      * @return true if the organism is alive; false otherwise
      */
-    public boolean getIsAlive() {
+    public boolean isAlive() {
 
-        return isAlive;
+        return alive;
     }
 
     /**
@@ -125,9 +125,9 @@ public class Health {
      * @param isAlive
      *         true if the organism is alive; false otherwise
      */
-    public void setIsAlive(boolean isAlive) {
+    public void setAlive(boolean isAlive) {
 
-        this.isAlive = isAlive;
+        this.alive = isAlive;
     }
 
     /**
@@ -151,7 +151,7 @@ public class Health {
 
         age++;
         if (age >= maxAge) {
-            setIsAlive(false);
+            setAlive(false);
         }
     }
 
@@ -168,7 +168,7 @@ public class Health {
 
         setCoefficient(coefficient + delta);
         if (coefficient <= Health.MINIMUM_COEFFICIENT) {
-            setIsAlive(false);
+            setAlive(false);
             setCoefficient(0);
         } else if (coefficient >= Health.MAXIMUM_COEFFICIENT) {
             setCoefficient(Health.MAXIMUM_COEFFICIENT);
@@ -178,6 +178,6 @@ public class Health {
     @Override
     public String toString() {
 
-        return "isAlive=" + isAlive + ",age=" + age + ",coefficient=" + coefficient;
+        return "alive=" + alive + ",age=" + age + ",coefficient=" + coefficient;
     }
 }

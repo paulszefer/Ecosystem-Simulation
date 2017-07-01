@@ -6,9 +6,9 @@ import java.util.Random;
 /**
  * A stream provides a connection between pools.
  * <p>
- * Guppies that leave the original pool travel through the stream to the destination pool.
+ * Creatures that leave the original pool travel through the stream to the destination pool.
  * <p>
- * A stream is not a container; guppies flow quickly through the stream to their destination.
+ * A stream is not a container; creatures flow quickly through the stream to their destination.
  *
  * @author Paul Szefer
  * @version 1.0
@@ -16,7 +16,7 @@ import java.util.Random;
 public class Stream extends WaterBody {
 
     /** Random number generator. */
-    private static Random generator = new Random();
+    private static final Random generator = new Random();
 
     /** The source pool. */
     private Pool source;
@@ -27,7 +27,7 @@ public class Stream extends WaterBody {
     /**
      * A stream that flows from its source pool to its destination pool.
      * <p>
-     * Streams facilitate the transfer of guppies between pools.
+     * Streams facilitate the transfer of creatures between pools.
      * <p>
      * Streams begin with the same pH and temperature as their source pool.
      *
@@ -46,7 +46,7 @@ public class Stream extends WaterBody {
     /**
      * A stream that flows from its source pool to its destination pool.
      * <p>
-     * Streams facilitate the transfer of guppies between pools.
+     * Streams facilitate the transfer of creatures between pools.
      * <p>
      * Streams begin with the same pH and temperature as their source pool.
      *
@@ -109,26 +109,26 @@ public class Stream extends WaterBody {
     }
 
     /**
-     * Transports the guppies through this stream to the destination pool.
+     * Transports the creatures through this stream to the destination pool.
      * <p>
-     * Guppies die in transport if a randomly generated double is greater than their health
+     * Creatures die in transport if a randomly generated double is greater than their health
      * coefficient.
      *
-     * @param guppies
-     *         the guppies to transport
+     * @param creatures
+     *         the creatures to transport
      *
-     * @return the number of guppies that die in transport
+     * @return the number of creatures that die in transport
      */
-    public int transportGuppies(List<Guppy> guppies) {
+    public int transportCreatures(List<Creature> creatures) {
 
         int countDied = 0;
 
-        for (Guppy guppy : guppies) {
-            guppy.getHealth().setIsAlive(
-                    generator.nextDouble() < guppy.getHealth().getCoefficient());
-            countDied += !guppy.getHealth().getIsAlive() ? 1 : 0;
+        for (Creature creature : creatures) {
+            creature.getHealth().setAlive(
+                    generator.nextDouble() < creature.getHealth().getCoefficient());
+            countDied += !creature.getHealth().isAlive() ? 1 : 0;
         }
-        destination.addGuppies(guppies);
+        destination.addCreatures(creatures);
 
         return countDied;
     }

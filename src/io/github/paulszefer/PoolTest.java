@@ -34,14 +34,14 @@ public class PoolTest {
     public static final double VOLUME_LITRES_LOWER_BOUND = 0.0;
     public static final double VOLUME_LITRES_VALID = 203.2;
 
-    public static final double TEMP_CELSIUS_BELOW_LOWER_BOUND = Pool.MINIMUM_WATER_TEMP_CELSIUS
-            - 1.0;
+    public static final double TEMP_CELSIUS_BELOW_LOWER_BOUND =
+            Pool.MINIMUM_WATER_TEMP_CELSIUS - 1.0;
     public static final double TEMP_CELSIUS_LOWER_BOUND = Pool.MINIMUM_WATER_TEMP_CELSIUS;
     public static final double TEMP_CELSIUS_VALID_1 = Pool.MINIMUM_WATER_TEMP_CELSIUS + 1.0;
     public static final double TEMP_CELSIUS_VALID_2 = Pool.MAXIMUM_WATER_TEMP_CELSIUS - 1.0;
     public static final double TEMP_CELSIUS_UPPER_BOUND = Pool.MAXIMUM_WATER_TEMP_CELSIUS;
-    public static final double TEMP_CELSIUS_ABOVE_UPPER_BOUND = Pool.MAXIMUM_WATER_TEMP_CELSIUS
-            + 1.0;
+    public static final double TEMP_CELSIUS_ABOVE_UPPER_BOUND =
+            Pool.MAXIMUM_WATER_TEMP_CELSIUS + 1.0;
 
     public static final double PH_BELOW_LOWER_BOUND = Pool.MINIMUM_PH - 1.0;
     public static final double PH_LOWER_BOUND = Pool.MINIMUM_PH;
@@ -51,21 +51,19 @@ public class PoolTest {
     public static final double PH_ABOVE_UPPER_BOUND = Pool.MAXIMUM_PH + 1.0;
 
     public static final double NUTRIENT_COEFFICIENT_BELOW_LOWER_BOUND =
-            Pool.MINIMUM_NUTRIENT_COEFFICIENT
-                    - 0.1;
+            Pool.MINIMUM_NUTRIENT_COEFFICIENT - 0.1;
     public static final double NUTRIENT_COEFFICIENT_LOWER_BOUND = Pool.MINIMUM_NUTRIENT_COEFFICIENT;
-    public static final double NUTRIENT_COEFFICIENT_VALID_1 = Pool.MINIMUM_NUTRIENT_COEFFICIENT
-            + 0.1;
-    public static final double NUTRIENT_COEFFICIENT_VALID_2 = Pool.MAXIMUM_NUTRIENT_COEFFICIENT
-            - 0.1;
+    public static final double NUTRIENT_COEFFICIENT_VALID_1 =
+            Pool.MINIMUM_NUTRIENT_COEFFICIENT + 0.1;
+    public static final double NUTRIENT_COEFFICIENT_VALID_2 =
+            Pool.MAXIMUM_NUTRIENT_COEFFICIENT - 0.1;
     public static final double NUTRIENT_COEFFICIENT_UPPER_BOUND = Pool.MAXIMUM_NUTRIENT_COEFFICIENT;
     public static final double NUTRIENT_COEFFICIENT_ABOVE_UPPER_BOUND =
-            Pool.MAXIMUM_NUTRIENT_COEFFICIENT
-                    + 0.1;
+            Pool.MAXIMUM_NUTRIENT_COEFFICIENT + 0.1;
 
     public static final double TOLERANCE = 0.000001;
 
-    private static Random generator = new Random();
+    private static final Random generator = new Random();
 
     private Pool pool;
     private Pool pool0ParameterConstructor;
@@ -73,7 +71,7 @@ public class PoolTest {
     private Pool pool5ParameterConstructorInvalidParameterValuesBelowBound;
     private Pool pool5ParameterConstructorInvalidParameterValuesAboveBound;
     private Pool pool5ParameterConstructor5;
-    private List<Guppy> testGuppies;
+    private List<Creature> testCreatures;
 
     @Before
     public void setUp() throws Exception {
@@ -81,10 +79,8 @@ public class PoolTest {
         pool = new Pool(NAME_VALID, VOLUME_LITRES_VALID, TEMP_CELSIUS_VALID_2, PH_VALID_2,
                         NUTRIENT_COEFFICIENT_VALID_2);
         pool0ParameterConstructor = new Pool();
-        pool5ParameterConstructorValidParameterValues = new Pool(NAME_VALID,
-                                                                 VOLUME_LITRES_VALID,
-                                                                 TEMP_CELSIUS_VALID_1,
-                                                                 PH_VALID_1,
+        pool5ParameterConstructorValidParameterValues = new Pool(NAME_VALID, VOLUME_LITRES_VALID,
+                                                                 TEMP_CELSIUS_VALID_1, PH_VALID_1,
                                                                  NUTRIENT_COEFFICIENT_VALID_1);
         pool5ParameterConstructorInvalidParameterValuesBelowBound = new Pool(
                 NAME_WHITESPACE_UNFORMATTED, VOLUME_LITRES_BELOW_LOWER_BOUND,
@@ -96,16 +92,16 @@ public class PoolTest {
                                                                              PH_ABOVE_UPPER_BOUND,
                                                                              NUTRIENT_COEFFICIENT_ABOVE_UPPER_BOUND);
 
-        testGuppies = new ArrayList<>();
+        testCreatures = new ArrayList<>();
 
         // must be even
-        final int numberOfTestGuppies = 100;
+        final int numberOfTestCreatures = 100;
 
-        for (int i = 0; i < numberOfTestGuppies; i++) {
-            testGuppies.add(new Guppy());
+        for (int i = 0; i < numberOfTestCreatures; i++) {
+            testCreatures.add(new Guppy());
         }
 
-        pool.setGuppiesInPool(testGuppies);
+        pool.setCreatures(testCreatures);
     }
 
     @After
@@ -130,8 +126,7 @@ public class PoolTest {
     @Test
     public void testPoolTemperature() {
 
-        assertThat(pool0ParameterConstructor.getTemperature(),
-                   is(Pool.DEFAULT_WATER_TEMP_CELSIUS));
+        assertThat(pool0ParameterConstructor.getTemperature(), is(Pool.DEFAULT_WATER_TEMP_CELSIUS));
 
     }
 
@@ -161,16 +156,16 @@ public class PoolTest {
     }
 
     @Test
-    public void testPoolGuppiesInPoolCreatesList() {
+    public void testPoolCreaturesInPoolCreatesList() {
 
-        assertThat(testGuppies, is(instanceOf(List.class)));
+        assertThat(testCreatures, is(instanceOf(List.class)));
 
     }
 
     @Test
-    public void testPoolGuppiesInPoolIsEmptyList() {
+    public void testPoolCreaturesInPoolIsEmptyList() {
 
-        assertThat(pool0ParameterConstructor.getGuppiesInPool().size(), is(0));
+        assertThat(pool0ParameterConstructor.getCreatures().size(), is(0));
 
     }
 
@@ -247,10 +242,8 @@ public class PoolTest {
     @Test
     public void testPoolStringDoubleDoubleDoubleDoubleIdentificationNumber() {
 
-        pool5ParameterConstructorValidParameterValues = new Pool(NAME_VALID,
-                                                                 VOLUME_LITRES_VALID,
-                                                                 TEMP_CELSIUS_VALID_1,
-                                                                 PH_VALID_1,
+        pool5ParameterConstructorValidParameterValues = new Pool(NAME_VALID, VOLUME_LITRES_VALID,
+                                                                 TEMP_CELSIUS_VALID_1, PH_VALID_1,
                                                                  NUTRIENT_COEFFICIENT_VALID_1);
 
         int numberOfPools = Pool.getNumberCreated();
@@ -261,17 +254,17 @@ public class PoolTest {
     }
 
     @Test
-    public void testPoolStringDoubleDoubleDoubleDoubleGuppiesInPoolCreatesList() {
+    public void testPoolStringDoubleDoubleDoubleDoubleCreaturesInPoolCreatesList() {
 
-        assertThat(pool5ParameterConstructorValidParameterValues.getGuppiesInPool(),
+        assertThat(pool5ParameterConstructorValidParameterValues.getCreatures(),
                    is(instanceOf(List.class)));
 
     }
 
     @Test
-    public void testPoolStringDoubleDoubleDoubleDoubleGuppiesInPoolCreatesEmptyList() {
+    public void testPoolStringDoubleDoubleDoubleDoubleCreaturesInPoolCreatesEmptyList() {
 
-        assertThat(pool5ParameterConstructorValidParameterValues.getGuppiesInPool().size(), is(0));
+        assertThat(pool5ParameterConstructorValidParameterValues.getCreatures().size(), is(0));
 
     }
 
@@ -351,7 +344,7 @@ public class PoolTest {
     }
 
     @Test
-    public void testGetGuppiesInPool() {
+    public void testGetCreaturesInPool() {
 
         assertThat(pool5ParameterConstructorValidParameterValues.getName(), is(NAME_VALID));
 
@@ -379,8 +372,8 @@ public class PoolTest {
         pool.setName(NAME_WHITESPACE_UNFORMATTED);
 
         String nameNoSpaces = NAME_WHITESPACE_UNFORMATTED.replace(" ", "");
-        String nameFormatted = nameNoSpaces.substring(0, 1).toUpperCase()
-                + nameNoSpaces.substring(1).toLowerCase();
+        String nameFormatted = nameNoSpaces.substring(0, 1).toUpperCase() + nameNoSpaces.substring(
+                1).toLowerCase();
 
         assertThat(pool.getName(), is(nameFormatted));
 
@@ -585,25 +578,25 @@ public class PoolTest {
     }
 
     @Test
-    public void testSetGuppiesInPoolSetsCorrectList() {
+    public void testSetCreaturesInPoolSetsCorrectList() {
 
-        assertThat(pool.getGuppiesInPool(), is(testGuppies));
-
-    }
-
-    @Test
-    public void testSetGuppiesInPoolSetsListOfGuppies() {
-
-        assertThat(pool.getGuppiesInPool(), is(instanceOf(List.class)));
+        assertThat(pool.getCreatures(), is(testCreatures));
 
     }
 
     @Test
-    public void testSetGuppiesInPoolIgnoresNull() {
+    public void testSetCreaturesInPoolSetsListOfCreatures() {
 
-        pool.setGuppiesInPool(null);
+        assertThat(pool.getCreatures(), is(instanceOf(List.class)));
 
-        assertThat(pool.getGuppiesInPool(), is(testGuppies));
+    }
+
+    @Test
+    public void testSetCreaturesInPoolIgnoresNull() {
+
+        pool.setCreatures(null);
+
+        assertThat(pool.getCreatures(), is(testCreatures));
 
     }
 
@@ -790,98 +783,98 @@ public class PoolTest {
     }
 
     @Test
-    public void testAddGuppyEmptyList() {
+    public void testAddCreatureEmptyList() {
 
-        List<Guppy> emptyList = new ArrayList<>();
+        List<Creature> emptyList = new ArrayList<>();
 
-        pool.setGuppiesInPool(emptyList);
+        pool.setCreatures(emptyList);
 
-        Guppy guppy = new Guppy();
+        Creature creature = new Guppy();
 
-        pool.addGuppy(guppy);
+        pool.addCreature(creature);
 
-        assertThat(pool.getGuppiesInPool().get(0), is(guppy));
+        assertThat(pool.getCreatures().get(0), is(creature));
     }
 
     @Test
-    public void testAddGuppyNotEmptyList() {
+    public void testAddCreatureNotEmptyList() {
 
-        List<Guppy> emptyList = new ArrayList<>();
+        List<Creature> emptyList = new ArrayList<>();
 
-        pool.setGuppiesInPool(emptyList);
-        pool.addGuppy(new Guppy());
+        pool.setCreatures(emptyList);
+        pool.addCreature(new Guppy());
 
-        Guppy guppy = new Guppy();
-        pool.addGuppy(guppy);
+        Creature creature = new Guppy();
+        pool.addCreature(creature);
 
-        assertThat(pool.getGuppiesInPool().get(1), is(guppy));
-
-    }
-
-    @Test
-    public void testAddGuppyValidGuppySucceeds() {
-
-        assertTrue(pool.addGuppy(new Guppy()));
+        assertThat(pool.getCreatures().get(1), is(creature));
 
     }
 
     @Test
-    public void testAddGuppyNullReturnsFalse() {
+    public void testAddCreatureValidCreatureSucceeds() {
 
-        assertFalse(pool.addGuppy(null));
+        assertTrue(pool.addCreature(new Guppy()));
+
     }
 
     @Test
-    public void testAddGuppiesEmptyList() {
+    public void testAddCreatureNullReturnsFalse() {
 
-        List<Guppy> emptyList = new ArrayList<>();
+        assertFalse(pool.addCreature(null));
+    }
 
-        pool.setGuppiesInPool(emptyList);
-        pool.addGuppies(testGuppies);
+    @Test
+    public void testAddCreaturesEmptyList() {
 
-        Guppy result = pool.getGuppiesInPool().get(pool.getGuppiesInPool().size() - 1);
-        Guppy expected = testGuppies.get(testGuppies.size() - 1);
+        List<Creature> emptyList = new ArrayList<>();
+
+        pool.setCreatures(emptyList);
+        pool.addCreatures(testCreatures);
+
+        Creature result = pool.getCreatures().get(pool.getCreatures().size() - 1);
+        Creature expected = testCreatures.get(testCreatures.size() - 1);
         assertThat(result, is(expected));
     }
 
     @Test
-    public void testAddGuppiesNotEmptyList() {
+    public void testAddCreaturesNotEmptyList() {
 
-        List<Guppy> emptyList = new ArrayList<>();
+        List<Creature> emptyList = new ArrayList<>();
 
-        pool.setGuppiesInPool(emptyList);
-        pool.addGuppy(new Guppy());
+        pool.setCreatures(emptyList);
+        pool.addCreature(new Guppy());
 
-        pool.addGuppies(testGuppies);
+        pool.addCreatures(testCreatures);
 
-        Guppy result = pool.getGuppiesInPool().get(pool.getGuppiesInPool().size() - 1);
-        Guppy expected = testGuppies.get(testGuppies.size() - 1);
+        Creature result = pool.getCreatures().get(pool.getCreatures().size() - 1);
+        Creature expected = testCreatures.get(testCreatures.size() - 1);
         assertThat(result, is(expected));
     }
 
-    public void testAddGuppiesNullReturnsFalse() {
+    public void testAddCreaturesNullReturnsFalse() {
 
-        assertFalse(pool.addGuppies(null));
+        assertFalse(pool.addCreatures(null));
     }
 
     @Test
-    public void testAddGuppiesValidSetSucceeds() {
+    public void testAddCreaturesValidSetSucceeds() {
 
-        assertTrue(pool.addGuppies(testGuppies));
+        assertTrue(pool.addCreatures(testCreatures));
 
     }
 
     @Test
     public void testGetPopulation() {
 
-        assertThat(pool.getPopulation(), is(testGuppies.size()));
+        assertThat(pool.getPopulation(), is(testCreatures.size()));
 
     }
 
     @Test
     public void testGetPopulationZero() {
 
-        pool.setGuppiesInPool(new ArrayList<>());
+        pool.setCreatures(new ArrayList<>());
 
         assertThat(pool.getPopulation(), is(0));
     }
@@ -889,90 +882,90 @@ public class PoolTest {
     @Test
     public void testApplyNutrientCoefficient() {
 
-        double expectedDead = Math
-                .round((1 - pool.getNutrientCoefficient()) * pool.getPopulation());
+        double expectedDead = Math.round(
+                (1 - pool.getNutrientCoefficient()) * pool.getPopulation());
         final double tolerance = pool.getPopulation() * 0.1;
 
         assertThat((double) pool.applyNutrientCoefficient(), is(closeTo(expectedDead, tolerance)));
     }
 
     @Test
-    public void testRemoveDeadGuppiesNoDead() {
+    public void testRemoveDeadCreaturesNoDead() {
 
-        int removed = pool.removeDeadGuppies();
+        int removed = pool.removeDeadCreatures();
 
         assertThat(removed, is(0));
 
     }
 
     @Test
-    public void testRemoveDeadGuppiesSomeDead() {
+    public void testRemoveDeadCreaturesSomeDead() {
 
         int countDead = 0;
 
-        for (Guppy guppy : testGuppies) {
+        for (Creature creature : testCreatures) {
 
             if (generator.nextBoolean()) {
 
-                guppy.getHealth().setIsAlive(false);
+                creature.getHealth().setAlive(false);
                 countDead++;
             }
         }
 
-        int removed = pool.removeDeadGuppies();
+        int removed = pool.removeDeadCreatures();
 
         assertThat(removed, is(countDead));
 
     }
 
     @Test
-    public void testRemoveDeadGuppiesAllDead() {
+    public void testRemoveDeadCreaturesAllDead() {
 
         int countDead = 0;
 
-        for (Guppy guppy : testGuppies) {
+        for (Creature creature : testCreatures) {
 
-            guppy.getHealth().setIsAlive(false);
+            creature.getHealth().setAlive(false);
             countDead++;
         }
 
-        int removed = pool.removeDeadGuppies();
+        int removed = pool.removeDeadCreatures();
 
         assertThat(removed, is(countDead));
 
     }
 
     @Test
-    public void testGetGuppyVolumeRequirementInLitres() {
+    public void testGetCreatureVolumeRequirementInLitres() {
 
         final double mLPerL = 1000.0;
         double volume = 0.0;
 
-        for (Guppy guppy : testGuppies) {
+        for (Creature creature : testCreatures) {
 
-            volume += guppy.getVolumeNeeded() / mLPerL;
+            volume += creature.getVolumeNeeded() / mLPerL;
         }
 
-        assertThat(pool.getGuppyVolumeRequirementInLitres(), is(volume));
+        assertThat(pool.getCreatureVolumeRequirementInLitres(), is(volume));
 
     }
 
     @Test
-    public void testGetGuppyVolumeRequirementInLitresExcludeDeadGuppies() {
+    public void testGetCreatureVolumeRequirementInLitresExcludeDeadCreatures() {
 
         final double mLPerL = 1000.0;
         double volume = 0.0;
 
-        for (Guppy guppy : testGuppies) {
+        for (Creature creature : testCreatures) {
 
             if (generator.nextBoolean()) {
-                volume += guppy.getVolumeNeeded() / mLPerL;
+                volume += creature.getVolumeNeeded() / mLPerL;
             } else {
-                guppy.getHealth().setIsAlive(false);
+                creature.getHealth().setAlive(false);
             }
         }
 
-        assertThat(pool.getGuppyVolumeRequirementInLitres(), is(volume));
+        assertThat(pool.getCreatureVolumeRequirementInLitres(), is(volume));
 
     }
 
@@ -982,10 +975,10 @@ public class PoolTest {
         int totalAge = 0;
         int count = 0;
 
-        for (Guppy guppy : testGuppies) {
+        for (Creature creature : testCreatures) {
 
-            guppy.getHealth().setAge(generator.nextInt(Guppy.MAXIMUM_AGE));
-            totalAge += guppy.getHealth().getAge();
+            creature.getHealth().setAge(generator.nextInt(Guppy.MAXIMUM_AGE));
+            totalAge += creature.getHealth().getAge();
             count++;
 
         }
@@ -997,19 +990,19 @@ public class PoolTest {
     }
 
     @Test
-    public void testGetAverageAgeInWeeksExcludeDeadGuppies() {
+    public void testGetAverageAgeInWeeksExcludeDeadCreatures() {
 
         int totalAge = 0;
         int count = 0;
 
-        for (Guppy guppy : testGuppies) {
+        for (Creature creature : testCreatures) {
 
             if (generator.nextBoolean()) {
-                guppy.getHealth().setAge(generator.nextInt(Guppy.MAXIMUM_AGE));
-                totalAge += guppy.getHealth().getAge();
+                creature.getHealth().setAge(generator.nextInt(Guppy.MAXIMUM_AGE));
+                totalAge += creature.getHealth().getAge();
                 count++;
             } else {
-                guppy.getHealth().setIsAlive(false);
+                creature.getHealth().setAlive(false);
             }
 
         }
@@ -1026,10 +1019,10 @@ public class PoolTest {
         double totalHealthCoefficient = 0.0;
         int count = 0;
 
-        for (Guppy guppy : testGuppies) {
+        for (Creature creature : testCreatures) {
 
-            guppy.getHealth().setCoefficient(generator.nextDouble());
-            totalHealthCoefficient += guppy.getHealth().getCoefficient();
+            creature.getHealth().setCoefficient(generator.nextDouble());
+            totalHealthCoefficient += creature.getHealth().getCoefficient();
             count++;
 
         }
@@ -1041,19 +1034,19 @@ public class PoolTest {
     }
 
     @Test
-    public void testGetAverageHealthCoefficientExcludeDeadGuppies() {
+    public void testGetAverageHealthCoefficientExcludeDeadCreatures() {
 
         double totalHealthCoefficient = 0.0;
         int count = 0;
 
-        for (Guppy guppy : testGuppies) {
+        for (Creature creature : testCreatures) {
 
             if (generator.nextBoolean()) {
-                guppy.getHealth().setCoefficient(generator.nextDouble());
-                totalHealthCoefficient += guppy.getHealth().getCoefficient();
+                creature.getHealth().setCoefficient(generator.nextDouble());
+                totalHealthCoefficient += creature.getHealth().getCoefficient();
                 count++;
             } else {
-                guppy.getHealth().setIsAlive(false);
+                creature.getHealth().setAlive(false);
             }
 
         }
@@ -1070,10 +1063,10 @@ public class PoolTest {
         int countFemale = 0;
         int countAll = 0;
 
-        for (Guppy guppy : testGuppies) {
+        for (Creature creature : testCreatures) {
 
-            guppy.setIsFemale(generator.nextBoolean());
-            countFemale += guppy.getIsFemale() ? 1 : 0;
+            creature.setFemale(generator.nextBoolean());
+            countFemale += creature.isFemale() ? 1 : 0;
             countAll++;
         }
 
@@ -1084,19 +1077,19 @@ public class PoolTest {
     }
 
     @Test
-    public void testGetFemalePercentageExcludeDeadGuppies() {
+    public void testGetFemalePercentageExcludeDeadCreatures() {
 
         int countFemale = 0;
         int countAll = 0;
 
-        for (Guppy guppy : testGuppies) {
+        for (Creature creature : testCreatures) {
 
             if (generator.nextBoolean()) {
-                guppy.setIsFemale(generator.nextBoolean());
-                countFemale += guppy.getIsFemale() ? 1 : 0;
+                creature.setFemale(generator.nextBoolean());
+                countFemale += creature.isFemale() ? 1 : 0;
                 countAll++;
             } else {
-                guppy.getHealth().setIsAlive(false);
+                creature.getHealth().setAlive(false);
             }
         }
 
@@ -1109,15 +1102,15 @@ public class PoolTest {
     @Test
     public void testGetMedianAgeEvenAmount() {
 
-        for (Guppy guppy : testGuppies) {
-            guppy.getHealth().setAge(generator.nextInt(Guppy.MAXIMUM_AGE - 1));
+        for (Creature creature : testCreatures) {
+            creature.getHealth().setAge(generator.nextInt(Guppy.MAXIMUM_AGE - 1));
         }
 
-        List<Integer> ages = pool.sortLivingGuppyAges();
+        List<Integer> ages = pool.sortLivingCreatureAges();
 
         if (ages.size() % 2 != 0) {
             ages.add(50);
-            pool.addGuppy(new Guppy(50, 0, true, 0));
+            pool.addCreature(new Guppy(50, 0, true, 0));
         }
 
         double medianAge = (ages.get(ages.size() / 2 - 1) + ages.get(ages.size() / 2)) / 2.0;
@@ -1129,15 +1122,15 @@ public class PoolTest {
     @Test
     public void testGetMedianAgeOddAmount() {
 
-        for (Guppy guppy : testGuppies) {
-            guppy.getHealth().setAge(generator.nextInt(Guppy.MAXIMUM_AGE - 1));
+        for (Creature creature : testCreatures) {
+            creature.getHealth().setAge(generator.nextInt(Guppy.MAXIMUM_AGE - 1));
         }
 
-        List<Integer> ages = pool.sortLivingGuppyAges();
+        List<Integer> ages = pool.sortLivingCreatureAges();
 
         if (ages.size() % 2 == 0) {
             ages.add(50);
-            pool.addGuppy(new Guppy(49, 0, true, 0));
+            pool.addCreature(new Guppy(49, 0, true, 0));
         }
 
         double medianAge = ages.get(ages.size() / 2 - 1);
@@ -1147,17 +1140,17 @@ public class PoolTest {
     }
 
     @Test
-    public void testGetMedianAgeExcludeDeadGuppies() {
+    public void testGetMedianAgeExcludeDeadCreatures() {
 
-        for (Guppy guppy : testGuppies) {
+        for (Creature creature : testCreatures) {
             if (generator.nextBoolean()) {
-                guppy.getHealth().setAge(generator.nextInt(Guppy.MAXIMUM_AGE - 1));
+                creature.getHealth().setAge(generator.nextInt(Guppy.MAXIMUM_AGE - 1));
             } else {
-                guppy.getHealth().setIsAlive(false);
+                creature.getHealth().setAlive(false);
             }
         }
 
-        List<Integer> ages = pool.sortLivingGuppyAges();
+        List<Integer> ages = pool.sortLivingCreatureAges();
 
         double medianAge;
 
@@ -1179,35 +1172,36 @@ public class PoolTest {
         pool.setVolumeLitres(1.4);
         pool.adjustForCrowding();
         assertThat(pool.getVolumeLitres(),
-                   is(greaterThanOrEqualTo(pool.getGuppyVolumeRequirementInLitres())));
+                   is(greaterThanOrEqualTo(pool.getCreatureVolumeRequirementInLitres())));
     }
 
     @Test
     public void testAdjustForCrowdingRemovesJustEnough() {
 
         pool.setVolumeLitres(1.5);
-        for (Guppy guppy : pool.getGuppiesInPool()) {
-            guppy.getHealth().setAge(0);
+        for (Creature creature : pool.getCreatures()) {
+            creature.getHealth().setAge(0);
         }
         pool.adjustForCrowding();
-        assertThat(pool.getVolumeLitres(), is(equalTo(pool.getGuppyVolumeRequirementInLitres())));
+        assertThat(pool.getVolumeLitres(),
+                   is(equalTo(pool.getCreatureVolumeRequirementInLitres())));
     }
 
     @Test
-    public void testAdjustForCrowdingRemovesGuppies() {
+    public void testAdjustForCrowdingRemovesCreatures() {
 
         pool.setVolumeLitres(1.5);
         int initial = pool.getPopulation();
-        int removedGuppies = pool.adjustForCrowding().size();
-        assertThat(removedGuppies, is(equalTo(initial - pool.getPopulation())));
+        int removedCreatures = pool.adjustForCrowding().size();
+        assertThat(removedCreatures, is(equalTo(initial - pool.getPopulation())));
     }
 
     @Test
-    public void testAdjustForCrowdingReturnsRemovedGuppies() {
+    public void testAdjustForCrowdingReturnsRemovedCreatures() {
 
         pool.setVolumeLitres(1.5);
-        List<Guppy> removedGuppies = pool.adjustForCrowding();
-        assertThat(removedGuppies, is(instanceOf(List.class)));
+        List<Creature> removedCreatures = pool.adjustForCrowding();
+        assertThat(removedCreatures, is(instanceOf(List.class)));
     }
 
     @Test
@@ -1225,7 +1219,7 @@ public class PoolTest {
          * assertThat(pool, is("[name=" + pool.getName() + ",volumeLitres=" + pool.getVolumeLitres()
          * + ",temperatureCelsius=" + pool.getTemperature() + ",pH=" + pool.getpH() +
          * ",nutrientCoefficient=" + pool.getNutrientCoefficient() + ",identificationNumber=" +
-         * pool.getIdentifier() + ",guppiesInPool=" + pool.getGuppiesInPool() +
+         * pool.getIdentifier() + ",creaturesInPool=" + pool.getCreatures() +
          * ",randomNumberGenerator=" + pool.getran() + "]";))
          */
         // no getter for random number generator, cannot test from outside pool

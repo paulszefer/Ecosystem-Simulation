@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Random;
 
 /**
- * Defines an aquatic pool that contains guppies.
+ * Defines an aquatic pool that contains creatures.
  *
  * @author Paul Szefer
  * @version 1.0
@@ -37,7 +37,7 @@ public class Pool extends WaterBody {
     /**
      * A random number generator.
      */
-    private static Random generator = new Random();
+    private static final Random generator = new Random();
 
     /**
      * The volume of water in the pool in Litres.
@@ -55,9 +55,9 @@ public class Pool extends WaterBody {
     private int identificationNumber;
 
     /**
-     * The set of guppies in the pool.
+     * The set of creatures in the pool.
      */
-    private List<Guppy> guppiesInPool;
+    private List<Creature> creatures;
 
     /**
      * Sets up a generic aquatic pool with default values.
@@ -68,7 +68,7 @@ public class Pool extends WaterBody {
         volumeLitres = 0.0;
         nutrientCoefficient = DEFAULT_NUTRIENT_COEFFICIENT;
         identificationNumber = ++numberOfPools;
-        guppiesInPool = new ArrayList<>();
+        creatures = new ArrayList<>();
     }
 
     /**
@@ -92,7 +92,7 @@ public class Pool extends WaterBody {
         setVolumeLitres(volumeLitres);
         setNutrientCoefficient(nutrientCoefficient);
         identificationNumber = ++numberOfPools;
-        guppiesInPool = new ArrayList<>();
+        creatures = new ArrayList<>();
     }
 
     /**
@@ -136,13 +136,13 @@ public class Pool extends WaterBody {
     }
 
     /**
-     * Returns the set of guppies in the pool.
+     * Returns the set of creatures in the pool.
      *
-     * @return the set of guppies in the pool
+     * @return the set of creatures in the pool
      */
-    public List<Guppy> getGuppiesInPool() {
+    public List<Creature> getCreatures() {
 
-        return guppiesInPool;
+        return creatures;
     }
 
     /**
@@ -189,49 +189,51 @@ public class Pool extends WaterBody {
     }
 
     /**
-     * Sets the set of guppies in the pool.
+     * Sets the set of creatures in the pool.
      *
-     * @param guppiesInPool
-     *         the set of guppies to set
+     * @param creatures
+     *         the set of creatures to set
      */
-    public void setGuppiesInPool(List<Guppy> guppiesInPool) {
+    public void setCreatures(List<Creature> creatures) {
 
-        if (guppiesInPool != null) {
-            this.guppiesInPool = guppiesInPool;
+        if (creatures != null) {
+            this.creatures = creatures;
         }
     }
 
     /**
-     * Populates the pool with guppies according to the given parameters.
+     * Populates the pool with creatures according to the given parameters.
      *
-     * @param numberOfGuppies
-     *         the number of guppies to create
+     * @param numberOfCreatures
+     *         the number of creatures to create
      * @param genus
-     *         the genus of the guppy
+     *         the genus of the creature
      * @param species
-     *         the species of the guppy
+     *         the species of the creature
      * @param minAge
-     *         the minimum possible age of the guppy
+     *         the minimum possible age of the creature
      * @param maxAge
-     *         the maximum possible age of the guppy
+     *         the maximum possible age of the creature
      * @param femaleChance
-     *         the chance that the guppy is female
+     *         the chance that the creature is female
      * @param minHealthCoefficient
-     *         the minimum possible health coefficient of the guppy
+     *         the minimum possible health coefficient of the creature
      * @param maxHealthCoefficient
-     *         the maximum possible health coefficient of the guppy
+     *         the maximum possible health coefficient of the creature
      */
-    public void populatePool(int numberOfGuppies, String genus, String species, int minAge,
-                             int maxAge, double femaleChance, double minHealthCoefficient,
-                             double maxHealthCoefficient) {
+    public void populate(int numberOfCreatures, String genus, String species, int minAge,
+                         int maxAge, double femaleChance, double minHealthCoefficient,
+                         double maxHealthCoefficient) {
 
-        for (int i = 0; i < numberOfGuppies; i++) {
+        for (int i = 0; i < numberOfCreatures; i++) {
             int age = generator.nextInt(maxAge - minAge + 1) + minAge;
             boolean isFemale = generator.nextDouble() < femaleChance;
             double healthCoefficient =
                     generator.nextDouble() * (maxHealthCoefficient - minHealthCoefficient)
                             + minHealthCoefficient;
-            addGuppy(new Guppy(age, healthCoefficient, isFemale, 0));
+            if (genus.equals("Poecilia") && species.equals("reticulata")) {
+                addCreature(new Guppy(age, healthCoefficient, isFemale, 0));
+            }
         }
     }
 
@@ -281,54 +283,54 @@ public class Pool extends WaterBody {
     }
 
     /**
-     * Adds the given guppy to the pool.
+     * Adds the given creature to the pool.
      *
-     * @param guppy
-     *         the guppy to add
-     *
-     * @return true if successful; false otherwise
-     */
-    public boolean addGuppy(Guppy guppy) {
-
-        return guppy != null && guppiesInPool.add(guppy);
-    }
-
-    /**
-     * Adds the given guppies to the pool.
-     *
-     * @param guppies
-     *         the guppies to add
+     * @param creature
+     *         the creature to add
      *
      * @return true if successful; false otherwise
      */
-    public boolean addGuppies(List<Guppy> guppies) {
+    public boolean addCreature(Creature creature) {
 
-        return guppies != null && guppiesInPool.addAll(guppies);
+        return creature != null && creatures.add(creature);
     }
 
     /**
-     * Returns the number of guppies in the pool.
+     * Adds the given creatures to the pool.
      *
-     * @return the number of guppies in the pool
+     * @param newCreatures
+     *         the creatures to add
+     *
+     * @return true if successful; false otherwise
+     */
+    public boolean addCreatures(List<Creature> newCreatures) {
+
+        return newCreatures != null && this.creatures.addAll(newCreatures);
+    }
+
+    /**
+     * Returns the number of creatures in the pool.
+     *
+     * @return the number of creatures in the pool
      */
     public int getPopulation() {
 
-        return guppiesInPool.size();
+        return creatures.size();
     }
 
     /**
-     * Calculates which guppies in the pool have died to malnutrition and returns the number of
+     * Calculates which creatures in the pool have died to malnutrition and returns the number of
      * deaths.
      *
-     * @return the number of guppies that died due to malnutrition
+     * @return the number of creatures that died due to malnutrition
      */
     public int applyNutrientCoefficient() {
 
         int countDied = 0;
 
-        for (Guppy guppy : guppiesInPool) {
+        for (Creature creature : creatures) {
             if (generator.nextDouble() > nutrientCoefficient) {
-                guppy.getHealth().setIsAlive(false);
+                creature.getHealth().setAlive(false);
                 countDied++;
             }
         }
@@ -337,24 +339,24 @@ public class Pool extends WaterBody {
     }
 
     /**
-     * Removes the dead guppies from the pool.
+     * Removes the dead creatures from the pool.
      *
-     * @return the number of guppies removed
+     * @return the number of creatures removed
      */
-    public int removeDeadGuppies() {
+    public int removeDeadCreatures() {
 
-        int guppiesRemoved = 0;
+        int creaturesRemoved = 0;
 
-        Iterator<Guppy> iterator = guppiesInPool.iterator();
+        Iterator<Creature> iterator = creatures.iterator();
 
         while (iterator.hasNext()) {
-            if (!iterator.next().getHealth().getIsAlive()) {
+            if (!iterator.next().getHealth().isAlive()) {
                 iterator.remove();
-                guppiesRemoved++;
+                creaturesRemoved++;
             }
         }
 
-        return guppiesRemoved;
+        return creaturesRemoved;
     }
 
     /**
@@ -362,13 +364,13 @@ public class Pool extends WaterBody {
      *
      * @return the volume of water needed in Litres
      */
-    public double getGuppyVolumeRequirementInLitres() {
+    public double getCreatureVolumeRequirementInLitres() {
 
         double volumeNeeded = 0.0;
         final double mlPerL = 1000.0;
 
-        for (Guppy guppy : guppiesInPool) {
-            volumeNeeded += guppy.getVolumeNeeded();
+        for (Creature creature : creatures) {
+            volumeNeeded += creature.getVolumeNeeded();
         }
 
         return volumeNeeded / mlPerL;
@@ -384,9 +386,9 @@ public class Pool extends WaterBody {
         int age = 0;
         int countAlive = 0;
 
-        for (Guppy guppy : guppiesInPool) {
-            if (guppy.getHealth().getIsAlive()) {
-                age += guppy.getHealth().getAge();
+        for (Creature creature : creatures) {
+            if (creature.getHealth().isAlive()) {
+                age += creature.getHealth().getAge();
                 countAlive++;
             }
         }
@@ -404,9 +406,9 @@ public class Pool extends WaterBody {
         double healthCoefficient = 0.0;
         int countAlive = 0;
 
-        for (Guppy guppy : guppiesInPool) {
-            if (guppy.getHealth().getIsAlive()) {
-                healthCoefficient += guppy.getHealth().getCoefficient();
+        for (Creature creature : creatures) {
+            if (creature.getHealth().isAlive()) {
+                healthCoefficient += creature.getHealth().getCoefficient();
                 countAlive++;
             }
         }
@@ -424,9 +426,9 @@ public class Pool extends WaterBody {
         int countFemale = 0;
         int countAlive = 0;
 
-        for (Guppy guppy : guppiesInPool) {
-            if (guppy.getHealth().getIsAlive()) {
-                countFemale += guppy.getIsFemale() ? 1 : 0;
+        for (Creature creature : creatures) {
+            if (creature.getHealth().isAlive()) {
+                countFemale += creature.isFemale() ? 1 : 0;
                 countAlive++;
             }
         }
@@ -443,15 +445,15 @@ public class Pool extends WaterBody {
 
         double medianAge;
 
-        List<Integer> livingGuppiesSorted = sortLivingGuppyAges();
+        List<Integer> livingCreaturesSorted = sortLivingCreatureAges();
 
-        if (livingGuppiesSorted.size() == 0) {
+        if (livingCreaturesSorted.size() == 0) {
             medianAge = 0;
-        } else if (livingGuppiesSorted.size() % 2 == 0) {
-            medianAge = (livingGuppiesSorted.get(livingGuppiesSorted.size() / 2 - 1)
-                    + livingGuppiesSorted.get(livingGuppiesSorted.size() / 2)) / 2.0;
+        } else if (livingCreaturesSorted.size() % 2 == 0) {
+            medianAge = (livingCreaturesSorted.get(livingCreaturesSorted.size() / 2 - 1)
+                    + livingCreaturesSorted.get(livingCreaturesSorted.size() / 2)) / 2.0;
         } else {
-            medianAge = livingGuppiesSorted.get(livingGuppiesSorted.size() / 2 - 1);
+            medianAge = livingCreaturesSorted.get(livingCreaturesSorted.size() / 2 - 1);
         }
 
         return medianAge;
@@ -459,38 +461,38 @@ public class Pool extends WaterBody {
     }
 
     /**
-     * Kills the weakest guppies in the pool until the pool has enough water to support the living
+     * Kills the weakest creatures in the pool until the pool has enough water to support the living
      * population.
      *
-     * @return the number of guppies that died
+     * @return the number of creatures that died
      */
-    public List<Guppy> adjustForCrowding() {
+    public List<Creature> adjustForCrowding() {
 
-        Collections.sort(guppiesInPool);
+        Collections.sort(creatures);
 
-        List<Guppy> weakestGuppies = new ArrayList<>();
+        List<Creature> weakestCreatures = new ArrayList<>();
         int index = 0;
 
-        while (volumeLitres < getGuppyVolumeRequirementInLitres()) {
-            weakestGuppies.add(guppiesInPool.remove(index));
+        while (volumeLitres < getCreatureVolumeRequirementInLitres()) {
+            weakestCreatures.add(creatures.remove(index));
         }
 
-        return weakestGuppies;
+        return weakestCreatures;
     }
 
     /**
-     * Increments the age of each guppy in the pool by one week and calculates the number that die
-     * as a result.
+     * Increments the age of each creature in the pool by one week and calculates the number that
+     * die as a result.
      *
-     * @return the number of guppies that died
+     * @return the number of creatures that died
      */
     public int incrementAges() {
 
         int countDied = 0;
 
-        for (Guppy guppy : guppiesInPool) {
-            guppy.getHealth().incrementAge();
-            if (!guppy.getHealth().getIsAlive()) {
+        for (Creature creature : creatures) {
+            creature.getHealth().incrementAge();
+            if (!creature.getHealth().isAlive()) {
                 countDied++;
             }
         }
@@ -498,25 +500,25 @@ public class Pool extends WaterBody {
     }
 
     /**
-     * Attempts to spawn baby guppies for each guppy in the pool.
+     * Attempts to spawn baby creatures for each creature in the pool.
      * <p>
-     * The new baby guppies are then added to the pool and the number that spawned is returned.
+     * The new baby creatures are then added to the pool and the number that spawned is returned.
      *
-     * @return the total number of spawned guppies
+     * @return the total number of spawned creatures
      */
     public int spawn() {
 
-        List<Guppy> newGuppies = new ArrayList<>();
+        List<Creature> newCreatures = new ArrayList<>();
 
-        for (Guppy guppy : guppiesInPool) {
-            List<Guppy> spawned = guppy.spawn();
+        for (Creature creature : creatures) {
+            List<Creature> spawned = creature.spawn();
             if (spawned != null) {
-                newGuppies.addAll(spawned);
+                newCreatures.addAll(spawned);
             }
         }
-        guppiesInPool.addAll(newGuppies);
+        creatures.addAll(newCreatures);
 
-        return newGuppies.size();
+        return newCreatures.size();
     }
 
     /**
@@ -524,13 +526,13 @@ public class Pool extends WaterBody {
      *
      * @return a list of the pool's living population's ages in ascending order
      */
-    public List<Integer> sortLivingGuppyAges() {
+    public List<Integer> sortLivingCreatureAges() {
 
         List<Integer> sorted = new ArrayList<>();
 
-        for (Guppy guppy : guppiesInPool) {
-            if (guppy.getHealth().getIsAlive()) {
-                sorted.add(guppy.getHealth().getAge());
+        for (Creature creature : creatures) {
+            if (creature.getHealth().isAlive()) {
+                sorted.add(creature.getHealth().getAge());
             }
         }
 
@@ -560,14 +562,11 @@ public class Pool extends WaterBody {
      */
     public Pool copy() {
 
-        Pool poolCopy = new Pool(getName(),
-                                 getVolumeLitres(),
-                                 getTemperature(),
-                                 getpH(),
+        Pool poolCopy = new Pool(getName(), getVolumeLitres(), getTemperature(), getpH(),
                                  getNutrientCoefficient());
         poolCopy.setIdentificationNumber(getIdentificationNumber());
-        for (Guppy guppy : guppiesInPool) {
-            poolCopy.addGuppy(guppy.copy());
+        for (Creature creature : creatures) {
+            poolCopy.addCreature(creature.copy());
         }
         return poolCopy;
     }
@@ -610,7 +609,7 @@ public class Pool extends WaterBody {
         if (!getName().equals(pool.getName())) {
             return false;
         }
-        return guppiesInPool.equals(pool.guppiesInPool);
+        return creatures.equals(pool.creatures);
     }
 
     /**
@@ -637,7 +636,7 @@ public class Pool extends WaterBody {
         temp = Double.doubleToLongBits(nutrientCoefficient);
         result = hashValue1 * result + (int) (temp ^ (temp >>> hashValue2));
         result = hashValue1 * result + identificationNumber;
-        result = hashValue1 * result + guppiesInPool.hashCode();
+        result = hashValue1 * result + creatures.hashCode();
         return result;
     }
 
@@ -659,6 +658,6 @@ public class Pool extends WaterBody {
         return "[name=" + getName() + ",volumeLitres=" + volumeLitres + ",temperatureCelsius="
                 + getTemperature() + ",pH=" + getpH() + ",nutrientCoefficient="
                 + nutrientCoefficient + ",identificationNumber=" + identificationNumber
-                + ",guppiesInPool=" + guppiesInPool + "]";
+                + ",creatures=" + creatures + "]";
     }
 }

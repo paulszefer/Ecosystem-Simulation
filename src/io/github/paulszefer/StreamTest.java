@@ -4,6 +4,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -21,8 +22,8 @@ public class StreamTest {
     private Stream stream1;
     private Stream stream2;
 
-    private ArrayList<Guppy> testGuppies;
-    private ArrayList<Guppy> testGuppies2;
+    private List<Creature> testGuppies;
+    private List<Creature> testGuppies2;
 
     @Before
     public void setUp() throws Exception {
@@ -40,7 +41,7 @@ public class StreamTest {
             testGuppies.add(new Guppy());
             testGuppies2.add(new Guppy());
         }
-        pool1.setGuppiesInPool(testGuppies);
+        pool1.setCreatures(testGuppies);
     }
 
     @Test
@@ -100,8 +101,8 @@ public class StreamTest {
     @Test
     public void transportGuppiesAddedToDestination() throws Exception {
 
-        stream1.transportGuppies(testGuppies2);
-        assertTrue(pool2.getGuppiesInPool().containsAll(testGuppies2));
+        stream1.transportCreatures(testGuppies2);
+        assertTrue(pool2.getCreatures().containsAll(testGuppies2));
 
     }
 
@@ -110,10 +111,10 @@ public class StreamTest {
 
         final double deathProportion = 0.25;
 
-        for (Guppy guppy : testGuppies2) {
-            guppy.getHealth().setCoefficient(1 - deathProportion);
+        for (Creature creature : testGuppies2) {
+            creature.getHealth().setCoefficient(1 - deathProportion);
         }
-        double countDied = stream1.transportGuppies(testGuppies2);
+        double countDied = stream1.transportCreatures(testGuppies2);
         assertThat(countDied,
                    is(closeTo(deathProportion * testGuppies2.size(), testGuppies2.size() * 0.1)));
     }

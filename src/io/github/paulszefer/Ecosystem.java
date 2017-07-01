@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.Random;
 
 /**
- * Drives a simulation of an ecosystem of pools filled with guppies.
+ * Drives a simulation of an ecosystem of pools filled with creatures.
  *
  * @author Paul Szefer
  * @version 1.0
@@ -13,7 +13,7 @@ import java.util.Random;
 public class Ecosystem {
 
     /** Random number generator. */
-    private static Random generator = new Random();
+    private static final Random generator = new Random();
 
     /** The collection of pools in the ecosystem. */
     private List<Pool> pools;
@@ -135,11 +135,11 @@ public class Ecosystem {
     }
 
     /**
-     * Returns the current population of guppies in the ecosystem.
+     * Returns the current population of creatures in the ecosystem.
      *
-     * @return the current population of guppies in the ecosystem
+     * @return the current population of creatures in the ecosystem
      */
-    public int getGuppyPopulation() {
+    public int getCreaturePopulation() {
 
         int population = 0;
 
@@ -153,11 +153,11 @@ public class Ecosystem {
     /**
      * Adjusts each pool in the ecosystem for overcrowding.
      * <p>
-     * If overcrowding occurs, guppies move through a stream to the next connected pool. The
-     * number of guppies that die in transport or due to there being no further pool to move to is
+     * If overcrowding occurs, creatures move through a stream to the next connected pool. The
+     * number of creatures that die in transport or due to there being no further pool to move to is
      * calculated and returned.
      *
-     * @return the number of guppies that died to overcrowding
+     * @return the number of creatures that died to overcrowding
      */
     public int adjustForCrowding() {
 
@@ -165,17 +165,17 @@ public class Ecosystem {
 
         for (Pool pool : pools) {
 
-            List<Guppy> weakestGuppies = pool.adjustForCrowding();
+            List<Creature> weakestCreatures = pool.adjustForCrowding();
 
             Stream stream = getRandomStream(pool);
             if (stream != null) {
-                diedToOverCrowding += stream.transportGuppies(weakestGuppies);
+                diedToOverCrowding += stream.transportCreatures(weakestCreatures);
             } else {
-                for (Guppy guppy : weakestGuppies) {
-                    guppy.getHealth().setIsAlive(false);
+                for (Creature creature : weakestCreatures) {
+                    creature.getHealth().setAlive(false);
                 }
-                pool.addGuppies(weakestGuppies);
-                diedToOverCrowding += weakestGuppies.size();
+                pool.addCreatures(weakestCreatures);
+                diedToOverCrowding += weakestCreatures.size();
             }
         }
 

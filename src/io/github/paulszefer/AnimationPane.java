@@ -29,7 +29,7 @@ public class AnimationPane extends StackPane {
     private static final double HEIGHT = SimulationApplication.HEIGHT * PROPORTION;
 
     /** Random number generator. */
-    private static Random generator = new Random();
+    private static final Random generator = new Random();
 
     /** Creates the GUI pane that will display the animation for the simulation. */
     public AnimationPane() {
