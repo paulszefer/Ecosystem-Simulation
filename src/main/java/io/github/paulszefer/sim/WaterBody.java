@@ -112,7 +112,6 @@ public class WaterBody {
      * @param temperature
      *         the temperature in degrees Celsius
      */
-
     public void setTemperature(double temperature) {
 
         double newTemperature = DEFAULT_WATER_TEMP_CELSIUS;
