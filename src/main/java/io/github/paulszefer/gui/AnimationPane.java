@@ -1,5 +1,6 @@
-package io.github.paulszefer;
+package io.github.paulszefer.gui;
 
+import io.github.paulszefer.Ecosystem;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.layout.StackPane;

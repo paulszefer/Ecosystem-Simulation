@@ -1,4 +1,4 @@
-package io.github.paulszefer;
+package io.github.paulszefer.gui;
 
 import javafx.scene.canvas.Canvas;
 import javafx.scene.paint.Paint;

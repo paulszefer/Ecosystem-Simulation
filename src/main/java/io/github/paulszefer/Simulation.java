@@ -1,5 +1,6 @@
 package io.github.paulszefer;
 
+import io.github.paulszefer.gui.SimulationApplication;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.filechooser.FileNameExtensionFilter;
