@@ -1,12 +1,12 @@
 package io.github.paulszefer;
 
 import javafx.geometry.Pos;
-import javafx.scene.canvas.Canvas;
 import javafx.scene.control.Button;
 import javafx.scene.control.Slider;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
+import javafx.scene.paint.Paint;
 
 /**
  * Defines the GUI pane that will display and handle the options for the simulation.
@@ -19,53 +19,38 @@ public class OptionPane extends StackPane {
     /** The proportion of the GUI's height taken by this Pane. */
     private static final double PROPORTION = 0.25;
 
-    /** The simulation gui. */
-    private GUI gui;
+    /** The width of the option pane. */
+    private static final double WIDTH = SimulationApplication.WIDTH;
+
+    /** The height of the option pane. */
+    private static final double HEIGHT = SimulationApplication.HEIGHT * PROPORTION;
+
+    /** The background fill of the animation pane. */
+    private static final Paint BACKGROUND_FILL = Color.WHITE;
 
     /** Creates the GUI pane that will display the options for the simulation. */
     public OptionPane() {
 
-        StackPane options = new StackPane();
-        addBackground(options);
-        addForeground(options);
-        getChildren().add(options);
+        addBackground();
+        addForeground();
     }
 
-    /**
-     * Adds the background to the given pane.
-     *
-     * @param pane
-     *         the pane to which the background is added
-     */
-    private void addBackground(StackPane pane) {
+    /** Adds the background pane. */
+    private void addBackground() {
 
-        // TODO - find solution to allow this to resize
-        Canvas optionsBackground = new Canvas(SimulationApplication.WIDTH,
-                                              SimulationApplication.HEIGHT * PROPORTION);
-        optionsBackground.getGraphicsContext2D().setFill(Color.WHITE);
-        optionsBackground.getGraphicsContext2D().fillRect(0,
-                                                          0,
-                                                          SimulationApplication.WIDTH,
-                                                          SimulationApplication.HEIGHT
-                                                                  * PROPORTION);
-        pane.getChildren().add(optionsBackground);
+        getChildren().add(new BackgroundCanvas(WIDTH, HEIGHT, BACKGROUND_FILL));
     }
 
-    /**
-     * Adds the foreground to the given pane.
-     *
-     * @param pane
-     *         the pane to which the foreground is added
-     */
-    private void addForeground(StackPane pane) {
+    /** Adds the foreground pane. */
+    private void addForeground() {
 
-        GridPane grid = new GridPane();
-        grid.setAlignment(Pos.CENTER);
+        GridPane foreground = new GridPane();
+        foreground.setAlignment(Pos.CENTER);
 
         final int horizontalGap = 80;
         final int verticalGap = 80;
-        grid.setHgap(horizontalGap);
-        grid.setVgap(verticalGap);
+        foreground.setHgap(horizontalGap);
+        foreground.setVgap(verticalGap);
 
         // Data load controls
         Button loadButton = new Button("Load");
@@ -88,19 +73,9 @@ public class OptionPane extends StackPane {
 
             // cases:
 
-            // new window
             // try to load file, fail
-            // should not change any disabled state
+            // should not change any state
 
-            // file already loaded
-            // try to load file, fail
-            // should not change any disabled state
-
-            // new window
-            // try to load file, successful
-            // enable/disable buttons
-
-            // file already loaded
             // try to load file, successful
             // enable/disable buttons
             boolean fileLoaded = SimulationApplication.getSimulation().loadFile();
@@ -108,6 +83,9 @@ public class OptionPane extends StackPane {
                 backButton.setDisable(true);
                 playPauseButton.setDisable(false);
                 stepButton.setDisable(false);
+
+                graphButton.setDisable(false);
+                reportButton.setDisable(false);
             }
         });
         saveButton.setDisable(true);
@@ -126,21 +104,24 @@ public class OptionPane extends StackPane {
         });
         stepButton.setDisable(true);
 
+        graphButton.setDisable(true);
+        reportButton.setDisable(true);
+
         final int thirdColumn = 3;
         final int fourthColumn = 4;
 
-        grid.add(loadButton, 0, 0);
-        grid.add(saveButton, 0, 1);
+        foreground.add(loadButton, 0, 0);
+        foreground.add(saveButton, 0, 1);
 
-        grid.add(backButton, 1, 0);
-        grid.add(playPauseButton, 2, 0);
-        grid.add(stepButton, thirdColumn, 0);
+        foreground.add(backButton, 1, 0);
+        foreground.add(playPauseButton, 2, 0);
+        foreground.add(stepButton, thirdColumn, 0);
 
-        grid.add(speedSlider, 1, 1, thirdColumn, 1);
+        foreground.add(speedSlider, 1, 1, thirdColumn, 1);
 
-        grid.add(graphButton, fourthColumn, 0);
-        grid.add(reportButton, fourthColumn, 1);
+        foreground.add(graphButton, fourthColumn, 0);
+        foreground.add(reportButton, fourthColumn, 1);
 
-        pane.getChildren().add(grid);
+        getChildren().add(foreground);
     }
 }

@@ -63,7 +63,7 @@ public class PoolTest {
 
     public static final double TOLERANCE = 0.000001;
 
-    private static final Random generator = new Random();
+    private static final Random GENERATOR = new Random();
 
     private Pool pool;
     private Pool pool0ParameterConstructor;
@@ -905,7 +905,7 @@ public class PoolTest {
 
         for (Creature creature : testCreatures) {
 
-            if (generator.nextBoolean()) {
+            if (GENERATOR.nextBoolean()) {
 
                 creature.getHealth().setAlive(false);
                 countDead++;
@@ -958,7 +958,7 @@ public class PoolTest {
 
         for (Creature creature : testCreatures) {
 
-            if (generator.nextBoolean()) {
+            if (GENERATOR.nextBoolean()) {
                 volume += creature.getVolumeNeeded() / mLPerL;
             } else {
                 creature.getHealth().setAlive(false);
@@ -977,7 +977,7 @@ public class PoolTest {
 
         for (Creature creature : testCreatures) {
 
-            creature.getHealth().setAge(generator.nextInt(Guppy.MAXIMUM_AGE));
+            creature.getHealth().setAge(GENERATOR.nextInt(Guppy.MAXIMUM_AGE));
             totalAge += creature.getHealth().getAge();
             count++;
 
@@ -997,8 +997,8 @@ public class PoolTest {
 
         for (Creature creature : testCreatures) {
 
-            if (generator.nextBoolean()) {
-                creature.getHealth().setAge(generator.nextInt(Guppy.MAXIMUM_AGE));
+            if (GENERATOR.nextBoolean()) {
+                creature.getHealth().setAge(GENERATOR.nextInt(Guppy.MAXIMUM_AGE));
                 totalAge += creature.getHealth().getAge();
                 count++;
             } else {
@@ -1021,7 +1021,7 @@ public class PoolTest {
 
         for (Creature creature : testCreatures) {
 
-            creature.getHealth().setCoefficient(generator.nextDouble());
+            creature.getHealth().setCoefficient(GENERATOR.nextDouble());
             totalHealthCoefficient += creature.getHealth().getCoefficient();
             count++;
 
@@ -1041,8 +1041,8 @@ public class PoolTest {
 
         for (Creature creature : testCreatures) {
 
-            if (generator.nextBoolean()) {
-                creature.getHealth().setCoefficient(generator.nextDouble());
+            if (GENERATOR.nextBoolean()) {
+                creature.getHealth().setCoefficient(GENERATOR.nextDouble());
                 totalHealthCoefficient += creature.getHealth().getCoefficient();
                 count++;
             } else {
@@ -1065,7 +1065,7 @@ public class PoolTest {
 
         for (Creature creature : testCreatures) {
 
-            creature.setFemale(generator.nextBoolean());
+            creature.setFemale(GENERATOR.nextBoolean());
             countFemale += creature.isFemale() ? 1 : 0;
             countAll++;
         }
@@ -1084,8 +1084,8 @@ public class PoolTest {
 
         for (Creature creature : testCreatures) {
 
-            if (generator.nextBoolean()) {
-                creature.setFemale(generator.nextBoolean());
+            if (GENERATOR.nextBoolean()) {
+                creature.setFemale(GENERATOR.nextBoolean());
                 countFemale += creature.isFemale() ? 1 : 0;
                 countAll++;
             } else {
@@ -1103,7 +1103,7 @@ public class PoolTest {
     public void testGetMedianAgeEvenAmount() {
 
         for (Creature creature : testCreatures) {
-            creature.getHealth().setAge(generator.nextInt(Guppy.MAXIMUM_AGE - 1));
+            creature.getHealth().setAge(GENERATOR.nextInt(Guppy.MAXIMUM_AGE - 1));
         }
 
         List<Integer> ages = pool.sortLivingCreatureAges();
@@ -1123,7 +1123,7 @@ public class PoolTest {
     public void testGetMedianAgeOddAmount() {
 
         for (Creature creature : testCreatures) {
-            creature.getHealth().setAge(generator.nextInt(Guppy.MAXIMUM_AGE - 1));
+            creature.getHealth().setAge(GENERATOR.nextInt(Guppy.MAXIMUM_AGE - 1));
         }
 
         List<Integer> ages = pool.sortLivingCreatureAges();
@@ -1143,8 +1143,8 @@ public class PoolTest {
     public void testGetMedianAgeExcludeDeadCreatures() {
 
         for (Creature creature : testCreatures) {
-            if (generator.nextBoolean()) {
-                creature.getHealth().setAge(generator.nextInt(Guppy.MAXIMUM_AGE - 1));
+            if (GENERATOR.nextBoolean()) {
+                creature.getHealth().setAge(GENERATOR.nextInt(Guppy.MAXIMUM_AGE - 1));
             } else {
                 creature.getHealth().setAlive(false);
             }

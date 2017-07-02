@@ -28,17 +28,14 @@ public class Pool extends WaterBody {
      * The maximum pool nutrient coefficient.
      */
     public static final double MAXIMUM_NUTRIENT_COEFFICIENT = 1.0;
-
+    /**
+     * A random number generator.
+     */
+    private static final Random GENERATOR = new Random();
     /**
      * The number of pools created.
      */
     private static int numberOfPools;
-
-    /**
-     * A random number generator.
-     */
-    private static final Random generator = new Random();
-
     /**
      * The volume of water in the pool in Litres.
      */
@@ -226,12 +223,12 @@ public class Pool extends WaterBody {
                          double maxHealthCoefficient) {
 
         for (int i = 0; i < numberOfCreatures; i++) {
-            int age = generator.nextInt(maxAge - minAge + 1) + minAge;
-            boolean isFemale = generator.nextDouble() < femaleChance;
+            int age = GENERATOR.nextInt(maxAge - minAge + 1) + minAge;
+            boolean isFemale = GENERATOR.nextDouble() < femaleChance;
             double healthCoefficient =
-                    generator.nextDouble() * (maxHealthCoefficient - minHealthCoefficient)
+                    GENERATOR.nextDouble() * (maxHealthCoefficient - minHealthCoefficient)
                             + minHealthCoefficient;
-            if (genus.equals("Poecilia") && species.equals("reticulata")) {
+            if (genus.equals(Guppy.GENUS) && species.equals(Guppy.SPECIES)) {
                 addCreature(new Guppy(age, healthCoefficient, isFemale, 0));
             }
         }
@@ -239,7 +236,6 @@ public class Pool extends WaterBody {
 
     /**
      * Changes the pool's nutrient coefficient by delta.
-     * <p>
      * <p>
      * If the resulting coefficient is less than the minimum or greater than the maximum, then the
      * new nutrient coefficient of the pool is set to be the closest bound.
@@ -329,7 +325,7 @@ public class Pool extends WaterBody {
         int countDied = 0;
 
         for (Creature creature : creatures) {
-            if (generator.nextDouble() > nutrientCoefficient) {
+            if (GENERATOR.nextDouble() > nutrientCoefficient) {
                 creature.getHealth().setAlive(false);
                 countDied++;
             }

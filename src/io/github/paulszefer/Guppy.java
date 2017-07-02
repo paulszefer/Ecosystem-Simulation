@@ -26,7 +26,7 @@ public class Guppy implements Creature {
     public static final String SPECIES = "reticulata";
 
     /** Random number generator. */
-    private static final Random generator = new Random();
+    private static final Random GENERATOR = new Random();
 
     /** The number of guppies that have been born. */
     private static int numberOfGuppiesBorn;
@@ -134,14 +134,14 @@ public class Guppy implements Creature {
         if (female && health.getAge() >= minAgeInWeeksToSpawn) {
 
             int numberOfOffspring = 0;
-            if (generator.nextDouble() <= spawnChance) {
-                numberOfOffspring = generator.nextInt(maxOffspring + 1);
+            if (GENERATOR.nextDouble() <= spawnChance) {
+                numberOfOffspring = GENERATOR.nextInt(maxOffspring + 1);
             }
 
             if (numberOfOffspring > 0) {
                 for (int i = 0; i < numberOfOffspring; i++) {
                     babyGuppies.add(new Guppy(0, (1.0 + health.getCoefficient()) / 2.0,
-                                              generator.nextBoolean(),
+                                              GENERATOR.nextBoolean(),
                                               identification.getGeneration() + 1));
                 }
             }

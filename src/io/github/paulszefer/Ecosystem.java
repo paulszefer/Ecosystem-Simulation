@@ -13,7 +13,7 @@ import java.util.Random;
 public class Ecosystem {
 
     /** Random number generator. */
-    private static final Random generator = new Random();
+    private static final Random GENERATOR = new Random();
 
     /** The collection of pools in the ecosystem. */
     private List<Pool> pools;
@@ -203,7 +203,7 @@ public class Ecosystem {
         }
 
         if (possibleStreams.size() > 1) {
-            return possibleStreams.get(generator.nextInt(possibleStreams.size() - 1));
+            return possibleStreams.get(GENERATOR.nextInt(possibleStreams.size() - 1));
         } else if (possibleStreams.size() == 1) {
             return possibleStreams.get(0);
         }

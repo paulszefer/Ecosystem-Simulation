@@ -15,7 +15,7 @@ import static org.junit.Assert.assertTrue;
 
 public class StreamTest {
 
-    private static Random generator = new Random();
+    private static final Random GENERATOR = new Random();
 
     private Pool pool1;
     private Pool pool2;

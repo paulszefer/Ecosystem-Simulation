@@ -5,6 +5,7 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.CycleMethod;
+import javafx.scene.paint.Paint;
 import javafx.scene.paint.RadialGradient;
 import javafx.scene.paint.Stop;
 import javafx.scene.text.Font;
@@ -28,8 +29,11 @@ public class AnimationPane extends StackPane {
     /** The height of the animation pane. */
     private static final double HEIGHT = SimulationApplication.HEIGHT * PROPORTION;
 
+    /** The background fill of the animation pane. */
+    private static final Paint BACKGROUND_FILL = Color.DEEPSKYBLUE;
+
     /** Random number generator. */
-    private static final Random generator = new Random();
+    private static final Random GENERATOR = new Random();
 
     /** Creates the GUI pane that will display the animation for the simulation. */
     public AnimationPane() {
@@ -40,12 +44,7 @@ public class AnimationPane extends StackPane {
 
     /** Adds the background pane. */
     private void addBackground() {
-
-        // TODO - find solution to allow this to resize
-        Canvas background = new Canvas(WIDTH, HEIGHT);
-        background.getGraphicsContext2D().setFill(Color.DEEPSKYBLUE);
-        background.getGraphicsContext2D().fillRect(0, 0, WIDTH, HEIGHT);
-        getChildren().add(background);
+        getChildren().add(new BackgroundCanvas(WIDTH, HEIGHT, BACKGROUND_FILL));
     }
 
     /** Adds the foreground pane. */
@@ -75,15 +74,8 @@ public class AnimationPane extends StackPane {
         final Stop guppyStop1 = new Stop(0.8, Color.WHITE);
         final Stop guppyStop2 = new Stop(1, Color.TRANSPARENT);
 
-        RadialGradient guppyFill = new RadialGradient(0,
-                                                      0,
-                                                      centerX,
-                                                      centerY,
-                                                      1,
-                                                      true,
-                                                      CycleMethod.NO_CYCLE,
-                                                      guppyStop1,
-                                                      guppyStop2);
+        RadialGradient guppyFill = new RadialGradient(0, 0, centerX, centerY, 1, true,
+                                                      CycleMethod.NO_CYCLE, guppyStop1, guppyStop2);
 
         // create new frame
         Canvas foreground = new Canvas(WIDTH, HEIGHT);
@@ -114,13 +106,11 @@ public class AnimationPane extends StackPane {
                 guppies = maxToDraw;
             }
             for (int j = 0; j < guppies; j++) {
-                graphicsContext.fillOval(
-                        generator.nextDouble() * poolSize * guppyAreaFactor
-                                + poolSize * guppyBorderFactor + poolStartX,
-                        generator.nextDouble() * poolSize * guppyAreaFactor
-                                + poolSize * guppyBorderFactor + poolStartY,
-                        guppySize,
-                        guppySize);
+                graphicsContext.fillOval(GENERATOR.nextDouble() * poolSize * guppyAreaFactor
+                                                 + poolSize * guppyBorderFactor + poolStartX,
+                                         GENERATOR.nextDouble() * poolSize * guppyAreaFactor
+                                                 + poolSize * guppyBorderFactor + poolStartY,
+                                         guppySize, guppySize);
             }
         }
         getChildren().set(1, foreground);

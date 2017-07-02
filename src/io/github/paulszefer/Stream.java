@@ -16,7 +16,7 @@ import java.util.Random;
 public class Stream extends WaterBody {
 
     /** Random number generator. */
-    private static final Random generator = new Random();
+    private static final Random GENERATOR = new Random();
 
     /** The source pool. */
     private Pool source;
@@ -125,7 +125,7 @@ public class Stream extends WaterBody {
 
         for (Creature creature : creatures) {
             creature.getHealth().setAlive(
-                    generator.nextDouble() < creature.getHealth().getCoefficient());
+                    GENERATOR.nextDouble() < creature.getHealth().getCoefficient());
             countDied += !creature.getHealth().isAlive() ? 1 : 0;
         }
         destination.addCreatures(creatures);
