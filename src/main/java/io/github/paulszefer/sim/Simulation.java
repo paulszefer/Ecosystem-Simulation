@@ -198,6 +198,9 @@ public class Simulation {
 
         crowdedOut += ecosystem.adjustForCrowding();
         numberRemoved += crowdedOut;
+        for (Pool pool : pools) {
+            pool.removeDeadCreatures();
+        }
 
         if (diedOfOldAge + starvedToDeath + crowdedOut == numberRemoved) {
             System.out.println("Simulating Week " + (week + 1));

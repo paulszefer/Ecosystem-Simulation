@@ -40,9 +40,13 @@ public class WaterBody {
 
     /**
      * A body of water with a name, temperature and pH.
-     * @param name a name
-     * @param temperature a temperature in degrees Celsius
-     * @param pH a pH value
+     *
+     * @param name
+     *         a name
+     * @param temperature
+     *         a temperature in degrees Celsius
+     * @param pH
+     *         a pH value
      */
     public WaterBody(String name, double temperature, double pH) {
 
@@ -91,11 +95,14 @@ public class WaterBody {
 
         String newName = DEFAULT_WATER_BODY_NAME;
 
-        if (name != null && !name.replaceAll(" ", "").equals("")) {
-            newName = name.replaceAll(" ", "").substring(0, 1).toUpperCase() + name
-                    .replaceAll(" ", "").substring(1).toLowerCase();
-        }
+        if (name != null) {
+            String nameFormatted = name.trim();
 
+            if (!nameFormatted.equals("")) {
+                newName = nameFormatted.substring(0, 1).toUpperCase() + nameFormatted.substring(1)
+                                                                                     .toLowerCase();
+            }
+        }
         this.name = newName;
     }
 
@@ -105,6 +112,7 @@ public class WaterBody {
      * @param temperature
      *         the temperature in degrees Celsius
      */
+
     public void setTemperature(double temperature) {
 
         double newTemperature = DEFAULT_WATER_TEMP_CELSIUS;

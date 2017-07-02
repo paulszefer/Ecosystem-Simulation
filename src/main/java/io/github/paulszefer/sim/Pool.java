@@ -653,7 +653,6 @@ public class Pool extends WaterBody {
 
         return "[name=" + getName() + ",volumeLitres=" + volumeLitres + ",temperatureCelsius="
                 + getTemperature() + ",pH=" + getpH() + ",nutrientCoefficient="
-                + nutrientCoefficient + ",identificationNumber=" + identificationNumber
-                + ",creatures=" + creatures + "]";
+                + nutrientCoefficient + ",identificationNumber=" + identificationNumber + "]";
     }
 }

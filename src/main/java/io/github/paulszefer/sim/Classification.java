@@ -37,17 +37,27 @@ public class Classification {
      */
     public Classification(String genus, String species) {
 
-        if (genus != null && !genus.replace(" ", "").equals("")) {
-            this.genus = genus.replace(" ", "").substring(0, 1).toUpperCase()
-                    + genus.replace(" ", "").substring(1).toLowerCase();
+        if (genus != null) {
+            String genusFormatted = genus.trim();
+            if (!genusFormatted.equals("")) {
+                this.genus = genusFormatted.substring(0, 1).toUpperCase() + genusFormatted
+                        .substring(1).toLowerCase();
+            } else {
+                throw new IllegalArgumentException("No genus given");
+            }
         } else {
-            throw new IllegalArgumentException(genus == null ? "Null" : "No" + "genus given");
+            throw new IllegalArgumentException("Null genus given");
         }
 
-        if (species != null && !species.replace(" ", "").equals("")) {
-            this.species = species.replace(" ", "").toLowerCase();
+        if (species != null) {
+            String speciesFormatted = species.trim();
+            if (!speciesFormatted.equals("")) {
+                this.species = speciesFormatted.toLowerCase();
+            } else {
+                throw new IllegalArgumentException("No species given");
+            }
         } else {
-            throw new IllegalArgumentException(species == null ? "Null" : "No" + "species given");
+            throw new IllegalArgumentException("Null species given");
         }
     }
 
@@ -56,6 +66,7 @@ public class Classification {
      *
      * @return The genus of the guppy.
      */
+
     public String getGenus() {
 
         return genus;

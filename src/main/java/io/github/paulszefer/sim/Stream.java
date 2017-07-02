@@ -38,7 +38,7 @@ public class Stream extends WaterBody {
      */
     public Stream(Pool source, Pool destination) {
 
-        super(source + "to" + destination, source.getpH(), source.getTemperature());
+        super("unnamed", source.getpH(), source.getTemperature());
         setSource(source);
         setDestination(destination);
     }
