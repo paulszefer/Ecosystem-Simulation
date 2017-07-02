@@ -86,8 +86,9 @@ public class OptionPane extends StackPane {
 
                 speedSlider.setDisable(false);
 
-                graphButton.setDisable(false);
-                reportButton.setDisable(false);
+                // TODO - re-enable once functionality implemented
+                // graphButton.setDisable(false);
+                // reportButton.setDisable(false);
             }
         });
         saveButton.setDisable(true);

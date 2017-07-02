@@ -1,5 +1,9 @@
 package io.github.paulszefer;
 
+import io.github.paulszefer.sim.Creature;
+import io.github.paulszefer.sim.Guppy;
+import io.github.paulszefer.sim.Pool;
+import io.github.paulszefer.sim.Stream;
 import org.junit.Before;
 import org.junit.Test;
 

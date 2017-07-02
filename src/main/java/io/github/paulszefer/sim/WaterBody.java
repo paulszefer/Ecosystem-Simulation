@@ -1,4 +1,4 @@
-package io.github.paulszefer;
+package io.github.paulszefer.sim;
 
 /**
  * A body of water in which animals might live.

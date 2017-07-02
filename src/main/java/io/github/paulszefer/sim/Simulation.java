@@ -1,4 +1,4 @@
-package io.github.paulszefer;
+package io.github.paulszefer.sim;
 
 import io.github.paulszefer.gui.SimulationApplication;
 import javax.swing.JFileChooser;

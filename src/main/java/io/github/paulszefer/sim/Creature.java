@@ -1,4 +1,4 @@
-package io.github.paulszefer;
+package io.github.paulszefer.sim;
 
 import java.util.InputMismatchException;
 import java.util.List;

@@ -1,4 +1,4 @@
-package io.github.paulszefer;
+package io.github.paulszefer.sim;
 
 /**
  * Defines the classification profile of an organism.

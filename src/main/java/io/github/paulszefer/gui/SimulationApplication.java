@@ -1,6 +1,6 @@
 package io.github.paulszefer.gui;
 
-import io.github.paulszefer.Simulation;
+import io.github.paulszefer.sim.Simulation;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.stage.Stage;

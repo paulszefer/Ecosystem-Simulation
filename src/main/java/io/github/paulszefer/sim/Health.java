@@ -1,4 +1,4 @@
-package io.github.paulszefer;
+package io.github.paulszefer.sim;
 
 /**
  * Defines a health profile that stores information about the health of an organism.
