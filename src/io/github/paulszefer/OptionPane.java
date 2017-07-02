@@ -1,5 +1,6 @@
 package io.github.paulszefer;
 
+import javafx.application.Platform;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.Slider;
@@ -8,6 +9,9 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 
+import java.util.Timer;
+import java.util.TimerTask;
+
 /**
  * Defines the GUI pane that will display and handle the options for the simulation.
  *
@@ -15,6 +19,9 @@ import javafx.scene.paint.Paint;
  * @version 1.0
  */
 public class OptionPane extends StackPane {
+
+    /** The default delay of the animation (in ms). */
+    public static final int DELAY = 1000;
 
     /** The proportion of the GUI's height taken by this Pane. */
     private static final double PROPORTION = 0.25;
@@ -68,21 +75,16 @@ public class OptionPane extends StackPane {
         Button graphButton = new Button("Graph");
         Button reportButton = new Button("Report");
 
-        // Button actions
+        // Control configurations
         loadButton.setOnAction((actionEvent) -> {
 
-            // cases:
-
-            // try to load file, fail
-            // should not change any state
-
-            // try to load file, successful
-            // enable/disable buttons
             boolean fileLoaded = SimulationApplication.getSimulation().loadFile();
             if (fileLoaded) {
                 backButton.setDisable(true);
                 playPauseButton.setDisable(false);
                 stepButton.setDisable(false);
+
+                speedSlider.setDisable(false);
 
                 graphButton.setDisable(false);
                 reportButton.setDisable(false);
@@ -97,12 +99,43 @@ public class OptionPane extends StackPane {
             }
         });
         backButton.setDisable(true);
+        final boolean[] animationActive = { false };
+        playPauseButton.setOnAction((actionEvent) -> {
+            if (playPauseButton.getText().equals("Play")) {
+                playPauseButton.setText("Pause");
+                speedSlider.setDisable(true);
+                Timer timer = new Timer();
+                animationActive[0] = true;
+                timer.scheduleAtFixedRate(new TimerTask() {
+
+                    @Override
+                    public void run() {
+
+                        if (!animationActive[0]) {
+                            timer.cancel();
+                            timer.purge();
+                            return;
+                        }
+                        Platform.runLater(() -> {
+                            SimulationApplication.getSimulation().nextWeek();
+                            backButton.setDisable(false);
+                        });
+                    }
+                }, 0, (int) (DELAY / ((SpeedSlider) speedSlider).returnMultiplier()));
+            } else {
+                playPauseButton.setText("Play");
+                speedSlider.setDisable(false);
+                animationActive[0] = false;
+            }
+        });
         playPauseButton.setDisable(true);
         stepButton.setOnAction((actionEvent) -> {
             SimulationApplication.getSimulation().nextWeek();
             backButton.setDisable(false);
         });
         stepButton.setDisable(true);
+
+        speedSlider.setDisable(true);
 
         graphButton.setDisable(true);
         reportButton.setDisable(true);

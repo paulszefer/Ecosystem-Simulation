@@ -38,8 +38,7 @@ public class SpeedSlider extends Slider {
      */
     private void configureLabels() {
 
-        @SuppressWarnings("unchecked")
-        StringConverter<Double> converter = new StringConverter() {
+        @SuppressWarnings("unchecked") StringConverter<Double> converter = new StringConverter() {
 
             /**
              * Converts the object provided into its string form.
@@ -95,5 +94,22 @@ public class SpeedSlider extends Slider {
         setShowTickMarks(true);
         setShowTickLabels(true);
         setSnapToTicks(true);
+    }
+
+    /**
+     * Returns the currently selected speed multiplier.
+     *
+     * @return the currently selected speed multiplier
+     */
+    public double returnMultiplier() {
+
+        Double current = getValue();
+        if (current < 0) {
+            return 1 / Math.pow(2, -current);
+        } else if (current.compareTo(0.0) == 0) {
+            return 1;
+        } else {
+            return Math.pow(2, current);
+        }
     }
 }
