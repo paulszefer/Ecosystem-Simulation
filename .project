@@ -20,4 +20,11 @@
 		<nature>org.eclipse.jdt.core.javanature</nature>
 		<nature>net.sf.eclipsecs.core.CheckstyleNature</nature>
 	</natures>
+	<linkedResources>
+		<link>
+			<name>java</name>
+			<type>2</type>
+			<location>C:/Users/APCP/Documents/Eclipse/Workspace/Ecosystem Simulation/src/main/java</location>
+		</link>
+	</linkedResources>
 </projectDescription>
