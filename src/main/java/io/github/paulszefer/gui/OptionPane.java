@@ -5,9 +5,7 @@ import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.Slider;
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
-import javafx.scene.paint.Paint;
 
 import java.util.Timer;
 import java.util.TimerTask;
@@ -18,7 +16,7 @@ import java.util.TimerTask;
  * @author Paul Szefer
  * @version 1.0
  */
-public class OptionPane extends StackPane {
+public class OptionPane extends DualLayerPane {
 
     /** The default delay of the animation (in ms). */
     public static final int DELAY = 1000;
@@ -26,30 +24,14 @@ public class OptionPane extends StackPane {
     /** The proportion of the GUI's height taken by this Pane. */
     private static final double PROPORTION = 0.25;
 
-    /** The width of the option pane. */
-    private static final double WIDTH = SimulationApplication.WIDTH;
-
-    /** The height of the option pane. */
-    private static final double HEIGHT = SimulationApplication.HEIGHT * PROPORTION;
-
-    /** The background fill of the animation pane. */
-    private static final Paint BACKGROUND_FILL = Color.WHITE;
-
     /** Creates the GUI pane that will display the options for the simulation. */
     public OptionPane() {
 
-        addBackground();
-        addForeground();
-    }
-
-    /** Adds the background pane. */
-    private void addBackground() {
-
-        getChildren().add(new BackgroundCanvas(WIDTH, HEIGHT, BACKGROUND_FILL));
+        super(SimulationApplication.WIDTH, SimulationApplication.HEIGHT, Color.WHITE);
     }
 
     /** Adds the foreground pane. */
-    private void addForeground() {
+    protected void addForeground() {
 
         GridPane foreground = new GridPane();
         foreground.setAlignment(Pos.CENTER);

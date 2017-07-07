@@ -3,10 +3,8 @@ package io.github.paulszefer.gui;
 import io.github.paulszefer.sim.Ecosystem;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.CycleMethod;
-import javafx.scene.paint.Paint;
 import javafx.scene.paint.RadialGradient;
 import javafx.scene.paint.Stop;
 import javafx.scene.text.Font;
@@ -19,19 +17,10 @@ import java.util.Random;
  * @author Paul Szefer
  * @version 1.0
  */
-public class AnimationPane extends StackPane {
+public class AnimationPane extends DualLayerPane {
 
     /** The proportion of the GUI's height taken by this Pane. */
     private static final double PROPORTION = 0.75;
-
-    /** The width of the animation pane. */
-    private static final double WIDTH = SimulationApplication.WIDTH;
-
-    /** The height of the animation pane. */
-    private static final double HEIGHT = SimulationApplication.HEIGHT * PROPORTION;
-
-    /** The background fill of the animation pane. */
-    private static final Paint BACKGROUND_FILL = Color.DEEPSKYBLUE;
 
     /** Random number generator. */
     private static final Random GENERATOR = new Random();
@@ -39,19 +28,14 @@ public class AnimationPane extends StackPane {
     /** Creates the GUI pane that will display the animation for the simulation. */
     public AnimationPane() {
 
-        addBackground();
-        addForeground();
-    }
-
-    /** Adds the background pane. */
-    private void addBackground() {
-        getChildren().add(new BackgroundCanvas(WIDTH, HEIGHT, BACKGROUND_FILL));
+        super(SimulationApplication.WIDTH, SimulationApplication.HEIGHT * PROPORTION,
+              Color.DEEPSKYBLUE);
     }
 
     /** Adds the foreground pane. */
-    private void addForeground() {
+    protected void addForeground() {
 
-        Canvas foreground = new Canvas(WIDTH, HEIGHT);
+        Canvas foreground = new Canvas(getWidth(), getHeight());
         GraphicsContext graphicsContext = foreground.getGraphicsContext2D();
         graphicsContext.setFill(Color.BLACK);
         final Font textFont = Font.font("Sans-serif", 20);
@@ -70,6 +54,8 @@ public class AnimationPane extends StackPane {
      */
     private void setForeground(Ecosystem ecosystem) {
 
+        // TODO - create object to store guppy to draw
+
         final double centerX = 0.5;
         final double centerY = 0.5;
         final Stop guppyStop1 = new Stop(0.8, Color.WHITE);
@@ -79,16 +65,16 @@ public class AnimationPane extends StackPane {
                                                       CycleMethod.NO_CYCLE, guppyStop1, guppyStop2);
 
         // create new frame
-        Canvas foreground = new Canvas(WIDTH, HEIGHT);
+        Canvas foreground = new Canvas(getWidth(), getHeight());
 
         final int poolShiftX = 20;
         final double guppySize = 2;
         final GraphicsContext graphicsContext = foreground.getGraphicsContext2D();
         final Color poolBackground = Color.BLUE;
 
-        final double poolSize = HEIGHT / 4;
+        final double poolSize = getHeight() / 4;
         double poolStartX;
-        double poolStartY = (HEIGHT - poolSize) / 2;
+        double poolStartY = (getHeight() - poolSize) / 2;
         final double guppyAreaFactor = 0.9;
         final double guppyBorderFactor = (1 - guppyAreaFactor) / 2;
 
