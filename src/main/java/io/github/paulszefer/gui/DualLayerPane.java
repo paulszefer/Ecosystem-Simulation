@@ -1,5 +1,6 @@
 package io.github.paulszefer.gui;
 
+import io.github.paulszefer.SimulationController;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Paint;
 
@@ -10,6 +11,9 @@ import javafx.scene.paint.Paint;
  * @version 1.0
  */
 public abstract class DualLayerPane extends StackPane {
+
+    /** The simulation controller. */
+    private SimulationController controller;
 
     /** The width of the pane. */
     private double paneWidth;
@@ -23,6 +27,8 @@ public abstract class DualLayerPane extends StackPane {
     /**
      * Creates a pane that consists of at least two layers.
      *
+     * @param controller
+     *         the simulation controller
      * @param paneWidth
      *         the width of the pane
      * @param paneHeight
@@ -30,14 +36,26 @@ public abstract class DualLayerPane extends StackPane {
      * @param backgroundFill
      *         the background fill of the pane
      */
-    public DualLayerPane(double paneWidth, double paneHeight, Paint backgroundFill) {
+    public DualLayerPane(SimulationController controller, double paneWidth, double paneHeight,
+                         Paint backgroundFill) {
 
+        this.controller = controller;
         this.paneWidth = paneWidth;
         this.paneHeight = paneHeight;
         this.backgroundFill = backgroundFill;
 
         addBackground();
         addForeground();
+    }
+
+    /**
+     * Returns the simulation controller.
+     *
+     * @return the simulation controller
+     */
+    public SimulationController getController() {
+
+        return controller;
     }
 
     /**

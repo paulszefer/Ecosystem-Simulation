@@ -1,5 +1,8 @@
-package io.github.paulszefer.gui;
+package io.github.paulszefer.gui.animation;
 
+import io.github.paulszefer.SimulationController;
+import io.github.paulszefer.gui.DualLayerPane;
+import io.github.paulszefer.gui.GUI;
 import io.github.paulszefer.sim.Ecosystem;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
@@ -25,17 +28,21 @@ public class AnimationPane extends DualLayerPane {
     /** Random number generator. */
     private static final Random GENERATOR = new Random();
 
-    /** Creates the GUI pane that will display the animation for the simulation. */
-    public AnimationPane() {
+    /**
+     * Creates the GUI pane that will display the animation for the simulation.
+     *
+     * @param controller
+     *         the simulation controller
+     */
+    public AnimationPane(SimulationController controller) {
 
-        super(SimulationApplication.WIDTH, SimulationApplication.HEIGHT * PROPORTION,
-              Color.DEEPSKYBLUE);
+        super(controller, GUI.WIDTH, GUI.HEIGHT * PROPORTION, Color.DEEPSKYBLUE);
     }
 
     /** Adds the foreground pane. */
     protected void addForeground() {
 
-        Canvas foreground = new Canvas(getWidth(), getHeight());
+        Canvas foreground = new Canvas(getPaneWidth(), getPaneHeight());
         GraphicsContext graphicsContext = foreground.getGraphicsContext2D();
         graphicsContext.setFill(Color.BLACK);
         final Font textFont = Font.font("Sans-serif", 20);

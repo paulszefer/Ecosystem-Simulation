@@ -1,15 +1,9 @@
 package io.github.paulszefer.sim;
 
-import io.github.paulszefer.gui.SimulationApplication;
-import javax.swing.JFileChooser;
-import javax.swing.JFrame;
-import javax.swing.filechooser.FileNameExtensionFilter;
+import io.github.paulszefer.SimulationController;
 
-import java.io.File;
-import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.NoSuchElementException;
 import java.util.Scanner;
 
 /**
@@ -20,19 +14,25 @@ import java.util.Scanner;
  */
 public class Simulation {
 
+    /** The controller for the simulation. */
+    private SimulationController controller;
+
     /** The current simulation state identifier. */
     private int week;
 
     /** The storage of ecosystem states. */
     private ArrayList<Ecosystem> history;
 
-    /** Sets up the simulation. */
-    public Simulation() {
+    /**
+     * Sets up the simulation.
+     *
+     * @param controller
+     *         the simulation controller
+     */
+    public Simulation(SimulationController controller) {
 
-        // initialize current identifier
+        this.controller = controller;
         week = -1;
-
-        // initialize history storage
         history = new ArrayList<>();
     }
 
@@ -47,44 +47,13 @@ public class Simulation {
     }
 
     /**
-     * Loads the simulation data from a file.
+     * Loads the simulation data from the given scanner.
      *
-     * @return true if the file was loaded successfully; false otherwise
+     * @param data
+     *         a scanner holding the data used to create the simulation
      */
-    public boolean loadFile() {
+    public void loadSimulation(Scanner data) {
 
-        // TODO - parse file differently based on file type
-        // Scanner should work for text file, but maybe not for xml and json
-        // Option: DataFile extends File, has a method called nextField()
-        // that returns the next field based on the file type/structure
-
-        JFileChooser fileChooser = new JFileChooser();
-        FileNameExtensionFilter filter = new FileNameExtensionFilter("File type", "xml", "json",
-                                                                     "txt");
-        Scanner data;
-        fileChooser.addChoosableFileFilter(filter);
-        if (fileChooser.showOpenDialog(new JFrame()) == JFileChooser.APPROVE_OPTION) {
-            File file = fileChooser.getSelectedFile();
-            try {
-                data = new Scanner(file);
-            } catch (FileNotFoundException e) {
-                System.out.println("File not found");
-                return false;
-            }
-        } else {
-            System.out.println("No file selected");
-            return false;
-        }
-
-        try {
-            SimulationApplication.getStage().setTitle(data.nextLine());
-        } catch (NullPointerException e) {
-            System.out.println("Invalid data file");
-            return false;
-        } catch (NoSuchElementException e) {
-            System.out.println("Invalid file type");
-            return false;
-        }
         Ecosystem ecosystem = new Ecosystem();
         Pool pool;
         while (data.hasNext()) {
@@ -101,12 +70,11 @@ public class Simulation {
         // update the simulation history
         week = 0;
         history = new ArrayList<>();
-        history.add(ecosystem.copy());
+        history.add(ecosystem);
 
-        // update the animation
-        SimulationApplication.getGui().getAnimationPane().updateState(ecosystem);
-
-        return true;
+        // TODO - update GUI animation state
+        // SimulationFX.getGui().getAnimationPane().updateState(ecosystem);
+        controller.updateGUI(ecosystem);
     }
 
     /** Returns the simulation to its state one week prior. */
@@ -114,7 +82,9 @@ public class Simulation {
 
         if (week > 0) {
             week--;
-            SimulationApplication.getGui().getAnimationPane().updateState(history.get(week));
+            // TODO - update GUI animation state
+            // SimulationFX.getGui().getAnimationPane().updateState(history.get(week));
+            controller.updateGUI(history.get(week));
         } else {
             System.out.println("There are no previous weeks.");
             // TODO - grey out back button if there are no previous weeks
@@ -131,7 +101,9 @@ public class Simulation {
             System.out.println("Please load a simulation first.");
         } else if (week + 1 < history.size()) {
             week++;
-            SimulationApplication.getGui().getAnimationPane().updateState(history.get(week));
+            // TODO - update GUI animation state
+            // SimulationFX.getGui().getAnimationPane().updateState(history.get(week));
+            controller.updateGUI(history.get(week));
         } else {
             simulateOneWeek();
         }
@@ -219,6 +191,8 @@ public class Simulation {
 
         week++;
         history.add(ecosystem);
-        SimulationApplication.getGui().getAnimationPane().updateState(history.get(week));
+        // TODO - update GUI animation state
+        // SimulationFX.getGui().getAnimationPane().updateState(history.get(week));
+        controller.updateGUI(history.get(week));
     }
 }

@@ -1,4 +1,4 @@
-package io.github.paulszefer.gui;
+package io.github.paulszefer.gui.option;
 
 import javafx.scene.control.Slider;
 import javafx.util.StringConverter;
