@@ -5,10 +5,14 @@ import io.github.paulszefer.gui.option.OptionControls;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javax.swing.JFileChooser;
+import javax.swing.UIManager;
+import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
+import java.awt.EventQueue;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.lang.reflect.InvocationTargetException;
 import java.util.NoSuchElementException;
 import java.util.Scanner;
 
@@ -55,15 +59,26 @@ public class LoadButtonHandler implements EventHandler<ActionEvent> {
         // that returns the next field based on the file type/structure
 
         JFileChooser fileChooser = new JFileChooser();
-        FileNameExtensionFilter filter = new FileNameExtensionFilter("File type", "txt");
+        FileNameExtensionFilter filter = new FileNameExtensionFilter("Simulation load file (*.txt)",
+                                                                     "txt");
         //"xml", "json", "txt");
+        fileChooser.setFileFilter(filter);
 
-        Scanner data;
-        fileChooser.addChoosableFileFilter(filter);
-        if (fileChooser.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
+        Scanner fileData;
+
+        final int[] fileChooserResult = new int[1];
+        try {
+            EventQueue.invokeAndWait(() -> {
+                fileChooserResult[0] = fileChooser.showOpenDialog(null);
+            });
+        } catch (InterruptedException | InvocationTargetException e) {
+            e.printStackTrace();
+        }
+
+        if (fileChooserResult[0] == JFileChooser.APPROVE_OPTION) {
             File file = fileChooser.getSelectedFile();
             try {
-                data = new Scanner(file);
+                fileData = new Scanner(file);
             } catch (FileNotFoundException e) {
                 System.out.println("File not found");
                 return;
@@ -76,7 +91,7 @@ public class LoadButtonHandler implements EventHandler<ActionEvent> {
         String simulationTitle;
 
         try {
-            simulationTitle = data.nextLine();
+            simulationTitle = fileData.nextLine();
         } catch (NullPointerException e) {
             System.out.println("Invalid data file");
             return;
@@ -86,7 +101,7 @@ public class LoadButtonHandler implements EventHandler<ActionEvent> {
         }
 
         controller.updateGUI(simulationTitle);
-        controller.updateSimulation(data);
+        controller.updateSimulation(fileData);
         controls.update(OptionControls.SIMULATION_LOADED);
     }
 }

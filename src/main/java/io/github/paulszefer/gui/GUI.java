@@ -8,6 +8,8 @@ import javafx.scene.Scene;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import javax.swing.UIManager;
+import javax.swing.UnsupportedLookAndFeelException;
 
 /**
  * Defines the GUI for the Simulation.
@@ -47,6 +49,18 @@ public class GUI {
      *         the primary stage of the JavaFX application
      */
     public GUI(SimulationController controller, Stage primaryStage) {
+
+        try {
+            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+        } catch (IllegalAccessException e) {
+            System.out.println("The System look and feel could not be accessed");
+        } catch (InstantiationException e) {
+            System.out.println("The System look and feel could not be instantiated");
+        } catch (ClassNotFoundException e) {
+            System.out.println("The System look and feel could not be found");
+        } catch (UnsupportedLookAndFeelException e) {
+            System.out.println("The System look and feel is not supported");
+        }
 
         this.controller = controller;
         this.primaryStage = primaryStage;
