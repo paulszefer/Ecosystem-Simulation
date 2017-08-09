@@ -21,7 +21,7 @@ public class Simulation {
     private int week;
 
     /** The storage of ecosystem states. */
-    private ArrayList<Ecosystem> history;
+    private List<Ecosystem> history;
 
     /**
      * Sets up the simulation.
@@ -44,6 +44,19 @@ public class Simulation {
     public int getWeek() {
 
         return week;
+    }
+
+    /**
+     * Returns a copy of the history.
+     *
+     * @return a copy of the history
+     */
+    public List<Ecosystem> getHistory() {
+        List<Ecosystem> historyCopy = new ArrayList<>();
+        for (Ecosystem ecosystem : history) {
+            historyCopy.add(ecosystem.copy());
+        }
+        return historyCopy;
     }
 
     /**

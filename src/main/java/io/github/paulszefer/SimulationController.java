@@ -5,6 +5,7 @@ import io.github.paulszefer.sim.Ecosystem;
 import io.github.paulszefer.sim.Simulation;
 import javafx.stage.Stage;
 
+import java.util.List;
 import java.util.Scanner;
 
 /**
@@ -79,6 +80,16 @@ public class SimulationController {
     public int retrieveWeek() {
 
         return model.getWeek();
+    }
+
+    /**
+     * Retrieves a copy of the history from the simulation.
+     *
+     * @return a copy of the history of the simulation.
+     */
+    public List<Ecosystem> retrieveHistory() {
+
+        return model.getHistory();
     }
 
     /**
