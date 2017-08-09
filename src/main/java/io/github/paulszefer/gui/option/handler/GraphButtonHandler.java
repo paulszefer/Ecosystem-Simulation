@@ -3,6 +3,7 @@ package io.github.paulszefer.gui.option.handler;
 import io.github.paulszefer.SimulationController;
 import io.github.paulszefer.sim.Ecosystem;
 import io.github.paulszefer.sim.Pool;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
@@ -11,8 +12,11 @@ import javafx.scene.Scene;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
+import javafx.scene.control.Button;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
+import javafx.scene.control.Tooltip;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
@@ -21,13 +25,15 @@ import javafx.scene.text.Font;
 import javafx.stage.Stage;
 
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 /**
  * Generates graphs based on the simulation and opens a new window for display.
  * <p>
  * Graphs can be shown for population over time, volume required over time, average age over time,
  * and health coefficient over time.
- *
+ * <p>
  * TODO - the graph should feature an option to update in real time with the simulation
  *
  * @author Paul Szefer
@@ -37,6 +43,27 @@ public class GraphButtonHandler implements EventHandler<ActionEvent> {
 
     /** The simulation controller. */
     private SimulationController controller;
+
+    /** A copy of the current state of the simulation. */
+    private List<Ecosystem> historyCopy;
+
+    /** The chart storing a graph of population vs. time. */
+    private LineChart<Number, Number> populationChart;
+
+    /** The chart storing a graph of volume required vs. time. */
+    private LineChart<Number, Number> volumeChart;
+
+    /** The chart storing a graph of average age vs. time. */
+    private LineChart<Number, Number> ageChart;
+
+    /** The chart storing a graph of average health vs. time. */
+    private LineChart<Number, Number> healthChart;
+
+    /** The choicebox used to select a graph to display. */
+    private ChoiceBox<String> graphSelector;
+
+    /** A timer to schedule auto-updating, when active. */
+    private Timer timer = new Timer();
 
     /**
      * Creates a handler for the save button.
@@ -52,7 +79,7 @@ public class GraphButtonHandler implements EventHandler<ActionEvent> {
     @Override
     public void handle(ActionEvent event) {
 
-        List<Ecosystem> historyCopy = controller.retrieveHistory();
+        historyCopy = controller.retrieveHistory();
         if (historyCopy.size() < 1) {
             throw new IllegalStateException("There is no history to graph.");
         }
@@ -60,18 +87,18 @@ public class GraphButtonHandler implements EventHandler<ActionEvent> {
         AnchorPane root = new AnchorPane();
         HBox container = new HBox();
 
-        LineChart<Number, Number> populationChart = createPopulationChart(historyCopy);
-        LineChart<Number, Number> volumeChart = createVolumeChart(historyCopy);
-        LineChart<Number, Number> ageChart = createAgeChart(historyCopy);
-        LineChart<Number, Number> healthChart = createHealthChart(historyCopy);
+        populationChart = createPopulationChart(historyCopy);
+        volumeChart = createVolumeChart(historyCopy);
+        ageChart = createAgeChart(historyCopy);
+        healthChart = createHealthChart(historyCopy);
 
         final Insets defaultInsets = new Insets(10);
         final double spacingSize = 10;
 
-        VBox settings = new VBox();
-        settings.setAlignment(Pos.TOP_CENTER);
-        settings.setPadding(defaultInsets);
-        settings.setSpacing(spacingSize);
+        VBox options = new VBox();
+        options.setAlignment(Pos.TOP_CENTER);
+        options.setPadding(defaultInsets);
+        options.setSpacing(spacingSize);
         // adds a vertical divider between graph and settings menu
         // settings.setBorder(new Border(new BorderStroke(Color.TRANSPARENT,
         //                                                Color.TRANSPARENT,
@@ -87,23 +114,22 @@ public class GraphButtonHandler implements EventHandler<ActionEvent> {
 
         final double fontSize = 24;
 
-        Label settingsLabel = new Label("Settings");
-        settingsLabel.setMaxWidth(Double.MAX_VALUE);
-        settingsLabel.setAlignment(Pos.CENTER);
-        settingsLabel.setFont(new Font(fontSize));
+        Label optionsLabel = new Label("Options");
+        optionsLabel.setMaxWidth(Double.MAX_VALUE);
+        optionsLabel.setAlignment(Pos.CENTER);
+        optionsLabel.setFont(new Font(fontSize));
 
-        ChoiceBox<String> choiceBox = new ChoiceBox<>();
-        choiceBox.setMaxWidth(Double.MAX_VALUE);
-        choiceBox.getItems().addAll("Population",
-                                    "Volume Required",
-                                    "Average Age",
-                                    "Average Health");
-        choiceBox.getSelectionModel().select(0);
-
-        choiceBox.setOnAction((actionEvent) -> {
-            String selectedOption = choiceBox.getSelectionModel().getSelectedItem();
+        graphSelector = new ChoiceBox<>();
+        graphSelector.setMaxWidth(Double.MAX_VALUE);
+        graphSelector.getItems().addAll("Population",
+                                        "Volume Required",
+                                        "Average Age",
+                                        "Average Health");
+        graphSelector.getSelectionModel().select(0);
+        graphSelector.setOnAction((actionEvent) -> {
+            String selectedGraph = graphSelector.getSelectionModel().getSelectedItem();
             LineChart<Number, Number> chart;
-            switch (selectedOption) {
+            switch (selectedGraph) {
                 case "Population":
                     chart = populationChart;
                     break;
@@ -123,32 +149,80 @@ public class GraphButtonHandler implements EventHandler<ActionEvent> {
             if (container.getChildren().size() == 0) {
                 container.getChildren().add(chart);
             } else {
-                container.getChildren().set(0, chart);
+                Platform.runLater(() -> {
+                    container.getChildren().set(0, chart);
+                });
             }
         });
 
-        choiceBox.getOnAction().handle(new ActionEvent());
+        graphSelector.getOnAction().handle(new ActionEvent());
 
-        settings.getChildren().add(settingsLabel);
-        settings.getChildren().add(choiceBox);
+        Button updateButton = new Button("Update");
+        updateButton.setMaxWidth(Double.MAX_VALUE);
+        updateButton.setTooltip(new Tooltip("Updates the graph to the current simulation state"));
+        updateButton.setOnAction((actionEvent) -> update());
 
-        container.setHgrow(container.getChildren().get(0), Priority.ALWAYS);
-        container.getChildren().add(settings);
+        CheckBox autoUpdateCheckbox = new CheckBox("Auto-Update?");
+        autoUpdateCheckbox.setMaxWidth(Double.MAX_VALUE);
+        autoUpdateCheckbox.setOnAction((actionEvent) -> {
+            if (autoUpdateCheckbox.isSelected()) {
+                timer = new Timer();
+                final int delay = 10;
+                final int period = 100;
+                timer.schedule(new TimerTask() {
+
+                    @Override
+                    public void run() {
+
+                        if (autoUpdateCheckbox.isSelected()) {
+                            update();
+                        } else {
+                            timer.cancel();
+                        }
+                    }
+                }, delay, period);
+            }
+        });
+
+        options.getChildren().add(optionsLabel);
+        options.getChildren().add(graphSelector);
+        options.getChildren().add(updateButton);
+        options.getChildren().add(autoUpdateCheckbox);
+
+        if (container.getChildren().size() > 0) {
+            container.setHgrow(container.getChildren().get(0), Priority.ALWAYS);
+        }
+        container.getChildren().add(options);
 
         root.setTopAnchor(container, 0.0);
         root.setBottomAnchor(container, 0.0);
         root.setLeftAnchor(container, 0.0);
         root.setRightAnchor(container, 0.0);
 
-        root.setTopAnchor(settings, 0.0);
-        root.setBottomAnchor(settings, 0.0);
-        root.setRightAnchor(settings, 0.0);
+        root.setTopAnchor(options, 0.0);
+        root.setBottomAnchor(options, 0.0);
+        root.setRightAnchor(options, 0.0);
         root.getChildren().add(container);
 
         Stage graphStage = new Stage();
         Scene graphScene = new Scene(root);
         graphStage.setScene(graphScene);
         graphStage.show();
+    }
+
+    public void update() {
+
+        historyCopy = controller.retrieveHistory();
+        if (historyCopy.size() < 1) {
+            throw new IllegalStateException("There is no history to graph.");
+        }
+
+        populationChart = createPopulationChart(historyCopy);
+        volumeChart = createVolumeChart(historyCopy);
+        ageChart = createAgeChart(historyCopy);
+        healthChart = createHealthChart(historyCopy);
+
+        graphSelector.getOnAction().handle(new ActionEvent());
     }
 
     /**

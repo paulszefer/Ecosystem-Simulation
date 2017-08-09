@@ -3,6 +3,7 @@ package io.github.paulszefer.sim;
 import io.github.paulszefer.SimulationController;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Scanner;
 
@@ -53,9 +54,15 @@ public class Simulation {
      */
     public List<Ecosystem> getHistory() {
         List<Ecosystem> historyCopy = new ArrayList<>();
-        for (Ecosystem ecosystem : history) {
-            historyCopy.add(ecosystem.copy());
+        // attempt to fix ConcurrentModificationException - does not work
+        Iterator<Ecosystem> historyIterator = history.iterator();
+        while (historyIterator.hasNext()) {
+            Ecosystem nextState = historyIterator.next();
+            historyCopy.add(nextState.copy());
         }
+        // for (Ecosystem ecosystem : history) {
+        //         historyCopy.add(ecosystem.copy());
+        // }
         return historyCopy;
     }
 
