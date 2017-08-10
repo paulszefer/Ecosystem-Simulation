@@ -4,6 +4,7 @@ import io.github.paulszefer.SimulationController;
 import io.github.paulszefer.sim.Ecosystem;
 import io.github.paulszefer.sim.Pool;
 import javafx.application.Platform;
+import javafx.embed.swing.SwingFXUtils;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
@@ -17,13 +18,18 @@ import javafx.scene.control.CheckBox;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.Tooltip;
+import javafx.scene.image.WritableImage;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import javax.imageio.ImageIO;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.List;
 
 /**
@@ -92,6 +98,7 @@ public class GraphButtonHandler implements EventHandler<ActionEvent> {
 
         final Insets defaultInsets = new Insets(10);
         final double spacingSize = 10;
+        final double minControlWidth = 140;
 
         VBox options = new VBox();
         options.setAlignment(Pos.TOP_CENTER);
@@ -109,6 +116,7 @@ public class GraphButtonHandler implements EventHandler<ActionEvent> {
         //                                                CornerRadii.EMPTY,
         //                                                BorderWidths.DEFAULT,
         //                                                defaultInsets)));
+        options.setMinWidth(minControlWidth);
 
         final double fontSize = 24;
 
@@ -147,9 +155,11 @@ public class GraphButtonHandler implements EventHandler<ActionEvent> {
             }
             if (container.getChildren().size() == 0) {
                 container.getChildren().add(chart);
+                container.setHgrow(container.getChildren().get(0), Priority.ALWAYS);
             } else {
                 Platform.runLater(() -> {
                     container.getChildren().set(0, chart);
+                    container.setHgrow(container.getChildren().get(0), Priority.ALWAYS);
                 });
             }
         });
@@ -168,14 +178,30 @@ public class GraphButtonHandler implements EventHandler<ActionEvent> {
             autoUpdateOn = autoUpdateCheckbox.isSelected();
         });
 
+        Button saveButton = new Button("Save");
+        saveButton.setMaxWidth(Double.MAX_VALUE);
+        saveButton.setTooltip(new Tooltip("Save graph as png"));
+        FileChooser fileSaver = new FileChooser();
+        fileSaver.getExtensionFilters().add(new FileChooser.ExtensionFilter("PNG", "*.png"));
+        saveButton.setOnAction((actionEvent) -> {
+            WritableImage image = container.getChildren().get(0).snapshot(null, null);
+            File saveFile = fileSaver.showSaveDialog(null);
+            try {
+                ImageIO.write(SwingFXUtils.fromFXImage(image, null), "png", saveFile);
+            } catch (IllegalArgumentException e) {
+                System.out.println("Save file not created.");
+            } catch (IOException e) {
+                System.err.println("The file could not be saved.");
+                e.printStackTrace();
+            }
+        });
+
         options.getChildren().add(optionsLabel);
         options.getChildren().add(graphSelector);
         options.getChildren().add(updateButton);
         options.getChildren().add(autoUpdateCheckbox);
+        options.getChildren().add(saveButton);
 
-        if (container.getChildren().size() > 0) {
-            container.setHgrow(container.getChildren().get(0), Priority.ALWAYS);
-        }
         container.getChildren().add(options);
 
         root.setTopAnchor(container, 0.0);
