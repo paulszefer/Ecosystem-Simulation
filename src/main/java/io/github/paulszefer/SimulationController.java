@@ -89,7 +89,7 @@ public class SimulationController {
      */
     public List<Ecosystem> retrieveHistory() {
 
-        return model.getHistory();
+        return model.getHistoryCopy();
     }
 
     /**
@@ -112,5 +112,17 @@ public class SimulationController {
     public void updateGUI(Ecosystem ecosystem) {
 
         view.updateAnimation(ecosystem);
+    }
+
+    /**
+     * Updates the GUI with a new copy of the simulation history, intended to be used to update the
+     * graph, when needed.
+     *
+     * @param historyCopy
+     *         a copy of the updated simulation history
+     */
+    public void updateGUI(List<Ecosystem> historyCopy) {
+
+        view.updateGraph(historyCopy);
     }
 }

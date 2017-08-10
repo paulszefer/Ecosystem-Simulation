@@ -25,8 +25,6 @@ import javafx.scene.text.Font;
 import javafx.stage.Stage;
 
 import java.util.List;
-import java.util.Timer;
-import java.util.TimerTask;
 
 /**
  * Generates graphs based on the simulation and opens a new window for display.
@@ -62,11 +60,11 @@ public class GraphButtonHandler implements EventHandler<ActionEvent> {
     /** The choicebox used to select a graph to display. */
     private ChoiceBox<String> graphSelector;
 
-    /** A timer to schedule auto-updating, when active. */
-    private Timer timer = new Timer();
+    /** A flag to track whether the graph should auto-update. */
+    private boolean autoUpdateOn;
 
     /**
-     * Creates a handler for the save button.
+     * Creates a handler for the graph button.
      *
      * @param controller
      *         the simulation controller
@@ -121,6 +119,7 @@ public class GraphButtonHandler implements EventHandler<ActionEvent> {
 
         graphSelector = new ChoiceBox<>();
         graphSelector.setMaxWidth(Double.MAX_VALUE);
+        graphSelector.setTooltip(new Tooltip("Select a graph type to display"));
         graphSelector.getItems().addAll("Population",
                                         "Volume Required",
                                         "Average Age",
@@ -164,24 +163,9 @@ public class GraphButtonHandler implements EventHandler<ActionEvent> {
 
         CheckBox autoUpdateCheckbox = new CheckBox("Auto-Update?");
         autoUpdateCheckbox.setMaxWidth(Double.MAX_VALUE);
+        autoUpdateCheckbox.setTooltip(new Tooltip("Should the graph automatically update?"));
         autoUpdateCheckbox.setOnAction((actionEvent) -> {
-            if (autoUpdateCheckbox.isSelected()) {
-                timer = new Timer();
-                final int delay = 10;
-                final int period = 100;
-                timer.schedule(new TimerTask() {
-
-                    @Override
-                    public void run() {
-
-                        if (autoUpdateCheckbox.isSelected()) {
-                            update();
-                        } else {
-                            timer.cancel();
-                        }
-                    }
-                }, delay, period);
-            }
+            autoUpdateOn = autoUpdateCheckbox.isSelected();
         });
 
         options.getChildren().add(optionsLabel);
@@ -210,9 +194,9 @@ public class GraphButtonHandler implements EventHandler<ActionEvent> {
         graphStage.show();
     }
 
+    /** Updates the graph control with the current simulation state. */
     public void update() {
 
-        historyCopy = controller.retrieveHistory();
         if (historyCopy.size() < 1) {
             throw new IllegalStateException("There is no history to graph.");
         }
@@ -223,6 +207,29 @@ public class GraphButtonHandler implements EventHandler<ActionEvent> {
         healthChart = createHealthChart(historyCopy);
 
         graphSelector.getOnAction().handle(new ActionEvent());
+    }
+
+    /**
+     * Handles a notification from the simulation that the simulation has been updated.
+     * <p>
+     * This method will update the handler with a copy of the most recent simulation history,
+     * intended to be used when a graph update is requested. This will replace the need for this
+     * handler to request a copy, leading to ConcurrentModificationExceptions.
+     * <p>
+     * This method is intended to be called when the simulation generates a new state, at which time
+     * this method will decide whether to update the graph or not depending on whether the
+     * auto-update checkbox is selected.
+     *
+     * @param newHistoryCopy
+     *         a copy of the updated simulation history
+     */
+    public void handleSimulationUpdate(List<Ecosystem> newHistoryCopy) {
+
+        historyCopy = newHistoryCopy;
+
+        if (autoUpdateOn) {
+            update();
+        }
     }
 
     /**

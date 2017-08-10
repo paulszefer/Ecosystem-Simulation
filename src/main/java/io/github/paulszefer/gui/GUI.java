@@ -3,6 +3,7 @@ package io.github.paulszefer.gui;
 import io.github.paulszefer.SimulationController;
 import io.github.paulszefer.gui.animation.AnimationPane;
 import io.github.paulszefer.gui.option.OptionPane;
+import io.github.paulszefer.gui.option.handler.GraphButtonHandler;
 import io.github.paulszefer.sim.Ecosystem;
 import javafx.scene.Scene;
 import javafx.scene.layout.Pane;
@@ -10,6 +11,8 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
+
+import java.util.List;
 
 /**
  * Defines the GUI for the Simulation.
@@ -99,5 +102,17 @@ public class GUI {
     public void updateAnimation(Ecosystem ecosystem) {
 
         animationPane.updateState(ecosystem);
+    }
+
+    /**
+     * Forwards an attempt to update the graph.
+     *
+     * @param historyCopy
+     *         a copy of the current simulation history
+     */
+    public void updateGraph(List<Ecosystem> historyCopy) {
+
+        ((GraphButtonHandler) optionPane.getControls().getGraph().getOnAction())
+                .handleSimulationUpdate(historyCopy);
     }
 }

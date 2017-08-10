@@ -71,4 +71,14 @@ public class OptionPane extends DualLayerPane {
 
         getChildren().add(foreground);
     }
+
+    /**
+     * Returns the controls.
+     *
+     * @return the controls
+     */
+    public OptionControls getControls() {
+
+        return controls;
+    }
 }
