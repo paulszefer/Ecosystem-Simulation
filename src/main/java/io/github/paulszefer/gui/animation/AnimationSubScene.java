@@ -36,6 +36,16 @@ public class AnimationSubScene extends SubScene {
     private final Camera3D camera3D;
 
     /**
+     * Whether the objects in the scene have been reversed (stored in reverse order). This is used
+     * to resolve a quirk involving rotation and transparency in JavaFX.
+     * <p>
+     * Depending on the orientation of the objects in the scene, objects were not transparent. This
+     * is due to the way that objects are rendered by JavaFX. For transparency to work properly,
+     * objects must be added to the scene from innermost object to outermost object.
+     */
+    private boolean ecosystem3DNodesReversed;
+
+    /**
      * Creates the SubScene that will display and handle the animation for the simulation.
      *
      * @param controller
@@ -67,6 +77,26 @@ public class AnimationSubScene extends SubScene {
     }
 
     /**
+     * Returns a boolean representing whether the order of the nodes in ecosystem3D has been
+     * reversed.
+     *
+     * @return true if they are reversed, false otherwise
+     */
+    public boolean getEcosystem3DNodesReversed() {
+        return ecosystem3DNodesReversed;
+    }
+
+    /**
+     * Sets whether the order of the nodes in ecosystem3D has been reversed.
+     *
+     * @param ecosystem3DNodesReversed
+     *         true if they are reversed, false otherwise
+     */
+    public void setEcosystem3DNodesReversed(boolean ecosystem3DNodesReversed) {
+        this.ecosystem3DNodesReversed = ecosystem3DNodesReversed;
+    }
+
+    /**
      * Reverses the order of the objects in the pool group. This is used to resolve a quirk
      * involving rotation and transparency in JavaFX.
      * <p>
@@ -90,5 +120,9 @@ public class AnimationSubScene extends SubScene {
      */
     public void updateState(Ecosystem ecosystem) {
         ecosystem3D.update(ecosystem);
+        if (ecosystem3DNodesReversed) {
+            reversePoolGroupOrder();
+            // ecosystem3DNodesReversed = false;
+        }
     }
 }

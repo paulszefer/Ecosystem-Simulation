@@ -74,16 +74,6 @@ public class AnimationMouseHandler implements EventHandler<MouseEvent> {
     private double mousePosY;
 
     /**
-     * Whether the objects in the scene have been reversed (stored in reverse order). This is used
-     * to resolve a quirk involving rotation and transparency in JavaFX.
-     * <p>
-     * Depending on the orientation of the objects in the scene, objects were not transparent. This
-     * is due to the way that objects are rendered by JavaFX. For transparency to work properly,
-     * objects must be added to the scene from innermost object to outermost object.
-     */
-    private boolean poolGroupOrderReversed;
-
-    /**
      * Creates the handler for all mouse events occurring in the animation subscene.
      *
      * @param subScene
@@ -130,15 +120,16 @@ public class AnimationMouseHandler implements EventHandler<MouseEvent> {
                                        - mouseDeltaX * MOUSE_SPEED * modifier * ROTATION_SPEED);
                 final int fullAngle = 360;
                 final int halfAngle = 180;
+                final boolean reversed = subScene.getEcosystem3DNodesReversed();
                 double reducedAngle = cameraXYRotation.getRy().getAngle() % fullAngle;
-                if (poolGroupOrderReversed && (reducedAngle < -halfAngle
-                                               || reducedAngle > 0 && reducedAngle < halfAngle)) {
+                if (reversed && (reducedAngle < -halfAngle
+                                 || reducedAngle > 0 && reducedAngle < halfAngle)) {
                     subScene.reversePoolGroupOrder();
-                    poolGroupOrderReversed = false;
-                } else if (!poolGroupOrderReversed && (reducedAngle > -halfAngle && reducedAngle < 0
-                                                       || reducedAngle > halfAngle)) {
+                    subScene.setEcosystem3DNodesReversed(false);
+                } else if (!reversed && (reducedAngle > -halfAngle && reducedAngle < 0
+                                         || reducedAngle > halfAngle)) {
                     subScene.reversePoolGroupOrder();
-                    poolGroupOrderReversed = true;
+                    subScene.setEcosystem3DNodesReversed(true);
                 }
             } else if (event.isSecondaryButtonDown()) {
                 PerspectiveCamera camera = camera3D.getCamera();
