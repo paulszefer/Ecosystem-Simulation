@@ -61,6 +61,15 @@ public class OptionControls {
     /** Creates the set of controls needed for the option pane. */
     public OptionControls() {
 
+        final int minWidth = 80;
+        load.setMinWidth(minWidth);
+        save.setMinWidth(minWidth);
+        back.setMinWidth(minWidth);
+        play.setMinWidth(minWidth);
+        step.setMinWidth(minWidth);
+        speedSlider.setMinWidth(minWidth);
+        graph.setMinWidth(minWidth);
+        report.setMinWidth(minWidth);
         update(0);
     }
 
