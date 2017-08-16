@@ -122,7 +122,6 @@ public class AnimationSubScene extends SubScene {
         ecosystem3D.update(ecosystem);
         if (ecosystem3DNodesReversed) {
             reversePoolGroupOrder();
-            // ecosystem3DNodesReversed = false;
         }
     }
 }
