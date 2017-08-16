@@ -71,9 +71,6 @@ public class Simulation {
         week = 0;
         history = new ArrayList<>();
         history.add(ecosystem);
-
-        // TODO - update GUI animation state
-        // SimulationFX.getGui().getAnimationPane().updateState(ecosystem);
         controller.updateGUI(ecosystem);
     }
 
@@ -82,8 +79,6 @@ public class Simulation {
 
         if (week > 0) {
             week--;
-            // TODO - update GUI animation state
-            // SimulationFX.getGui().getAnimationPane().updateState(history.get(week));
             controller.updateGUI(history.get(week));
         } else {
             System.out.println("There are no previous weeks.");
@@ -101,8 +96,6 @@ public class Simulation {
             System.out.println("Please load a simulation first.");
         } else if (week + 1 < history.size()) {
             week++;
-            // TODO - update GUI animation state
-            // SimulationFX.getGui().getAnimationPane().updateState(history.get(week));
             controller.updateGUI(history.get(week));
         } else {
             simulateOneWeek();
@@ -191,8 +184,6 @@ public class Simulation {
 
         week++;
         history.add(ecosystem);
-        // TODO - update GUI animation state
-        // SimulationFX.getGui().getAnimationPane().updateState(history.get(week));
         controller.updateGUI(history.get(week));
     }
 }

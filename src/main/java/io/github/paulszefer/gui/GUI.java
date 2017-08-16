@@ -5,8 +5,7 @@ import io.github.paulszefer.gui.animation.AnimationPane;
 import io.github.paulszefer.gui.option.OptionPane;
 import io.github.paulszefer.sim.Ecosystem;
 import javafx.scene.Scene;
-import javafx.scene.layout.Pane;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
@@ -32,7 +31,7 @@ public class GUI {
     private Stage primaryStage;
 
     /** The root pane of the GUI. */
-    private Pane root;
+    private AnchorPane root;
 
     /** The animation pane of the GUI. */
     private AnimationPane animationPane;
@@ -65,12 +64,41 @@ public class GUI {
         this.controller = controller;
         this.primaryStage = primaryStage;
 
-        root = new VBox();
+        root = new AnchorPane();
+        root.setMinHeight(GUI.HEIGHT);
+        root.setMinWidth(GUI.WIDTH);
         animationPane = new AnimationPane(controller);
         optionPane = new OptionPane(controller);
-        root.getChildren().addAll(animationPane, optionPane);
+        root.getChildren().add(animationPane);
+        root.getChildren().add(optionPane);
+
+        AnchorPane.setTopAnchor(animationPane, 0.0);
+        // AnchorPane.setBottomAnchor(animationPane, GUI.HEIGHT * OptionPane.PROPORTION);
+        AnchorPane.setLeftAnchor(animationPane, 0.0);
+        AnchorPane.setRightAnchor(animationPane, 0.0);
+
+        // AnchorPane.setTopAnchor(optionPane, GUI.HEIGHT * AnimationPane.PROPORTION);
+        AnchorPane.setBottomAnchor(optionPane, 0.0);
+        AnchorPane.setLeftAnchor(optionPane, 0.0);
+        AnchorPane.setRightAnchor(optionPane, 0.0);
 
         Scene scene = new Scene(root);
+
+        // Adjusts the animation width when the scene window changes size
+        scene.widthProperty().addListener((observable, oldValue, newValue) -> {
+            animationPane.setWidth((double) newValue);
+        });
+
+        // Adjusts the animation height when the scene window changes size
+        scene.heightProperty().addListener((observable, oldValue, newValue) -> {
+            animationPane.setHeight((double) newValue);
+        });
+
+        // Passes on key presses to the animation subscene to handle
+        scene.setOnKeyPressed(event -> {
+            animationPane.getOnKeyPressed().handle(event);
+        });
+
         primaryStage.setScene(scene);
         primaryStage.setTitle("Simulation");
         primaryStage.show();

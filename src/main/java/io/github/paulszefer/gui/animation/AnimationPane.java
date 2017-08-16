@@ -1,32 +1,64 @@
 package io.github.paulszefer.gui.animation;
 
 import io.github.paulszefer.SimulationController;
-import io.github.paulszefer.gui.DualLayerPane;
 import io.github.paulszefer.gui.GUI;
+import io.github.paulszefer.gui.animation.handler.AnimationKeyHandler;
+import io.github.paulszefer.gui.animation.handler.AnimationMouseHandler;
+import io.github.paulszefer.gui.animation.handler.AnimationScrollHandler;
 import io.github.paulszefer.sim.Ecosystem;
-import javafx.scene.canvas.Canvas;
-import javafx.scene.canvas.GraphicsContext;
+import javafx.animation.KeyFrame;
+import javafx.animation.KeyValue;
+import javafx.animation.Timeline;
+import javafx.scene.DepthTest;
+import javafx.scene.Group;
+import javafx.scene.SceneAntialiasing;
+import javafx.scene.SubScene;
 import javafx.scene.paint.Color;
-import javafx.scene.paint.CycleMethod;
-import javafx.scene.paint.RadialGradient;
-import javafx.scene.paint.Stop;
-import javafx.scene.text.Font;
+import javafx.scene.paint.PhongMaterial;
+import javafx.scene.shape.Box;
+import javafx.scene.shape.Sphere;
+import javafx.util.Duration;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Random;
 
 /**
- * Defines the GUI pane that will display and handle the animation for the simulation.
+ * Defines the SubScene that will display and handle the animation for the simulation.
  *
  * @author Paul Szefer
  * @version 1.0
  */
-public class AnimationPane extends DualLayerPane {
+public class AnimationPane extends SubScene {
 
-    /** The proportion of the GUI's height taken by this Pane. */
-    private static final double PROPORTION = 0.75;
+    /** The proportion of the GUI's height taken by this SubScene. */
+    public static final double PROPORTION = 0.75;
 
     /** Random number generator. */
     private static final Random GENERATOR = new Random();
+
+    /** The minimum length of a creature's animation timeline. */
+    private static final double CREATURE_ANIMATION_DURATION = 6000;
+
+    /** The possible amount of variance in the durations of key frames in a creature's animation. */
+    private static final double CREATURE_ANIMATION_DURATION_VARIANCE =
+            CREATURE_ANIMATION_DURATION / 3;
+
+    /** The simulation controller. */
+    private SimulationController controller;
+
+    /** The root group of this subscene. */
+    private final Group root;
+
+    /** The group containing all objects to be rendered. */
+    private final Xform world = new Xform();
+
+    /** The group containing all pool objects. */
+    private final Xform poolGroup = new Xform();
+
+    /** A construct that organizes 3D transformations. */
+    private final Camera3D camera3D;
 
     /**
      * Creates the GUI pane that will display the animation for the simulation.
@@ -36,78 +68,160 @@ public class AnimationPane extends DualLayerPane {
      */
     public AnimationPane(SimulationController controller) {
 
-        super(controller, GUI.WIDTH, GUI.HEIGHT * PROPORTION, Color.DEEPSKYBLUE);
+        super(new Group(), GUI.WIDTH, GUI.HEIGHT * PROPORTION, true, SceneAntialiasing.BALANCED);
+        this.controller = controller;
+
+        // Required due to the necessary super() call before the group can be made
+        root = (Group) getRoot();
+        root.getChildren().add(world);
+        root.setDepthTest(DepthTest.ENABLE);
+
+        // TODO - extract into own class
+        // TODO - this class should receive the update event as well to update the pools
+        buildPools();
+
+        camera3D = new Camera3D(root);
+
+        setCamera(camera3D.getCamera());
+        setFill(Color.LIGHTSKYBLUE);
+        setFocusTraversable(true);
+        setFocused(true);
+
+        AnimationMouseHandler mouseHandler = new AnimationMouseHandler(this, camera3D);
+        AnimationScrollHandler scrollHandler = new AnimationScrollHandler(camera3D);
+        AnimationKeyHandler keyHandler = new AnimationKeyHandler(camera3D);
+
+        setOnMousePressed(mouseHandler);
+        setOnMouseDragged(mouseHandler);
+        setOnScroll(scrollHandler);
+        setOnKeyPressed(keyHandler);
     }
 
-    /** Adds the foreground pane. */
-    protected void addForeground() {
+    // TODO - extract
+    private void buildPools() {
 
-        Canvas foreground = new Canvas(getPaneWidth(), getPaneHeight());
-        GraphicsContext graphicsContext = foreground.getGraphicsContext2D();
-        graphicsContext.setFill(Color.BLACK);
-        final Font textFont = Font.font("Sans-serif", 20);
-        graphicsContext.setFont(textFont);
-        final int loadFileTextShiftX = 10;
-        final int loadFileTextShiftY = 30;
-        graphicsContext.fillText("Please load a file", loadFileTextShiftX, loadFileTextShiftY);
-        getChildren().add(foreground);
+        final PhongMaterial water = new PhongMaterial();
+        water.setDiffuseColor(new Color(0, 0, 0.5, 0.4));
+        water.setSpecularColor(Color.TRANSPARENT);
+
+        // TODO - make creature colour based on health coefficient (red <-> green)
+        // TODO - Color(1, 0.5, 0.5, 1) to Color(0.5, 1, 0.5, 1) possibly
+        final PhongMaterial creatureMaterial = new PhongMaterial();
+        creatureMaterial.setDiffuseColor(Color.WHITE);
+        creatureMaterial.setSpecularColor(Color.WHITE);
+
+        List<Group> pools = new ArrayList<>();
+        int numberOfPools = 3;
+        for (int i = 0; i < numberOfPools; i++) {
+
+            Group poolContainer = new Group();
+
+            // create pool
+            Box pool = new Box(100, 100, 100);
+            pool.setMaterial(water);
+            pool.setTranslateX((i - 1) * pool.getWidth() * 1.5);
+
+            // create creatures
+            int numberOfCreatures = 200; // TODO - make pool.getPopulation();
+            for (int j = 0; j < numberOfCreatures; j++) {
+                Sphere creature = new Sphere(pool.getWidth() / 50);
+                creature.setMaterial(creatureMaterial);
+                creature.setTranslateX(
+                        pool.getTranslateX() + (Math.random() * pool.getWidth() * 0.96
+                                                - pool.getWidth() * 0.48));
+                creature.setTranslateY(
+                        pool.getTranslateY() + (Math.random() * pool.getHeight() * 0.96
+                                                - pool.getHeight() * 0.48));
+                creature.setTranslateZ(
+                        pool.getTranslateZ() + (Math.random() * pool.getDepth() * 0.96
+                                                - pool.getDepth() * 0.48));
+
+                // TODO - extract animation
+                Timeline timeline = new Timeline();
+                timeline.setCycleCount(Timeline.INDEFINITE);
+
+                List<KeyFrame> keyFrames = new ArrayList<>();
+                keyFrames.addAll(Arrays.asList(new KeyFrame(Duration.ZERO, new KeyValue(
+                                                       creature.translateXProperty(), creature.getTranslateX()), new KeyValue(
+                                                       creature.translateYProperty(), creature.getTranslateY()), new KeyValue(
+                                                       creature.translateZProperty(), creature.getTranslateZ())), new KeyFrame(
+                                                       new Duration(Math.random() * CREATURE_ANIMATION_DURATION / 3
+                                                                    + CREATURE_ANIMATION_DURATION / 3),
+                                                       new KeyValue(creature.translateXProperty(),
+                                                                    pool.getTranslateX() + (Math.random() * pool.getWidth() * 0.96
+                                                                                            - pool.getWidth() * 0.48)),
+                                                       new KeyValue(creature.translateYProperty(),
+                                                                    pool.getTranslateY() + (Math.random() * pool.getHeight() * 0.96
+                                                                                            - pool.getHeight() * 0.48)),
+                                                       new KeyValue(creature.translateZProperty(),
+                                                                    pool.getTranslateZ() + (Math.random() * pool.getDepth() * 0.96
+                                                                                            - pool.getDepth() * 0.48))),
+                                               new KeyFrame(new Duration(
+                                                       Math.random() * CREATURE_ANIMATION_DURATION
+                                                       / 3 + CREATURE_ANIMATION_DURATION * 2 / 3),
+                                                            new KeyValue(
+                                                                    creature.translateXProperty(),
+                                                                    pool.getTranslateX() + (
+                                                                            Math.random() * pool
+                                                                                    .getWidth()
+                                                                            * 0.96 - pool.getWidth()
+                                                                                     * 0.48)),
+                                                            new KeyValue(
+                                                                    creature.translateYProperty(),
+                                                                    pool.getTranslateY() + (
+                                                                            Math.random() * pool
+                                                                                    .getHeight()
+                                                                            * 0.96
+                                                                            - pool.getHeight()
+                                                                              * 0.48)),
+                                                            new KeyValue(
+                                                                    creature.translateZProperty(),
+                                                                    pool.getTranslateZ() + (
+                                                                            Math.random() * pool
+                                                                                    .getDepth()
+                                                                            * 0.96 - pool.getDepth()
+                                                                                     * 0.48))),
+                                               new KeyFrame(new Duration(
+                                                       Math.random() * CREATURE_ANIMATION_DURATION
+                                                       / 3 + CREATURE_ANIMATION_DURATION),
+                                                            new KeyValue(
+                                                                    creature.translateXProperty(),
+                                                                    creature.getTranslateX()),
+                                                            new KeyValue(
+                                                                    creature.translateYProperty(),
+                                                                    creature.getTranslateY()),
+                                                            new KeyValue(
+                                                                    creature.translateZProperty(),
+                                                                    creature.getTranslateZ()))));
+                timeline.getKeyFrames().addAll(keyFrames);
+                timeline.play();
+                poolContainer.getChildren().add(creature);
+            }
+
+            poolContainer.getChildren().add(pool);
+            pools.add(poolContainer);
+        }
+
+        poolGroup.getChildren().addAll(pools);
+        poolGroup.setVisible(true);
+        world.getChildren().addAll(poolGroup);
     }
 
     /**
-     * Sets the foreground pane for the animation.
-     *
-     * @param ecosystem
-     *         the current state of the simulation
+     * Reverses the order of the objects in the pool group. This is used to resolve a quirk
+     * involving rotation and transparency in JavaFX.
+     * <p>
+     * Depending on the orientation of the objects in the scene, objects were not transparent. This
+     * is due to the way that objects are rendered by JavaFX. For transparency to work properly,
+     * objects must be added to the scene from innermost object to outermost object.
      */
-    private void setForeground(Ecosystem ecosystem) {
+    public void reversePoolGroupOrder() {
 
-        // TODO - create object to store guppy to draw
-
-        final double centerX = 0.5;
-        final double centerY = 0.5;
-        final Stop guppyStop1 = new Stop(0.8, Color.WHITE);
-        final Stop guppyStop2 = new Stop(1, Color.TRANSPARENT);
-
-        RadialGradient guppyFill = new RadialGradient(0, 0, centerX, centerY, 1, true,
-                                                      CycleMethod.NO_CYCLE, guppyStop1, guppyStop2);
-
-        // create new frame
-        Canvas foreground = new Canvas(getWidth(), getHeight());
-
-        final int poolShiftX = 20;
-        final double guppySize = 2;
-        final GraphicsContext graphicsContext = foreground.getGraphicsContext2D();
-        final Color poolBackground = Color.BLUE;
-
-        final double poolSize = getHeight() / 4;
-        double poolStartX;
-        double poolStartY = (getHeight() - poolSize) / 2;
-        final double guppyAreaFactor = 0.9;
-        final double guppyBorderFactor = (1 - guppyAreaFactor) / 2;
-
-        for (int i = 0; i < ecosystem.getPools().size(); i++) {
-
-            // draw background
-            graphicsContext.setFill(poolBackground);
-            poolStartX = poolShiftX * (i + 1) + i * poolSize;
-            graphicsContext.fillRect(poolStartX, poolStartY, poolSize, poolSize);
-
-            // draw guppies
-            graphicsContext.setFill(guppyFill);
-            int guppies = ecosystem.getPools().get(i).getPopulation();
-            final int maxToDraw = 1000;
-            if (guppies > maxToDraw) {
-                guppies = maxToDraw;
-            }
-            for (int j = 0; j < guppies; j++) {
-                graphicsContext.fillOval(GENERATOR.nextDouble() * poolSize * guppyAreaFactor
-                                                 + poolSize * guppyBorderFactor + poolStartX,
-                                         GENERATOR.nextDouble() * poolSize * guppyAreaFactor
-                                                 + poolSize * guppyBorderFactor + poolStartY,
-                                         guppySize, guppySize);
-            }
+        int i = poolGroup.getChildren().size();
+        while (i > 0) {
+            poolGroup.getChildren().add(poolGroup.getChildren().remove(i - 1));
+            i--;
         }
-        getChildren().set(1, foreground);
     }
 
     /**
@@ -118,6 +232,6 @@ public class AnimationPane extends DualLayerPane {
      */
     public void updateState(Ecosystem ecosystem) {
 
-        setForeground(ecosystem);
+        // TODO - update pool 3D object
     }
 }
