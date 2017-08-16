@@ -1,7 +1,7 @@
 package io.github.paulszefer.gui;
 
 import io.github.paulszefer.SimulationController;
-import io.github.paulszefer.gui.animation.AnimationPane;
+import io.github.paulszefer.gui.animation.AnimationSubScene;
 import io.github.paulszefer.gui.option.OptionPane;
 import io.github.paulszefer.sim.Ecosystem;
 import javafx.scene.Scene;
@@ -34,7 +34,7 @@ public class GUI {
     private AnchorPane root;
 
     /** The animation pane of the GUI. */
-    private AnimationPane animationPane;
+    private AnimationSubScene animationSubScene;
 
     /** The option pane of the GUI. */
     private OptionPane optionPane;
@@ -67,17 +67,15 @@ public class GUI {
         root = new AnchorPane();
         root.setMinHeight(GUI.HEIGHT);
         root.setMinWidth(GUI.WIDTH);
-        animationPane = new AnimationPane(controller);
+        animationSubScene = new AnimationSubScene(controller);
         optionPane = new OptionPane(controller);
-        root.getChildren().add(animationPane);
+        root.getChildren().add(animationSubScene);
         root.getChildren().add(optionPane);
 
-        AnchorPane.setTopAnchor(animationPane, 0.0);
-        // AnchorPane.setBottomAnchor(animationPane, GUI.HEIGHT * OptionPane.PROPORTION);
-        AnchorPane.setLeftAnchor(animationPane, 0.0);
-        AnchorPane.setRightAnchor(animationPane, 0.0);
+        AnchorPane.setTopAnchor(animationSubScene, 0.0);
+        AnchorPane.setLeftAnchor(animationSubScene, 0.0);
+        AnchorPane.setRightAnchor(animationSubScene, 0.0);
 
-        // AnchorPane.setTopAnchor(optionPane, GUI.HEIGHT * AnimationPane.PROPORTION);
         AnchorPane.setBottomAnchor(optionPane, 0.0);
         AnchorPane.setLeftAnchor(optionPane, 0.0);
         AnchorPane.setRightAnchor(optionPane, 0.0);
@@ -86,17 +84,17 @@ public class GUI {
 
         // Adjusts the animation width when the scene window changes size
         scene.widthProperty().addListener((observable, oldValue, newValue) -> {
-            animationPane.setWidth((double) newValue);
+            animationSubScene.setWidth((double) newValue);
         });
 
         // Adjusts the animation height when the scene window changes size
         scene.heightProperty().addListener((observable, oldValue, newValue) -> {
-            animationPane.setHeight((double) newValue);
+            animationSubScene.setHeight((double) newValue);
         });
 
         // Passes on key presses to the animation subscene to handle
         scene.setOnKeyPressed(event -> {
-            animationPane.getOnKeyPressed().handle(event);
+            animationSubScene.getOnKeyPressed().handle(event);
         });
 
         primaryStage.setScene(scene);
@@ -126,6 +124,6 @@ public class GUI {
      */
     public void updateAnimation(Ecosystem ecosystem) {
 
-        animationPane.updateState(ecosystem);
+        animationSubScene.updateState(ecosystem);
     }
 }

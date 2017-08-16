@@ -82,7 +82,6 @@ public class Simulation {
             controller.updateGUI(history.get(week));
         } else {
             System.out.println("There are no previous weeks.");
-            // TODO - grey out back button if there are no previous weeks
         }
     }
 

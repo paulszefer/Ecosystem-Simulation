@@ -1,6 +1,37 @@
+/*
+ * Copyright (c) 2013, 2014 Oracle and/or its affiliates.
+ * All rights reserved. Use is subject to license terms.
+ *
+ * This file is available and licensed under the following license:
+ *
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions
+ * are met:
+ *
+ *  - Redistributions of source code must retain the above copyright
+ *    notice, this list of conditions and the following disclaimer.
+ *  - Redistributions in binary form must reproduce the above copyright
+ *    notice, this list of conditions and the following disclaimer in
+ *    the documentation and/or other materials provided with the distribution.
+ *  - Neither the name of Oracle nor the names of its
+ *    contributors may be used to endorse or promote products derived
+ *    from this software without specific prior written permission.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+ * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+ * LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+ * A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+ * OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+ * SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+ * LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+ * DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+ * THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+ * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ */
 package io.github.paulszefer.gui.animation.handler;
 
-import io.github.paulszefer.gui.animation.AnimationPane;
+import io.github.paulszefer.gui.animation.AnimationSubScene;
 import io.github.paulszefer.gui.animation.Camera3D;
 import io.github.paulszefer.gui.animation.Xform;
 import javafx.event.EventHandler;
@@ -31,7 +62,7 @@ public class AnimationMouseHandler implements EventHandler<MouseEvent> {
     private static final double ROTATION_SPEED = 2.0;
 
     /** The animation subscene utilizing this handler. */
-    private final AnimationPane subScene;
+    private final AnimationSubScene subScene;
 
     /** A construct that organizes 3D transformations. */
     private final Camera3D camera3D;
@@ -60,7 +91,7 @@ public class AnimationMouseHandler implements EventHandler<MouseEvent> {
      * @param camera3D
      *         A construct that organizes 3D transformations.
      */
-    public AnimationMouseHandler(AnimationPane subScene, Camera3D camera3D) {
+    public AnimationMouseHandler(AnimationSubScene subScene, Camera3D camera3D) {
         this.subScene = subScene;
         this.camera3D = camera3D;
     }
@@ -77,12 +108,6 @@ public class AnimationMouseHandler implements EventHandler<MouseEvent> {
             mousePosX = event.getSceneX();
             mousePosY = event.getSceneY();
         } else if (event.getEventType() == MouseEvent.MOUSE_DRAGGED) {
-            // double mouseOldX = mousePosX;
-            // double mouseOldY = mousePosY;
-            // mousePosX = event.getSceneX();
-            // mousePosY = event.getSceneY();
-            // double mouseDeltaX = (mousePosX - mouseOldX);
-            // double mouseDeltaY = (mousePosY - mouseOldY);
 
             double mouseDeltaX = (event.getSceneX() - mousePosX);
             double mouseDeltaY = (event.getSceneY() - mousePosY);
@@ -106,14 +131,14 @@ public class AnimationMouseHandler implements EventHandler<MouseEvent> {
                 final int fullAngle = 360;
                 final int halfAngle = 180;
                 double reducedAngle = cameraXYRotation.getRy().getAngle() % fullAngle;
-                if (!poolGroupOrderReversed && (reducedAngle < -halfAngle
-                                                || reducedAngle > 0 && reducedAngle < halfAngle)) {
-                    subScene.reversePoolGroupOrder();
-                    poolGroupOrderReversed = true;
-                } else if (poolGroupOrderReversed && (reducedAngle > -halfAngle && reducedAngle < 0
-                                                      || reducedAngle > halfAngle)) {
+                if (poolGroupOrderReversed && (reducedAngle < -halfAngle
+                                               || reducedAngle > 0 && reducedAngle < halfAngle)) {
                     subScene.reversePoolGroupOrder();
                     poolGroupOrderReversed = false;
+                } else if (!poolGroupOrderReversed && (reducedAngle > -halfAngle && reducedAngle < 0
+                                                       || reducedAngle > halfAngle)) {
+                    subScene.reversePoolGroupOrder();
+                    poolGroupOrderReversed = true;
                 }
             } else if (event.isSecondaryButtonDown()) {
                 PerspectiveCamera camera = camera3D.getCamera();
