@@ -1,6 +1,8 @@
 package io.github.paulszefer.gui.option;
 
 import javafx.scene.control.Button;
+import javafx.scene.control.Tooltip;
+import javafx.scene.text.Font;
 
 /**
  * Defines the controls needed for the simulation option pane.
@@ -62,14 +64,19 @@ public class OptionControls {
     public OptionControls() {
 
         final int minWidth = 80;
+        final Tooltip notYetImplemented = new Tooltip("Not yet implemented");
+        final Font tooltipFont = new Font(16);
+        notYetImplemented.setFont(tooltipFont);
         load.setMinWidth(minWidth);
         save.setMinWidth(minWidth);
+        save.setTooltip(notYetImplemented);
         back.setMinWidth(minWidth);
         play.setMinWidth(minWidth);
         step.setMinWidth(minWidth);
         speedSlider.setMinWidth(minWidth);
         graph.setMinWidth(minWidth);
         report.setMinWidth(minWidth);
+        report.setTooltip(notYetImplemented);
         update(0);
     }
 
