@@ -164,7 +164,7 @@ public class Pool extends WaterBody {
         double newNutrientCoefficient = DEFAULT_NUTRIENT_COEFFICIENT;
 
         if (nutrientCoefficient >= MINIMUM_NUTRIENT_COEFFICIENT
-                && nutrientCoefficient <= MAXIMUM_NUTRIENT_COEFFICIENT) {
+            && nutrientCoefficient <= MAXIMUM_NUTRIENT_COEFFICIENT) {
             newNutrientCoefficient = nutrientCoefficient;
         }
 
@@ -227,7 +227,7 @@ public class Pool extends WaterBody {
             boolean isFemale = GENERATOR.nextDouble() < femaleChance;
             double healthCoefficient =
                     GENERATOR.nextDouble() * (maxHealthCoefficient - minHealthCoefficient)
-                            + minHealthCoefficient;
+                    + minHealthCoefficient;
             if (genus.equals(Guppy.GENUS) && species.equals(Guppy.SPECIES)) {
                 addCreature(new Guppy(age, healthCoefficient, isFemale, 0));
             }
@@ -447,7 +447,7 @@ public class Pool extends WaterBody {
             medianAge = 0;
         } else if (livingCreaturesSorted.size() % 2 == 0) {
             medianAge = (livingCreaturesSorted.get(livingCreaturesSorted.size() / 2 - 1)
-                    + livingCreaturesSorted.get(livingCreaturesSorted.size() / 2)) / 2.0;
+                         + livingCreaturesSorted.get(livingCreaturesSorted.size() / 2)) / 2.0;
         } else {
             medianAge = livingCreaturesSorted.get(livingCreaturesSorted.size() / 2 - 1);
         }
@@ -457,20 +457,44 @@ public class Pool extends WaterBody {
     }
 
     /**
-     * Kills the weakest creatures in the pool until the pool has enough water to support the living
-     * population.
+     * Assembles a list of the weakest creatures in the pool that would be crowded out if the pool
+     * did not have enough water to support the population.
+     * <p>
+     * These creatures are removed from the pool's list of creatures.
+     * <p>
+     * This list will continue to be populated until the population's volume requirement is less
+     * than or equal to the volume of water in the pool.
+     * <p>
+     * If the pool volume is adequate for its population, then null is returned.
      *
-     * @return the number of creatures that died
+     * @return the list of creatures that have been removed or null if removal is unnecessary
      */
     public List<Creature> adjustForCrowding() {
+
+        if (getCreatureVolumeRequirementInLitres() - volumeLitres < 0) {
+            return null;
+        }
 
         Collections.sort(creatures);
 
         List<Creature> weakestCreatures = new ArrayList<>();
-        int index = 0;
+        List<Creature> weakestSet;
 
+        // assume each guppy requires 0.75L (max is 0.725L currently)
+        final double creatureMaxVolumeInLitres = 0.75;
+
+        // remove as many as possible in bulk
+        while (getCreatureVolumeRequirementInLitres() - volumeLitres > creatureMaxVolumeInLitres) {
+            int numberToRemove = (int) ((getCreatureVolumeRequirementInLitres() - volumeLitres)
+                                        / creatureMaxVolumeInLitres);
+            weakestSet = creatures.subList(0, numberToRemove);
+            weakestCreatures.addAll(weakestSet);
+            creatures.removeAll(weakestSet);
+        }
+
+        // remove one by one
         while (volumeLitres < getCreatureVolumeRequirementInLitres()) {
-            weakestCreatures.add(creatures.remove(index));
+            weakestCreatures.add(creatures.remove(0));
         }
 
         return weakestCreatures;
@@ -652,7 +676,7 @@ public class Pool extends WaterBody {
     public String toString() {
 
         return "[name=" + getName() + ",volumeLitres=" + volumeLitres + ",temperatureCelsius="
-                + getTemperature() + ",pH=" + getpH() + ",nutrientCoefficient="
-                + nutrientCoefficient + ",identificationNumber=" + identificationNumber + "]";
+               + getTemperature() + ",pH=" + getpH() + ",nutrientCoefficient=" + nutrientCoefficient
+               + ",identificationNumber=" + identificationNumber + "]";
     }
 }

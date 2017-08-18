@@ -167,15 +167,17 @@ public class Ecosystem {
 
             List<Creature> weakestCreatures = pool.adjustForCrowding();
 
-            Stream stream = getRandomStream(pool);
-            if (stream != null) {
-                diedToOverCrowding += stream.transportCreatures(weakestCreatures);
-            } else {
-                for (Creature creature : weakestCreatures) {
-                    creature.getHealth().setAlive(false);
+            if (weakestCreatures != null) {
+                Stream stream = getRandomStream(pool);
+                if (stream != null) {
+                    diedToOverCrowding += stream.transportCreatures(weakestCreatures);
+                } else {
+                    for (Creature creature : weakestCreatures) {
+                        creature.getHealth().setAlive(false);
+                    }
+                    pool.addCreatures(weakestCreatures);
+                    diedToOverCrowding += weakestCreatures.size();
                 }
-                pool.addCreatures(weakestCreatures);
-                diedToOverCrowding += weakestCreatures.size();
             }
         }
 
