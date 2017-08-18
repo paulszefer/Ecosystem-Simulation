@@ -47,6 +47,15 @@ public class Simulation {
     }
 
     /**
+     * Returns the history.
+     *
+     * @return the history
+     */
+    public List<Ecosystem> getHistory() {
+        return history;
+    }
+
+    /**
      * Loads the simulation data from the given scanner.
      *
      * @param data
@@ -183,8 +192,7 @@ public class Simulation {
 
         week++;
         history.add(ecosystem);
-        controller.updateHistoryCopy(ecosystem.copy());
         controller.updateGUI(history.get(week), false);
-        controller.updateGUIGraph();
+        controller.updateGUIGraph(history);
     }
 }

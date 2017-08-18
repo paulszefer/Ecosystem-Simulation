@@ -5,7 +5,6 @@ import io.github.paulszefer.sim.Ecosystem;
 import io.github.paulszefer.sim.Simulation;
 import javafx.stage.Stage;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
@@ -25,9 +24,6 @@ public class SimulationController {
     /** The presenter of the GUI. */
     private GUI view;
 
-    /** A copy of the simulation history. */
-    private List<Ecosystem> historyCopy;
-
     /**
      * Creates the object to control the simulation.
      *
@@ -38,7 +34,6 @@ public class SimulationController {
 
         model = new Simulation(this);
         view = new GUI(this, primaryStage);
-        historyCopy = new ArrayList<>();
     }
 
     /**
@@ -88,23 +83,13 @@ public class SimulationController {
     }
 
     /**
-     * Updates this controller's copy of the simulation history with the given Ecosystem.
+     * Retrieves the simulation history.
      *
-     * @param ecosystemCopy
-     *         a copy of the newest simulation state to add
-     */
-    public void updateHistoryCopy(Ecosystem ecosystemCopy) {
-        historyCopy.add(ecosystemCopy);
-    }
-
-    /**
-     * Retrieves a copy of the simulation history.
-     *
-     * @return a copy of the simulation history
+     * @return the simulation history
      */
     public List<Ecosystem> retrieveHistory() {
 
-        return historyCopy;
+        return model.getHistory();
     }
 
     /**
@@ -134,9 +119,12 @@ public class SimulationController {
     /**
      * Updates the GUI with a new copy of the simulation history, intended to be used to update the
      * graph, when needed.
+     *
+     * @param history
+     *         the simulation history
      */
-    public void updateGUIGraph() {
+    public void updateGUIGraph(List<Ecosystem> history) {
 
-        view.updateGraph(historyCopy);
+        view.updateGraph(history);
     }
 }
