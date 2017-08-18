@@ -84,7 +84,7 @@ public class Simulation {
         week = 0;
         history = new ArrayList<>();
         history.add(ecosystem);
-        controller.updateGUI(ecosystem);
+        controller.updateGUI(ecosystem, true);
     }
 
     /** Returns the simulation to its state one week prior. */
@@ -92,7 +92,7 @@ public class Simulation {
 
         if (week > 0) {
             week--;
-            controller.updateGUI(history.get(week));
+            controller.updateGUI(history.get(week), false);
         } else {
             System.out.println("There are no previous weeks.");
         }
@@ -108,7 +108,7 @@ public class Simulation {
             System.out.println("Please load a simulation first.");
         } else if (week + 1 < history.size()) {
             week++;
-            controller.updateGUI(history.get(week));
+            controller.updateGUI(history.get(week), false);
         } else {
             simulateOneWeek();
         }
@@ -196,7 +196,7 @@ public class Simulation {
 
         week++;
         history.add(ecosystem);
-        controller.updateGUI(history.get(week));
+        controller.updateGUI(history.get(week), false);
         controller.updateGUI(getHistoryCopy());
     }
 }

@@ -98,7 +98,6 @@ public class AnimationMouseHandler implements EventHandler<MouseEvent> {
             mousePosX = event.getSceneX();
             mousePosY = event.getSceneY();
         } else if (event.getEventType() == MouseEvent.MOUSE_DRAGGED) {
-
             double mouseDeltaX = (event.getSceneX() - mousePosX);
             double mouseDeltaY = (event.getSceneY() - mousePosY);
             mousePosX = event.getSceneX();
@@ -118,19 +117,7 @@ public class AnimationMouseHandler implements EventHandler<MouseEvent> {
                                        + mouseDeltaY * MOUSE_SPEED * modifier * ROTATION_SPEED);
                 cameraXYRotation.setRy(cameraXYRotation.getRy().getAngle()
                                        - mouseDeltaX * MOUSE_SPEED * modifier * ROTATION_SPEED);
-                final int fullAngle = 360;
-                final int halfAngle = 180;
-                final boolean reversed = subScene.getEcosystem3DNodesReversed();
-                double reducedAngle = cameraXYRotation.getRy().getAngle() % fullAngle;
-                if (reversed && (reducedAngle < -halfAngle
-                                 || reducedAngle > 0 && reducedAngle < halfAngle)) {
-                    subScene.reversePoolGroupOrder();
-                    subScene.setEcosystem3DNodesReversed(false);
-                } else if (!reversed && (reducedAngle > -halfAngle && reducedAngle < 0
-                                         || reducedAngle > halfAngle)) {
-                    subScene.reversePoolGroupOrder();
-                    subScene.setEcosystem3DNodesReversed(true);
-                }
+                updateTransparency();
             } else if (event.isSecondaryButtonDown()) {
                 PerspectiveCamera camera = camera3D.getCamera();
                 camera.setTranslateX(
@@ -138,16 +125,44 @@ public class AnimationMouseHandler implements EventHandler<MouseEvent> {
                 camera.setTranslateY(
                         camera.getTranslateY() + -mouseDeltaY * MOUSE_SPEED * PAN_FACTOR);
 
-                // makes the camera rotate around the viewed point instead of a locked position
-                // makes it easier to view outer pools, but requires precise aim onto outer pools
-                // to not experience strange control behaviour
-                // also may cause problems with camera reset key
+                /*
+                   This makes the camera rotate around the viewed point instead of a locked
+                   position. It also makes it easier to view outer pools, but requires precise
+                   aim onto outer pools to not experience strange control behaviour.
+                   This may also may cause problems with the camera reset key.
+                */
+
                 // Xform cameraXYTranslation = camera3D.getCameraXYTranslation();
                 // cameraXYTranslation.setTranslateX(cameraXYTranslation.getTranslateX()
                 // + mouseDeltaX * MOUSE_SPEED * PAN_FACTOR);
                 // cameraXYTranslation.setTranslateY(cameraXYTranslation.getTranslateY()
                 // + mouseDeltaY * MOUSE_SPEED * PAN_FACTOR);
             }
+        }
+    }
+
+    /**
+     * Updates the transparency of the 3D world. This is done by determining which 180 degree
+     * portion the camera is currently looking from. If necessary, the order of the objects in the
+     * Ecosystem3D group is reversed.
+     * <p>
+     * Refer to {@linkplain AnimationSubScene#reversePoolGroupOrder() reversePoolGroupOrder()'s}
+     * documentation for an explanation on why this reversion is necessary.
+     */
+    public void updateTransparency() {
+        Xform cameraXYRotation = camera3D.getCameraXYRotation();
+        final int fullAngle = 360;
+        final int halfAngle = 180;
+        final boolean reversed = subScene.getEcosystem3DNodesReversed();
+        double reducedAngle = cameraXYRotation.getRy().getAngle() % fullAngle;
+        if (reversed && (reducedAngle < -halfAngle
+                         || reducedAngle > 0 && reducedAngle < halfAngle)) {
+            subScene.reversePoolGroupOrder();
+            subScene.setEcosystem3DNodesReversed(false);
+        } else if (!reversed && (reducedAngle > -halfAngle && reducedAngle < 0
+                                 || reducedAngle > halfAngle)) {
+            subScene.reversePoolGroupOrder();
+            subScene.setEcosystem3DNodesReversed(true);
         }
     }
 }

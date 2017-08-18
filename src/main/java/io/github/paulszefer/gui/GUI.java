@@ -124,10 +124,12 @@ public class GUI {
      *
      * @param ecosystem
      *         the current state of the simulation
+     * @param initialUpdate
+     *         whether this is the first update to the GUI
      */
-    public void updateAnimation(Ecosystem ecosystem) {
+    public void updateAnimation(Ecosystem ecosystem, boolean initialUpdate) {
 
-        animationSubScene.updateState(ecosystem);
+        animationSubScene.updateState(ecosystem, initialUpdate);
     }
 
     /**

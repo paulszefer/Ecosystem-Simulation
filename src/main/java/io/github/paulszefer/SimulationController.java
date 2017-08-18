@@ -108,10 +108,12 @@ public class SimulationController {
      *
      * @param ecosystem
      *         the new simulation state to update to
+     * @param initialUpdate
+     *         whether this is the first update to the GUI
      */
-    public void updateGUI(Ecosystem ecosystem) {
+    public void updateGUI(Ecosystem ecosystem, boolean initialUpdate) {
 
-        view.updateAnimation(ecosystem);
+        view.updateAnimation(ecosystem, initialUpdate);
     }
 
     /**

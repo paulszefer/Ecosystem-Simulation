@@ -117,11 +117,14 @@ public class AnimationSubScene extends SubScene {
      *
      * @param ecosystem
      *         the current simulation state
+     * @param initialUpdate
+     *         whether this is the first update to the GUI
      */
-    public void updateState(Ecosystem ecosystem) {
-        ecosystem3D.update(ecosystem);
-        if (ecosystem3DNodesReversed) {
-            reversePoolGroupOrder();
+    public void updateState(Ecosystem ecosystem, boolean initialUpdate) {
+        ecosystem3D.update(ecosystem, initialUpdate);
+        if (initialUpdate) {
+            ecosystem3DNodesReversed = false;
+            ((AnimationMouseHandler) getOnMousePressed()).updateTransparency();
         }
     }
 }
