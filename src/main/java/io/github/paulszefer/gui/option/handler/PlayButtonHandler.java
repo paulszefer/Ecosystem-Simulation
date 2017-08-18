@@ -20,6 +20,9 @@ public class PlayButtonHandler implements EventHandler<ActionEvent> {
     /** The default delay of the animation (in ms). */
     public static final int DELAY = 1000;
 
+    /** The maximum number of weeks to automatically simulate. */
+    private static final int MAX_WEEKS_TO_SIMULATE = 10;
+
     /** The simulation controller. */
     private SimulationController controller;
 
@@ -28,6 +31,9 @@ public class PlayButtonHandler implements EventHandler<ActionEvent> {
 
     /** Whether the animation is currently active. */
     private boolean animationActive;
+
+    /** The number of weeks automatically simulated so far. */
+    private int numberOfWeeksAutoSimulated;
 
     /**
      * Creates a handler for the play button.
@@ -54,15 +60,20 @@ public class PlayButtonHandler implements EventHandler<ActionEvent> {
                 @Override
                 public void run() {
 
-                    if (!animationActive) {
-                        timer.cancel();
-                        timer.purge();
-                        return;
-                    }
                     Platform.runLater(() -> {
                         controller.updateSimulation(1);
                         controls.update(OptionControls.SIMULATION_ANIMATION_PLAYING);
                     });
+                    numberOfWeeksAutoSimulated++;
+                    animationActive = numberOfWeeksAutoSimulated < MAX_WEEKS_TO_SIMULATE;
+
+                    if (!animationActive) {
+                        timer.cancel();
+                        numberOfWeeksAutoSimulated = 0;
+                        Platform.runLater(() -> {
+                            controls.update(OptionControls.SIMULATION_ANIMATION_STOPPED);
+                        });
+                    }
                 }
             }, 0, (int) (DELAY / (controls.getSpeedSlider()).returnMultiplier()));
         } else {
