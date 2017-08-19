@@ -65,7 +65,8 @@ public class PlayButtonHandler implements EventHandler<ActionEvent> {
                         controls.update(OptionControls.SIMULATION_ANIMATION_PLAYING);
                     });
                     numberOfWeeksAutoSimulated++;
-                    animationActive = numberOfWeeksAutoSimulated < MAX_WEEKS_TO_SIMULATE;
+                    animationActive =
+                            animationActive && numberOfWeeksAutoSimulated < MAX_WEEKS_TO_SIMULATE;
 
                     if (!animationActive) {
                         timer.cancel();
